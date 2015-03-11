@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    public class MainMenuPanel : MonoBehaviour
+    public class ChatFrame : MonoBehaviour
     {
 
         // Use this for initialization
@@ -19,3 +19,4 @@ namespace MiniWeChat
         }
     }
 }
+

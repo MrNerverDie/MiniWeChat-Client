@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,45 +8,66 @@ namespace MiniWeChat
     public class UIManager : Singleton<UIManager>
     {
 
-        private Dictionary<string, GameObject> UIDict;
-        private Dictionary<string, string> UIPathDict;
+        private Dictionary<EUIType, GameObject> _UIDict;
+        private Dictionary<EUIType, string> _UIPathDict;
+
+        private Transform _canvas;
 
         public override void Init()
         {
-            UIDict = new Dictionary<string, GameObject>();
-            UIPathDict = new Dictionary<string, string>();
-            UIPathDict.Add("Panel2", "Panel2");
+            _canvas = GameObject.Find("Canvas").transform;
+            _UIDict = new Dictionary<EUIType, GameObject>();
+            _UIPathDict = new Dictionary<EUIType, string>();
+
+            InitUIPathDict();
         }
 
-        public GameObject GetUI(string name)
+        public GameObject GetSingleUI(EUIType name)
         {
-            if (UIPathDict.ContainsKey(name) == false)
+            if (_UIPathDict.ContainsKey(name) == false)
             {
                 return null;
             }
 
-            if (UIDict.ContainsKey(name) == false)
+            if (_UIDict.ContainsKey(name) == false)
             {
-                GameObject go = GameObject.Instantiate(Resources.Load(UIPathDict[name], typeof(GameObject))) as GameObject;
-                go.transform.SetParent(GameObject.Find("UICamera").transform);
-                go.transform.localScale = Vector3.one;
-                go.transform.localPosition = Vector3.zero;
-                go.name = name;
-                UIDict.Add(name, go);
+                GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(_UIPathDict[name])) as GameObject;
+                go.transform.SetParent(_canvas, false);
+                go.name = name.ToString();
+                _UIDict.Add(name, go);
                 return go;
             }
-            return UIDict[name];
+            return _UIDict[name];
         }
 
-        public void DestroyUI(string name)
+        public void DestroySingleUI(EUIType name)
         {
-            if (UIDict.ContainsKey(name) == false)
+            if (_UIDict.ContainsKey(name) == false)
             {
                 return;
             }
 
-            GameObject.Destroy(UIDict[name]);
-            UIDict.Remove(name);
+            GameObject.Destroy(_UIDict[name]);
+            _UIDict.Remove(name);
         }
+
+        public GameObject AddChild(GameObject parent, EUIType name)
+        {
+            GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(_UIPathDict[name])) as GameObject;
+            go.transform.SetParent(parent.transform, false);
+            return go;
+        }
+
+        private void InitUIPathDict()
+        {
+            _UIPathDict.Add(EUIType.MainMenuPanel, "Common/MainMenuPanel");
+            _UIPathDict.Add(EUIType.ChatFrame, "Chat/ChatFrame");
+        }
+    }
+
+    public enum EUIType
+    {
+        MainMenuPanel = 1,
+        ChatFrame,
     }
 }

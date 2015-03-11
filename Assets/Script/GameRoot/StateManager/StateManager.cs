@@ -13,6 +13,9 @@ namespace MiniWeChat
         public override void Init()
         {
             _stateStack = new Stack<BaseState>();
+
+            GameObject mainMenuPanel = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
+            PushState<MainMenuPanel>(mainMenuPanel);
         }
 
         public void PushState<T>(GameObject go, object param = null) where T : BaseState
@@ -22,7 +25,7 @@ namespace MiniWeChat
             if (_stateStack.Count != 0)
             {
                 BaseState curState = _stateStack.Peek();
-                curState.OnExit();
+                curState.OnHide();
             }
             nextState.OnEnter(param);
             _stateStack.Push(nextState);
@@ -39,7 +42,7 @@ namespace MiniWeChat
             if (_stateStack.Count != 0)
             {
                 BaseState lastState = _stateStack.Peek();
-                lastState.OnEnter();
+                lastState.OnShow();
             }
         }
 
@@ -55,15 +58,6 @@ namespace MiniWeChat
             nextState.OnEnter(param);
             _stateStack.Push(nextState);
         }
-
-        public void ClearStates()
-        {
-            while (_stateStack.Count != 0)
-            {
-                BaseState curState = _stateStack.Pop();
-                curState.OnExit();
-            }
-        }
     }
 
     public class BaseState : MonoBehaviour
@@ -78,13 +72,15 @@ namespace MiniWeChat
 
         }
 
-        public virtual void OnEnable()
+        public virtual void OnHide()
         {
-
+            gameObject.SetActive(false);
         }
 
-
-
+        public virtual void OnShow()
+        {
+            gameObject.SetActive(true);
+        }
     }
 
 }

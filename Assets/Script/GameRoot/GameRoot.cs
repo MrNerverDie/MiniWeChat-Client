@@ -6,17 +6,17 @@ namespace MiniWeChat
 {
     public class GameRoot : MonoBehaviour
     {
-        private static GameRoot _instance;
-        GameObject _rootObj;
+        private static GameObject _rootObj;
 
         public void Awake()
         {
             _rootObj = gameObject;
             GameObject.DontDestroyOnLoad(_rootObj);
 
-            AddSingleton<StateManager>(_rootObj);
             AddSingleton<MessageDispatcher>(_rootObj);
             AddSingleton<UIManager>(_rootObj);
+            AddSingleton<StateManager>(_rootObj);
+
         }
 
         private static T AddSingleton<T>(GameObject go) where T : Singleton<T>
@@ -28,7 +28,7 @@ namespace MiniWeChat
 
         public static T GetSingleton<T>() where T : Singleton<T>
         {
-            T t = _instance._rootObj.GetComponent<T>();
+            T t = _rootObj.GetComponent<T>();
 
             if (t == null)
             {
