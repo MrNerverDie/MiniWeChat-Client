@@ -17,7 +17,6 @@ namespace MiniWeChat
             for (int i = 0; i < chatNum; i++)
             {
                 GameObject go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.ChatFrame);
-                Debug.Log(go.transform.GetSiblingIndex());
             }
         }
 

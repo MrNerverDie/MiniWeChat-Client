@@ -62,6 +62,7 @@ namespace MiniWeChat
         {
             _UIPathDict.Add(EUIType.MainMenuPanel, "Common/MainMenuPanel");
             _UIPathDict.Add(EUIType.ChatFrame, "Chat/ChatFrame");
+            _UIPathDict.Add(EUIType.ContactFrame, "Contacts/ContactFrame");
         }
     }
 
@@ -69,5 +70,6 @@ namespace MiniWeChat
     {
         MainMenuPanel = 1,
         ChatFrame,
+        ContactFrame,
     }
 }
