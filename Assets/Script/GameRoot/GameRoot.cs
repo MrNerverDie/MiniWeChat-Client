@@ -13,10 +13,16 @@ namespace MiniWeChat
             _rootObj = gameObject;
             GameObject.DontDestroyOnLoad(_rootObj);
 
+            StartCoroutine(InitSingletons());
+        }
+
+        private IEnumerator InitSingletons()
+        {
+            ClearCanvas();
+            yield return null;
             AddSingleton<MessageDispatcher>(_rootObj);
             AddSingleton<UIManager>(_rootObj);
             AddSingleton<StateManager>(_rootObj);
-
         }
 
         private static T AddSingleton<T>(GameObject go) where T : Singleton<T>
@@ -36,6 +42,15 @@ namespace MiniWeChat
             }
 
             return t;
+        }
+
+        public void ClearCanvas()
+        {
+            Transform canvas = GameObject.Find("Canvas").transform;
+            foreach (Transform panel in canvas)
+            {
+                GameObject.Destroy(panel.gameObject);
+            }
         }
     }
 }
