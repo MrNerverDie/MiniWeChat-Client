@@ -29,7 +29,7 @@ namespace MiniWeChat
         public void Show(string text)
         {
             int lines = 0;
-            int maxCharNumInOneLine = 0;
+            float maxCharNumInOneLine = 0;
 
             SetTextParam(ref text,ref lines,ref maxCharNumInOneLine);
 
@@ -44,7 +44,7 @@ namespace MiniWeChat
                 );
         }
 
-        private void SetTextParam(ref string text, ref int lines, ref int maxCharNumInOneLine)
+        private void SetTextParam(ref string text, ref int lines, ref float maxCharNumInOneLine)
         {
             float curCharNumInOneLine = 0;
 
@@ -57,7 +57,7 @@ namespace MiniWeChat
                     lines++;
                     if (maxCharNumInOneLine < MAX_CHAR_NUM_ONE_LINE && curCharNumInOneLine > maxCharNumInOneLine)
                     {
-                        maxCharNumInOneLine = (int)Mathf.Round(curCharNumInOneLine);
+                        maxCharNumInOneLine = curCharNumInOneLine;
                     }
                     curCharNumInOneLine = 0;
                     continue;
