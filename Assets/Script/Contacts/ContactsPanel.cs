@@ -6,7 +6,7 @@ namespace MiniWeChat
 {
     public class ContactsPanel : MonoBehaviour
     {
-        private const int CONTACT_FRAME_HEIGHT = 200;
+        private const int CONTACT_FRAME_HEIGHT = 150;
 
         public VerticalLayoutGroup _contactsGrid;
 
