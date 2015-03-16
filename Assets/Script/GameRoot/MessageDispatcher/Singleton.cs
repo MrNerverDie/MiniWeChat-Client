@@ -15,6 +15,11 @@ namespace MiniWeChat
         {
             return;
         }
+
+        public virtual void Release()
+        {
+            return;
+        }
     }
 }
 

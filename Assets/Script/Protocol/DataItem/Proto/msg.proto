@@ -1,4 +1,4 @@
-  package tutorial;
+  package protocol;
   option java_package = "com.protobuftest.protobuf"; 
   option java_outer_classname = "PersonProbuf"; 
 

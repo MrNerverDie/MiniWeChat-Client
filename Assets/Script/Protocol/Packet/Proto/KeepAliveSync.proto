@@ -1,0 +1,12 @@
+package protocol;
+
+import "ProtoHead.proto";
+
+option java_package = "protocol";
+
+message KeepAliveSyncPacket{
+	required messageType type=1;
+	optional int32 a=2;
+	optional bool b=3;
+	optional string c=4;
+}

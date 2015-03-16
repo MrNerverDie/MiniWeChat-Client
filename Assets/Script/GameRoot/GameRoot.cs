@@ -16,10 +16,17 @@ namespace MiniWeChat
             StartCoroutine(InitSingletons());
         }
 
+        public void OnDestroy()
+        {
+            NetworkManager.GetInstance().Release();
+        }
+
+
         private IEnumerator InitSingletons()
         {
             ClearCanvas();
             yield return null;
+            AddSingleton<NetworkManager>(_rootObj);
             AddSingleton<MessageDispatcher>(_rootObj);
             AddSingleton<UIManager>(_rootObj);
             AddSingleton<StateManager>(_rootObj);

@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 // Generated from: msg.proto
-namespace tutorial
+namespace protocol
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Person")]
   public partial class Person : global::ProtoBuf.IExtensible
@@ -37,9 +37,9 @@ namespace tutorial
       get { return _email; }
       set { _email = value; }
     }
-    private readonly global::System.Collections.Generic.List<tutorial.Person.PhoneNumber> _phone = new global::System.Collections.Generic.List<tutorial.Person.PhoneNumber>();
+    private readonly global::System.Collections.Generic.List<protocol.Person.PhoneNumber> _phone = new global::System.Collections.Generic.List<protocol.Person.PhoneNumber>();
     [global::ProtoBuf.ProtoMember(4, Name=@"phone", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<tutorial.Person.PhoneNumber> phone
+    public global::System.Collections.Generic.List<protocol.Person.PhoneNumber> phone
     {
       get { return _phone; }
     }
@@ -56,10 +56,10 @@ namespace tutorial
       get { return _number; }
       set { _number = value; }
     }
-    private tutorial.Person.PhoneType _type = tutorial.Person.PhoneType.HOME;
+    private protocol.Person.PhoneType _type = protocol.Person.PhoneType.HOME;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(tutorial.Person.PhoneType.HOME)]
-    public tutorial.Person.PhoneType type
+    [global::System.ComponentModel.DefaultValue(protocol.Person.PhoneType.HOME)]
+    public protocol.Person.PhoneType type
     {
       get { return _type; }
       set { _type = value; }
@@ -125,9 +125,9 @@ namespace tutorial
   {
     public AddressBook() {}
     
-    private readonly global::System.Collections.Generic.List<tutorial.Person> _person = new global::System.Collections.Generic.List<tutorial.Person>();
+    private readonly global::System.Collections.Generic.List<protocol.Person> _person = new global::System.Collections.Generic.List<protocol.Person>();
     [global::ProtoBuf.ProtoMember(1, Name=@"person", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<tutorial.Person> person
+    public global::System.Collections.Generic.List<protocol.Person> person
     {
       get { return _person; }
     }
