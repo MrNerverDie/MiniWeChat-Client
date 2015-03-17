@@ -18,12 +18,5 @@ namespace MiniWeChat
         BattleTest = 1000,
     }
     #endregion
-
-    #region 网络事件 ENetMessage 2000 - 2999
-    public enum ENetMessage : uint
-    {
-        NetTest = 2000,
-    }
-    #endregion
 }
 

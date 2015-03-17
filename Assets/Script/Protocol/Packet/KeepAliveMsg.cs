@@ -7,8 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: KeepAliveSync.proto
-// Note: requires additional types generated from: ProtoHead.proto
+// Generated from: KeepAliveMsg.proto
 namespace protocol
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"KeepAliveSyncPacket")]
@@ -16,15 +15,8 @@ namespace protocol
   {
     public KeepAliveSyncPacket() {}
     
-    private protocol.messageType _type;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public protocol.messageType type
-    {
-      get { return _type; }
-      set { _type = value; }
-    }
     private int _a = default(int);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"a", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"a", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
     public int a
     {
@@ -32,7 +24,7 @@ namespace protocol
       set { _a = value; }
     }
     private bool _b = default(bool);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"b", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"b", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
     public bool b
     {
@@ -40,7 +32,7 @@ namespace protocol
       set { _b = value; }
     }
     private string _c = "";
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"c", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"c", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
     public string c
     {

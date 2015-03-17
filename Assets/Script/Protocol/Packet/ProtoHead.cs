@@ -10,12 +10,12 @@
 // Generated from: ProtoHead.proto
 namespace protocol
 {
-    [global::ProtoBuf.ProtoContract(Name=@"messageType")]
-    public enum messageType
+    [global::ProtoBuf.ProtoContract(Name=@"ENetworkMessage")]
+    public enum ENetworkMessage
     {
             
-      [global::ProtoBuf.ProtoEnum(Name=@"KeepkAliveSync", Value=0)]
-      KeepkAliveSync = 0,
+      [global::ProtoBuf.ProtoEnum(Name=@"KeepAliveSync", Value=0)]
+      KeepAliveSync = 0,
             
       [global::ProtoBuf.ProtoEnum(Name=@"RegisterReq", Value=1)]
       RegisterReq = 1,
