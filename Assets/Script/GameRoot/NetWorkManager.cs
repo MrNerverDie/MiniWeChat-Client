@@ -12,28 +12,29 @@ namespace MiniWeChat
 {
     public class NetworkManager : Singleton<NetworkManager>
     {
-        private TcpClient _client;
-        private NetworkStream _streamToServer;
+        private Socket _socket;
 
-        private byte[] _buffer;
-        private const int BUFFER_SIZE = 8192;
+        private byte[] _receiveBuffer;
+        private byte[] _sendBuffer;
 
         private const int HEAD_SIZE = 4;
         private const int HEAD_NUM = 2;
 
+        private float CONNECT_TIME_OUT = 3.0f;
+
+        #region LifeCycle
         public override void Init()
         {
             Debug.Log("Client Running...");
-            try {
-                _client = new TcpClient();
-                _client.Connect("192.168.45.55", 8080); 
-            } catch (Exception ex) {
-                Debug.Log(ex.StackTrace);
-                return;
-            }
 
-            _buffer = new byte[BUFFER_SIZE];
-            _streamToServer = _client.GetStream();
+            BeginConnection();
+
+        }
+
+        private void DoInitNetWork()
+        {
+            _receiveBuffer = new byte[_socket.ReceiveBufferSize];
+            _sendBuffer = new byte[_socket.SendBufferSize];
 
             KeepAliveSyncPacket reqPacket = new KeepAliveSyncPacket
             {
@@ -44,7 +45,7 @@ namespace MiniWeChat
 
             //for (int i = 0; i < 100; i++)
             //{
-                SendPacket<KeepAliveSyncPacket>(ENetworkMessage.KeepAliveSync, reqPacket);                
+            BeginSendPacket<KeepAliveSyncPacket>(ENetworkMessage.KeepAliveSync, reqPacket);
             //}
 
             BeginReceivePacket();
@@ -52,17 +53,73 @@ namespace MiniWeChat
 
         public override void Release()
         {
-            _client.Close();
+            if (_socket.Connected)
+            {
+                _socket.Shutdown(SocketShutdown.Both);
+                _socket.Disconnect(true);
+            }
+            _socket.Close();
             Debug.Log("Client Close...");
         }
 
+        #endregion
+
+        #region Connection
+
+        private void BeginConnection()
+        {
+            try
+            {
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _socket.BeginConnect("192.168.45.38", 8080, new AsyncCallback(FinishConnection), null);
+                Invoke("CheckConnectTimeOut", CONNECT_TIME_OUT);
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.Log(ex.StackTrace);
+                return;
+            }
+        }
+
+        private void FinishConnection(IAsyncResult ar)
+        {
+            _socket.EndConnect(ar);
+
+            if (_socket.Connected)
+            {
+                DoInitNetWork();
+            }
+        }
+
+        private void CheckConnectTimeOut()
+        {
+            if (_socket.Connected == false)
+            {
+                Debug.Log("Client Connect Time Out...");
+                Release();
+            }
+        }
+
+        #endregion
+
+        #region ReceivePacket
+
         private void BeginReceivePacket()
         {
-            lock(_streamToServer)
+            try
             {
-                AsyncCallback callBack = new AsyncCallback(EndReceivePacket);
-                _streamToServer.BeginRead(_buffer, 0, BUFFER_SIZE, callBack, null);
+                lock (_socket)
+                {
+                    _socket.BeginReceive(_receiveBuffer, 0, _socket.ReceiveBufferSize, SocketFlags.None, new AsyncCallback(EndReceivePacket), null);
+                }
             }
+            catch (Exception ex)
+            {
+                Release();
+                Debug.Log(ex.Message);
+            }
+
         }
 
         private void EndReceivePacket(IAsyncResult ar)
@@ -70,19 +127,19 @@ namespace MiniWeChat
             int bytesRead = 0;
             try
             {
-                lock (_streamToServer)
+                lock (_socket)
                 {
-                    bytesRead = _streamToServer.EndRead(ar);
+                    bytesRead = _socket.EndReceive(ar);
                 }
                 Debug.Log("Raed Data Length is : " + bytesRead);
 
-                int bufferSize = MiniConverter.BytesToInt(_buffer, HEAD_SIZE * 0);
-                ENetworkMessage networkMessage = (ENetworkMessage)MiniConverter.BytesToInt(_buffer, HEAD_SIZE * 1);
+                int bufferSize = MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 0);
+                ENetworkMessage networkMessage = (ENetworkMessage)MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 1);
 
                 Debug.Log("bufferSize : " + bufferSize);
                 Debug.Log("networkMessage : " + networkMessage);
                 
-                using(MemoryStream streamForProto = new MemoryStream(_buffer, HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_SIZE * HEAD_NUM))
+                using(MemoryStream streamForProto = new MemoryStream(_receiveBuffer, HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_SIZE * HEAD_NUM))
                 {
                     switch (networkMessage)
                     {
@@ -103,19 +160,21 @@ namespace MiniWeChat
                     }
                 }
 
-                Array.Clear(_buffer, 0, BUFFER_SIZE);
+                Array.Clear(_receiveBuffer, 0, _socket.ReceiveBufferSize);
 
                 BeginReceivePacket();
             }
             catch (Exception ex)
             {
-                if (_streamToServer != null)
-                    _streamToServer.Dispose();
-                _client.Close();
+                Release();
                 Debug.Log(ex.Message);
             }
         }
 
+        #endregion
+
+
+        #region SendPacket
         /// <summary>
         /// 协议格式：
         /// SIZE ： 4 | TYPE ： 4 | PACKET ： dynamic
@@ -123,23 +182,57 @@ namespace MiniWeChat
         /// <typeparam name="T">向服务器发送的packet的类型</typeparam>
         /// <param name="networkMessage">向服务器发送的请求的类型</param>
         /// <param name="packet">向服务器发送的packet</param>
-        private void SendPacket<T>(ENetworkMessage networkMessage, T packet) where T : global::ProtoBuf.IExtensible
+        private void BeginSendPacket<T>(ENetworkMessage networkMessage, T packet) where T : global::ProtoBuf.IExtensible
         {
-            MemoryStream streamForProto = new MemoryStream();
-            Serializer.Serialize<T>(streamForProto, packet);
-            int bufferSize = HEAD_SIZE * HEAD_NUM + (int)streamForProto.Length;
+            try
+            {
+                lock (_socket)
+                {
+                    MemoryStream streamForProto = new MemoryStream();
+                    Serializer.Serialize<T>(streamForProto, packet);
+                    int bufferSize = HEAD_SIZE * HEAD_NUM + (int)streamForProto.Length;
 
-            byte[] bufferSizeBytes = MiniConverter.IntToBytes(bufferSize);
-            byte[] networkMessageBytes = MiniConverter.IntToBytes((int)networkMessage);
+                    byte[] bufferSizeBytes = MiniConverter.IntToBytes(bufferSize);
+                    byte[] networkMessageBytes = MiniConverter.IntToBytes((int)networkMessage);
 
-            MemoryStream streamToServerBuffer = new MemoryStream();
-            streamToServerBuffer.Write(bufferSizeBytes, 0, HEAD_SIZE);
-            streamToServerBuffer.Write(networkMessageBytes, 0, HEAD_SIZE);
-            streamForProto.WriteTo(streamToServerBuffer);
+                    Array.Copy(bufferSizeBytes, 0, _sendBuffer, HEAD_SIZE * 0, HEAD_SIZE);
+                    Array.Copy(networkMessageBytes, 0, _sendBuffer, HEAD_SIZE * 1, HEAD_SIZE);
+                    Array.Copy(streamForProto.ToArray(), 0, _sendBuffer, HEAD_SIZE * HEAD_NUM, streamForProto.Length);
 
-            streamToServerBuffer.WriteTo(_streamToServer);
+                    _socket.BeginSend(_sendBuffer, 0, bufferSize, SocketFlags.None, new AsyncCallback(EndSendPacket), null);
+
+                    streamForProto.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                Release();
+                Debug.Log(ex.Message);
+            }
         }
 
+        private void EndSendPacket(IAsyncResult ar)
+        {
+            int bytesSend = 0;
+            try
+            {
+                lock (_socket)
+                {
+                    bytesSend = _socket.EndSend(ar);
+                }
+
+                if (bytesSend > 0)
+                {
+                    Array.Clear(_sendBuffer, 0, _socket.SendBufferSize);
+                }
+            }
+            catch (Exception ex)
+            {
+                Release();
+                Debug.Log(ex.Message);
+            }
+        }
+        #endregion
     }
 }
 
