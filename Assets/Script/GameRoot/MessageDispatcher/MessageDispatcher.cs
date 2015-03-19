@@ -6,6 +6,11 @@ using System.Collections.Generic;
 namespace MiniWeChat
 {
     public delegate void MessageHandler(uint iMessageType, object kParam);
+    public class MessageArgs
+    {
+        public uint iMessageType;
+        public object kParam;
+    }
 
     public class MessageDispatcher : Singleton<MessageDispatcher>
     {
@@ -39,7 +44,7 @@ namespace MiniWeChat
             }
         }
 
-        public void SendMessage(uint iMessageType, object kParam = null)
+        public void DispatchMessage(uint iMessageType, object kParam = null)
         {
             if (m_kMessageTable.ContainsKey(iMessageType))
             {
@@ -49,6 +54,11 @@ namespace MiniWeChat
                     ((MessageHandler)kHandlerList[i])(iMessageType, kParam);
                 }
             }
+        }
+
+        public void DispatchMessage(MessageArgs kMessageArgs)
+        {
+            DispatchMessage(kMessageArgs.iMessageType, kMessageArgs.kParam);
         }
     }
 }

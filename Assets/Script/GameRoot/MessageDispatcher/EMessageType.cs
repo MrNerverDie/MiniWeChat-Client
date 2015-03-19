@@ -3,20 +3,12 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    #region 界面事件 EUIMessage 0 - 999
-    public enum EUIMessage : uint
-    {
-        UITest0 = 0,
-        UITest1 = 1,
-        UITest2 = 2
-    }
-    #endregion
+    #region 内部事件 Internal 1000 - 2000
 
-    #region 战斗事件 EBattleMessage 1000 - 1999
-    public enum EBattleMessage : uint
+    public enum EGeneralMessage : uint
     {
-        BattleTest = 1000,
+        SocketConnected = 0,
     }
-    #endregion
+    #endregion=
 }
 

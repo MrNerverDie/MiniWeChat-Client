@@ -26,8 +26,8 @@ namespace MiniWeChat
         {
             ClearCanvas();
             yield return null;
-            AddSingleton<NetworkManager>(_rootObj);
             AddSingleton<MessageDispatcher>(_rootObj);
+            AddSingleton<NetworkManager>(_rootObj);
             AddSingleton<UIManager>(_rootObj);
             AddSingleton<StateManager>(_rootObj);
         }
