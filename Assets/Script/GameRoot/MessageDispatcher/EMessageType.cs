@@ -7,7 +7,9 @@ namespace MiniWeChat
 
     public enum EGeneralMessage : uint
     {
-        SocketConnected = 0,
+        SocketConnected = 1000,
+        SocketDisConnected,
+        ReqTimeOut,
     }
     #endregion=
 }

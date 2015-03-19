@@ -22,7 +22,7 @@ namespace MiniWeChat
 
         private float CONNECT_TIME_OUT = 3.0f;
         private float REQ_TIME_OUT = 3.0f;
-        private float KEEP_ALIVE_TIME_OUT = 5.0f;
+        private float KEEP_ALIVE_TIME_OUT = 6.0f;
 
         private bool _isKeepAlive = false;
 
@@ -106,7 +106,7 @@ namespace MiniWeChat
             try
             {
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                _socket.BeginConnect("192.168.45.38", 8080, new AsyncCallback(FinishConnection), null);
+                _socket.BeginConnect("192.168.45.37", 8080, new AsyncCallback(FinishConnection), null);
             }
             catch (Exception ex)
             {
@@ -144,25 +144,28 @@ namespace MiniWeChat
 
         private void CloseConnection()
         {
-            _isKeepAlive = false;
-            if (_socket.Connected)
+            if (_socket != null)
             {
-                _socket.Shutdown(SocketShutdown.Both);
-                _socket.Disconnect(true);
+                if (_socket.Connected)
+                {
+                    _socket.Shutdown(SocketShutdown.Both);
+                    _socket.Disconnect(true);
+                }
+                _socket.Close();
             }
-            _socket.Close();
             Debug.Log("Client Close...");
         }
 
         private IEnumerator BeginTryConnect()
         {
-            while(true)
+            //while(true)
             {
                 if (_isKeepAlive == false)
                 {
-                    yield return StartCoroutine(BeginConnection());
                     Debug.Log("Begin Reconnect...");
+                    yield return StartCoroutine(BeginConnection());
                 }
+                _isKeepAlive = false;
                 yield return new WaitForSeconds(KEEP_ALIVE_TIME_OUT);
             }
         }
@@ -270,7 +273,12 @@ namespace MiniWeChat
 
         #region SendPacket
 
-        private IEnumerator BeginSendPacket<T>(ENetworkMessage networkMessage, T packet) where T : global::ProtoBuf.IExtensible
+        public void SendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage = (uint)EGeneralMessage.ReqTimeOut) where T : global::ProtoBuf.IExtensible
+        {
+            StartCoroutine(BeginSendPacket<T>(networkMessage, packet, timeoutMessage));
+        }
+
+        private IEnumerator BeginSendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage) where T : global::ProtoBuf.IExtensible
         {
             byte[] msgIDBytes = BitConverter.GetBytes(UnityEngine.Random.value);
             string msgID = BitConverter.ToString(msgIDBytes);
@@ -289,6 +297,7 @@ namespace MiniWeChat
                 if (_msgIDSet.Contains(msgID))
                 {
                     _msgIDSet.Remove(msgID);
+                    MessageDispatcher.GetInstance().DispatchMessage(timeoutMessage);
                     Debug.Log("Send Packet Type : " + networkMessage + " msgID : " + msgID + " timeout ");
                 }
             }
