@@ -3,9 +3,9 @@ package protocol;
 option java_package = "protocol";
 
 enum ENetworkMessage{
-    KeepAliveSync=0;
-    RegisterReq=1;
-    RegisterRsp=2;
-    LoginReq=3;
-    LoginRsp=4;
+    KEEP_ALIVE_SYNC=0;
+    REGISTER_REQ=1;
+    REGISTER_RSP=2;
+    LOGIN_REQ=3;
+    LOGIN_RSP=4;
 }

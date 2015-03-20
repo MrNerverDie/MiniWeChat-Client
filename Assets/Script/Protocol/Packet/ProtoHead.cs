@@ -14,20 +14,20 @@ namespace protocol
     public enum ENetworkMessage
     {
             
-      [global::ProtoBuf.ProtoEnum(Name=@"KeepAliveSync", Value=0)]
-      KeepAliveSync = 0,
+      [global::ProtoBuf.ProtoEnum(Name=@"KEEP_ALIVE_SYNC", Value=0)]
+      KEEP_ALIVE_SYNC = 0,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"RegisterReq", Value=1)]
-      RegisterReq = 1,
+      [global::ProtoBuf.ProtoEnum(Name=@"REGISTER_REQ", Value=1)]
+      REGISTER_REQ = 1,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"RegisterRsp", Value=2)]
-      RegisterRsp = 2,
+      [global::ProtoBuf.ProtoEnum(Name=@"REGISTER_RSP", Value=2)]
+      REGISTER_RSP = 2,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"LoginReq", Value=3)]
-      LoginReq = 3,
+      [global::ProtoBuf.ProtoEnum(Name=@"LOGIN_REQ", Value=3)]
+      LOGIN_REQ = 3,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"LoginRsp", Value=4)]
-      LoginRsp = 4
+      [global::ProtoBuf.ProtoEnum(Name=@"LOGIN_RSP", Value=4)]
+      LOGIN_RSP = 4
     }
   
 }

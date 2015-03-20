@@ -22,7 +22,7 @@ namespace MiniWeChat
 
         private float CONNECT_TIME_OUT = 3.0f;
         private float REQ_TIME_OUT = 3.0f;
-        private float KEEP_ALIVE_TIME_OUT = 6.0f;
+        private float KEEP_ALIVE_TIME_OUT = 5.0f;
 
         private bool _isKeepAlive = false;
 
@@ -42,11 +42,11 @@ namespace MiniWeChat
             _msgIDSet = new HashSet<string>();
             _forcePushMessageType = new HashSet<ENetworkMessage> 
             { 
-                ENetworkMessage.KeepAliveSync,
+                ENetworkMessage.KEEP_ALIVE_SYNC,
             };
 
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SocketConnected, OnSocketConnected);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KeepAliveSync, OnKeepAliveSync);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKEEP_ALIVE_SYNC);
 
             StartCoroutine(BeginHandleReceiveMessageQueue());
             StartCoroutine(BeginTryConnect());
@@ -54,8 +54,8 @@ namespace MiniWeChat
 
         public override void Release()
         {
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SocketConnected, OnSocketConnected);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.KeepAliveSync, OnKeepAliveSync);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKEEP_ALIVE_SYNC);
 
             CloseConnection();
         }
@@ -89,7 +89,7 @@ namespace MiniWeChat
 
             //for (int i = 0; i < 100; i++)
             //{
-            //StartCoroutine(BeginSendPacket<KeepAliveSyncPacket>(ENetworkMessage.KeepAliveSync, reqPacket));
+            //StartCoroutine(BeginSendPacket<KEEP_ALIVE_SYNCPacket>(ENetworkMessage.KEEP_ALIVE_SYNC, reqPacket));
             //}
 
             _isKeepAlive = true;
@@ -106,7 +106,7 @@ namespace MiniWeChat
             try
             {
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                _socket.BeginConnect("192.168.45.37", 8080, new AsyncCallback(FinishConnection), null);
+                _socket.BeginConnect("192.168.45.11", 8080, new AsyncCallback(FinishConnection), null);
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ namespace MiniWeChat
                 {
                     MessageArgs args = new MessageArgs()
                     {
-                        iMessageType = (uint)EGeneralMessage.SocketConnected,
+                        iMessageType = (uint)EGeneralMessage.SOCKET_CONNECTED,
                         kParam = null
                     };
 
@@ -158,7 +158,7 @@ namespace MiniWeChat
 
         private IEnumerator BeginTryConnect()
         {
-            //while(true)
+            while (true)
             {
                 if (_isKeepAlive == false)
                 {
@@ -170,7 +170,7 @@ namespace MiniWeChat
             }
         }
 
-        private void OnKeepAliveSync(uint iMessageType, object kParam)
+        private void OnKEEP_ALIVE_SYNC(uint iMessageType, object kParam)
         {
             _isKeepAlive = true;
         }
@@ -273,7 +273,7 @@ namespace MiniWeChat
 
         #region SendPacket
 
-        public void SendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage = (uint)EGeneralMessage.ReqTimeOut) where T : global::ProtoBuf.IExtensible
+        public void SendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage = (uint)EGeneralMessage.REQ_TIMEOUT) where T : global::ProtoBuf.IExtensible
         {
             StartCoroutine(BeginSendPacket<T>(networkMessage, packet, timeoutMessage));
         }
@@ -393,16 +393,16 @@ namespace MiniWeChat
             {
                 switch (networkMessage)
                 {
-                    case ENetworkMessage.KeepAliveSync:
+                    case ENetworkMessage.KEEP_ALIVE_SYNC:
                         packet = Serializer.Deserialize<KeepAliveSyncPacket>(streamForProto);
                         break;
-                    case ENetworkMessage.RegisterReq:
+                    case ENetworkMessage.REGISTER_REQ:
                         break;
-                    case ENetworkMessage.RegisterRsp:
+                    case ENetworkMessage.REGISTER_RSP:
                         break;
-                    case ENetworkMessage.LoginReq:
+                    case ENetworkMessage.LOGIN_REQ:
                         break;
-                    case ENetworkMessage.LoginRsp:
+                    case ENetworkMessage.LOGIN_RSP:
                         break;
                     default:
                         Debug.Log("No Such Packet, packet type is " + networkMessage);
