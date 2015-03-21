@@ -68,6 +68,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.ChatPanel, "Chat/ChatPanel");
             _UIPathDict.Add(EUIType.WelcomePanel, "Common/WelcomePanel");
             _UIPathDict.Add(EUIType.BackButton, "Common/BackButton");
+            _UIPathDict.Add(EUIType.RegisterPanel, "Personal/RegisterPanel");
         }
     }
 
@@ -81,5 +82,6 @@ namespace MiniWeChat
         ChatPanel,
         WelcomePanel,
         BackButton,
+        RegisterPanel,
     }
 }

@@ -20,8 +20,8 @@ namespace MiniWeChat
         private IEnumerator BeginWelcomeLoad()
         {
             yield return new WaitForSeconds(WELCOME_LOAD_DURATION);
-            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
-            StateManager.GetInstance().ReplaceState<MainMenuPanel>(go);
+            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.RegisterPanel);
+            StateManager.GetInstance().ReplaceState<RegisterPanel>(go);
         }
     }
 }

@@ -27,9 +27,9 @@ namespace MiniWeChat
             ClearCanvas();
             yield return null;
             AddSingleton<MessageDispatcher>(_rootObj);
-            AddSingleton<NetworkManager>(_rootObj);
             AddSingleton<UIManager>(_rootObj);
             AddSingleton<StateManager>(_rootObj);
+            AddSingleton<NetworkManager>(_rootObj);
         }
 
         private static T AddSingleton<T>(GameObject go) where T : Singleton<T>

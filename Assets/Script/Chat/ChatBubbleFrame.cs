@@ -39,7 +39,7 @@ namespace MiniWeChat
                 IMAGE_BUBBLE_HEIGHT_BASE + HEIGHT_INCREMENT * (lines - 1)
                 );
             _frameChatBubble.sizeDelta = new Vector2(
-                1080,
+                GlobalVars.DEFAULT_SCREEN_WIDTH,
                 FRAME_BUBBLE_HEIGHT_BASE + HEIGHT_INCREMENT * (lines - 1) 
                 );
         }

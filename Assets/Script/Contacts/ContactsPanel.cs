@@ -13,7 +13,7 @@ namespace MiniWeChat
         public void Start()
         {
             int chatNum = 10;
-            _contactsGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(1080, CONTACT_FRAME_HEIGHT * chatNum);
+            _contactsGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, CONTACT_FRAME_HEIGHT * chatNum);
             for (int i = 0; i < chatNum; i++)
             {
                 GameObject go = UIManager.GetInstance().AddChild(_contactsGrid.gameObject, EUIType.ContactFrame);
