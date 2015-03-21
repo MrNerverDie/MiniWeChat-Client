@@ -1,4 +1,4 @@
-﻿package protocol;
+package protocol;
 
 option java_package = "protocol";
 
