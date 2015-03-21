@@ -45,7 +45,7 @@ namespace MiniWeChat
             };
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKEEP_ALIVE_SYNC);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
 
             StartCoroutine(BeginHandleReceiveMessageQueue());
             StartCoroutine(BeginTryConnect());
@@ -54,7 +54,7 @@ namespace MiniWeChat
         public override void Release()
         {
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKEEP_ALIVE_SYNC);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
 
             CloseConnection();
         }
@@ -169,7 +169,7 @@ namespace MiniWeChat
             }
         }
 
-        private void OnKEEP_ALIVE_SYNC(uint iMessageType, object kParam)
+        private void OnKeepAliveSync(uint iMessageType, object kParam)
         {
             _isKeepAlive = true;
         }
@@ -212,7 +212,14 @@ namespace MiniWeChat
                 {
                     int bufferSize = MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 0);
                     ENetworkMessage networkMessage = (ENetworkMessage)MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 1);
-                    string msgID = BitConverter.ToString(_receiveBuffer, HEAD_SIZE * 2);
+
+                    byte[] msgIDBytes = new byte[HEAD_SIZE];
+                    for (int i = 0; i < HEAD_SIZE; i++)
+                    {
+                        msgIDBytes[i] = _receiveBuffer[position + HEAD_SIZE * 2 + i];
+                    }
+                    string msgID = BitConverter.ToString(msgIDBytes);
+                    
                     object param = UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE);
 
                     MessageArgs args = new MessageArgs
@@ -239,17 +246,13 @@ namespace MiniWeChat
                     
                     if (_forcePushMessageType.Contains(networkMessage))
                     {
-                        byte[] msgIDBytes = new byte[HEAD_SIZE];
-                        for (int i = HEAD_SIZE * 2; i < HEAD_SIZE; i++)
-                        {
-                            msgIDBytes[i] = _receiveBuffer[position + i];
-                        }
 
                         DoBeginSendPacket(networkMessage, msgIDBytes);
                     }
 
                     Debug.Log("bufferSize : " + bufferSize);
                     Debug.Log("networkMessage : " + networkMessage);
+                    Debug.Log("msgID : " + msgID);
 
                     position += bufferSize;
                 }
