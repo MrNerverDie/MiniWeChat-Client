@@ -66,6 +66,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.FriendChatBubbleFrame, "Chat/FriendChatBubbleFrame");
             _UIPathDict.Add(EUIType.PersonalChatBubbleFrame, "Chat/PersonalChatBubbleFrame");
             _UIPathDict.Add(EUIType.ChatPanel, "Chat/ChatPanel");
+            _UIPathDict.Add(EUIType.WelcomePanel, "Common/WelcomePanel");
         }
     }
 
@@ -77,5 +78,6 @@ namespace MiniWeChat
         FriendChatBubbleFrame,
         PersonalChatBubbleFrame,
         ChatPanel,
+        WelcomePanel,
     }
 }

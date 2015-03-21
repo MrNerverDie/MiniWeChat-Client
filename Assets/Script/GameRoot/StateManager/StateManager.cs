@@ -14,8 +14,8 @@ namespace MiniWeChat
         {
             _stateStack = new Stack<BaseState>();
 
-            GameObject mainMenuPanel = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
-            PushState<MainMenuPanel>(mainMenuPanel);
+            GameObject welcomePanel = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
+            PushState<WelcomePanel>(welcomePanel);
         }
 
         public void PushState<T>(GameObject go, object param = null) where T : BaseState
