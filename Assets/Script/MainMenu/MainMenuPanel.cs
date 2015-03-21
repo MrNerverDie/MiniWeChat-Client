@@ -7,13 +7,13 @@ namespace MiniWeChat
     public class MainMenuPanel : BaseState
     {
         public override void OnEnter(object param = null)
-        {   
-            
+        {
+            base.OnEnter(param);
         }
 
         public override void OnExit()
         {
-
+            base.OnExit();
         }
     }
 }

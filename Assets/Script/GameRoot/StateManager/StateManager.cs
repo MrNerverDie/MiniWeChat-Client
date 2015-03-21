@@ -64,12 +64,12 @@ namespace MiniWeChat
     {
         public virtual void OnEnter(object param = null)
         {
-
+            OnShow();
         }
 
         public virtual void OnExit()
         {
-
+            OnHide();
         }
 
         public virtual void OnHide()

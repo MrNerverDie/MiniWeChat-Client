@@ -105,7 +105,7 @@ namespace MiniWeChat
             try
             {
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                _socket.BeginConnect("192.168.45.11", 8080, new AsyncCallback(FinishConnection), null);
+                _socket.BeginConnect(GlobalVars.IPAddress, GlobalVars.IPPort, new AsyncCallback(FinishConnection), null);
             }
             catch (Exception ex)
             {

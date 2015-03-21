@@ -9,11 +9,13 @@ namespace MiniWeChat
 
         public override void OnEnter(object param = null)
         {
+            base.OnEnter(param);
             StartCoroutine(BeginWelcomeLoad());
         }
 
         public override void OnExit()
         {
+            base.OnExit();
             UIManager.GetInstance().DestroySingleUI(EUIType.WelcomePanel);
         }
 

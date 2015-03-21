@@ -6,10 +6,13 @@ namespace MiniWeChat
 {
     public class GlobalVars
     {
-        public static string PREF_USERID = "USERID";
-        public static string PREF_USERPASSWORD = "USERID";
+        public const string PREF_USER_ID = "USER_ID";
+        public const string PREF_USER_PASSWORD = "USER_RPASSWORD";
 
-        public static int DEFAULT_SCREEN_WIDTH = 1080;
+        public const int DEFAULT_SCREEN_WIDTH = 1080;
+
+        public const string IPAddress = "192.168.45.11";
+        public const  int IPPort = 8080;
     }
 }
 
