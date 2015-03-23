@@ -37,14 +37,14 @@ namespace MiniWeChat
         {
             base.OnShow();
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnRegisterRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
         }
 
         public override void OnHide()
         {
             base.OnHide();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnRegisterRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
         }
 
         public void OnValueChangeRegisterInfo(string text)
@@ -85,6 +85,9 @@ namespace MiniWeChat
                     userPassword = _userPassword,
                 };
                 NetworkManager.GetInstance().SendPacket<LoginReq>(ENetworkMessage.LOGIN_REQ, req);
+            }else
+            {
+                DialogManager.GetInstance().CreateSingleButtonDialog(rsp.resultCode.ToString());
             }
         }
 
@@ -96,6 +99,10 @@ namespace MiniWeChat
             {
                 GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
                 StateManager.GetInstance().PushState<MainMenuPanel>(go);
+            }
+            else
+            {
+                DialogManager.GetInstance().CreateSingleButtonDialog(rsp.resultCode.ToString());
             }
         }
     }

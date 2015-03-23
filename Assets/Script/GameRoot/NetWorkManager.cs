@@ -313,6 +313,11 @@ namespace MiniWeChat
         /// <param name="packet">向服务器发送的packet</param>
         private void DoBeginSendPacket<T>(ENetworkMessage networkMessage, T packet, byte[] msgID) where T : global::ProtoBuf.IExtensible
         {
+            if (_socket.Connected == false)
+            {
+                DialogManager.GetInstance().CreateSingleButtonDialog("与服务器链接已断开");
+            }
+
             try
             {
                 byte[] sendBuffer = new byte[_socket.SendBufferSize];
@@ -394,13 +399,11 @@ namespace MiniWeChat
                     case ENetworkMessage.KEEP_ALIVE_SYNC:
                         packet = Serializer.Deserialize<KeepAliveSyncPacket>(streamForProto);
                         break;
-                    case ENetworkMessage.REGISTER_REQ:
-                        break;
                     case ENetworkMessage.REGISTER_RSP:
-                        break;
-                    case ENetworkMessage.LOGIN_REQ:
+                        packet = Serializer.Deserialize<RegisterRsp>(streamForProto);
                         break;
                     case ENetworkMessage.LOGIN_RSP:
+                        packet = Serializer.Deserialize<LoginRsp>(streamForProto);
                         break;
                     default:
                         Debug.Log("No Such Packet, packet type is " + networkMessage);

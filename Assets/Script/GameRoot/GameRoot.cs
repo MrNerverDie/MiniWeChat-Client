@@ -30,6 +30,7 @@ namespace MiniWeChat
             AddSingleton<UIManager>(_rootObj);
             AddSingleton<StateManager>(_rootObj);
             AddSingleton<NetworkManager>(_rootObj);
+            AddSingleton<DialogManager>(_rootObj);
         }
 
         private static T AddSingleton<T>(GameObject go) where T : Singleton<T>

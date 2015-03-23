@@ -83,6 +83,10 @@ namespace MiniWeChat
                 GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
                 StateManager.GetInstance().PushState<MainMenuPanel>(go);
             }
+            else
+            {
+                DialogManager.GetInstance().CreateSingleButtonDialog(rsp.resultCode.ToString());
+            }
         }
     }
 }

@@ -58,6 +58,11 @@ namespace MiniWeChat
             return go;
         }
 
+        public void SetSiblingToTop(GameObject child)
+        {
+            child.transform.SetSiblingIndex(child.transform.parent.childCount - 1);
+        }
+
         private void InitUIPathDict()
         {
             _UIPathDict.Add(EUIType.MainMenuPanel, "Common/MainMenuPanel");
@@ -70,6 +75,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.BackButton, "Common/BackButton");
             _UIPathDict.Add(EUIType.RegisterPanel, "Personal/RegisterPanel");
             _UIPathDict.Add(EUIType.LoginPanel, "Personal/LoginPanel");
+            _UIPathDict.Add(EUIType.SingleButtonDialog, "Common/SingleButtonDialog");
         }
     }
 
@@ -85,5 +91,6 @@ namespace MiniWeChat
         BackButton,
         RegisterPanel,
         LoginPanel,
+        SingleButtonDialog,
     }
 }
