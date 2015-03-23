@@ -1,0 +1,17 @@
+package protocol;
+
+option java_package = "protocol";
+
+message PersonalSettingsReq{
+	optional string userName = 1 [default = ""];
+	optional string userPassword = 2 [default = ""];
+	optional int32 headIndex = 3 [default = 0];
+}
+
+message PersonalSettingsRsp{
+	enum ResultCode{
+    	SUCCESS = 0;
+		FAIL = 1;
+	}
+	required ResultCode resultCode = 1;
+}

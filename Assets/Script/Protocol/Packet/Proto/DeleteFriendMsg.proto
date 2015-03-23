@@ -1,0 +1,15 @@
+package protocol;
+
+option java_package = "protocol";
+
+message DeleteFriendReq{
+	required string friendUserId = 1;
+}
+
+message DeleteFriendRsp{
+	enum ResultCode{
+		SUCCESS = 0;
+		FAIL = 1;
+	}
+	required ResultCode resultCode = 1;
+}

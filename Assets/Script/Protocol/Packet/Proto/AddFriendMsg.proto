@@ -1,0 +1,15 @@
+package protocol;
+
+option java_package = "protocol";
+
+message AddFriendReq{
+	required string friendUserId = 1;
+}
+
+message AddFriendRsp{
+	enum ResultCode{
+		SUCCESS = 0;
+		FAIL = 1;
+	}
+	required ResultCode resultCode = 1;
+}
