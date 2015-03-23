@@ -101,6 +101,7 @@ namespace MiniWeChat
             if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
             {
                 GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
+                StateManager.GetInstance().ClearStates();
                 StateManager.GetInstance().PushState<MainMenuPanel>(go);
             }
             else

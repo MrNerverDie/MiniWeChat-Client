@@ -58,6 +58,24 @@ namespace MiniWeChat
             nextState.OnEnter(param);
             _stateStack.Push(nextState);
         }
+
+        public void ClearStates()
+        {
+            while (_stateStack.Count != 0)
+            {
+                BaseState curState = _stateStack.Pop();
+                curState.OnExit();
+            }
+        }
+
+        public void ClearStatesExceptBottom()
+        {
+            while (_stateStack.Count != 1)
+            {
+                BaseState curState = _stateStack.Pop();
+                curState.OnExit();
+            }
+        }
     }
 
     public class BaseState : MonoBehaviour
