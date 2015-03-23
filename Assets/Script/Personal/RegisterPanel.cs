@@ -21,9 +21,9 @@ namespace MiniWeChat
             UIManager.GetInstance().AddChild(gameObject, EUIType.BackButton);
 
             _buttonRegister.interactable = false;
-            _inputName.onValueChange.AddListener(OnEndEditRegisterInfo);
-            _inputId.onValueChange.AddListener(OnEndEditRegisterInfo);
-            _inputPassword.onValueChange.AddListener(OnEndEditRegisterInfo);
+            _inputName.onValueChange.AddListener(OnValueChangeRegisterInfo);
+            _inputId.onValueChange.AddListener(OnValueChangeRegisterInfo);
+            _inputPassword.onValueChange.AddListener(OnValueChangeRegisterInfo);
             _buttonRegister.onClick.AddListener(OnClickRegisterButton);
         }
 
@@ -47,7 +47,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnLoginRsp);
         }
 
-        public void OnEndEditRegisterInfo(string text)
+        public void OnValueChangeRegisterInfo(string text)
         {
             if (_inputName.text == "" || _inputId.text == "" || _inputPassword.text == "")
             {

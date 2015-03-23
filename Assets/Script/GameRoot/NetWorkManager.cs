@@ -151,8 +151,8 @@ namespace MiniWeChat
                     _socket.Disconnect(true);
                 }
                 _socket.Close();
+                Debug.Log("Client Close...");
             }
-            Debug.Log("Client Close...");
         }
 
         private IEnumerator BeginTryConnect()
@@ -161,7 +161,8 @@ namespace MiniWeChat
             {
                 if (_isKeepAlive == false)
                 {
-                    Debug.Log("Begin Reconnect...");
+                    Debug.Log("Begin Connect...");
+                    CloseConnection();
                     yield return StartCoroutine(BeginConnection());
                 }
                 _isKeepAlive = false;
@@ -189,7 +190,6 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                CloseConnection();
                 Debug.Log(ex.Message);
             }
 
@@ -265,7 +265,6 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                CloseConnection();
                 Debug.Log(ex.Message);
             }
         }
@@ -338,7 +337,6 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                CloseConnection();
                 Debug.Log(ex.Message);
             }
         }
@@ -363,7 +361,6 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                CloseConnection();
                 Debug.Log(ex.Message);
             }
         }
@@ -380,7 +377,6 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                CloseConnection();
                 Debug.Log(ex.Message);
             }
         }
