@@ -35,15 +35,19 @@ namespace MiniWeChat
         {
             base.OnShow();
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
+
         }
 
         public override void OnHide()
         {
             base.OnHide();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
+
         }
 
-        public void OnValueChangeLoginInfo(string text)
+        public void OnValueChangeLoginInfo(string text = null)
         {
             if (_inputId.text == "" || _inputPassword.text == "")
             {
@@ -87,6 +91,11 @@ namespace MiniWeChat
             {
                 DialogManager.GetInstance().CreateSingleButtonDialog(rsp.resultCode.ToString());
             }
+        }
+
+        public void OnReqTimeOut(uint iMessageType, object kParam)
+        {
+            OnValueChangeLoginInfo();
         }
     }
 }
