@@ -31,9 +31,9 @@ namespace MiniWeChat
             UIManager.GetInstance().DestroySingleUI(EUIType.LoginPanel);
         }
 
-        public override void OnShow()
+        public override void OnShow(object param = null)
         {
-            base.OnShow();
+            base.OnShow(param);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
 

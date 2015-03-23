@@ -19,6 +19,7 @@ namespace MiniWeChat
         public void OnDestroy()
         {
             NetworkManager.GetInstance().Release();
+            GlobalUser.GetInstance().Release();
         }
 
 
@@ -31,6 +32,7 @@ namespace MiniWeChat
             AddSingleton<StateManager>(_rootObj);
             AddSingleton<NetworkManager>(_rootObj);
             AddSingleton<DialogManager>(_rootObj);
+            AddSingleton<GlobalUser>(_rootObj);
         }
 
         private static T AddSingleton<T>(GameObject go) where T : Singleton<T>

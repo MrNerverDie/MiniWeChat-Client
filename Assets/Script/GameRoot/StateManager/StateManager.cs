@@ -31,7 +31,7 @@ namespace MiniWeChat
             _stateStack.Push(nextState);
         }
 
-        public void PopState()
+        public void PopState(object param = null)
         {
             if (_stateStack.Count != 0)
             {
@@ -95,7 +95,7 @@ namespace MiniWeChat
             gameObject.SetActive(false);
         }
 
-        public virtual void OnShow()
+        public virtual void OnShow(object param = null)
         {
             gameObject.SetActive(true);
         }
