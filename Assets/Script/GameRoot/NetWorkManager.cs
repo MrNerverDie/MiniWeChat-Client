@@ -86,11 +86,6 @@ namespace MiniWeChat
                 c = "Hello MiniWeChat Server",
             };
 
-            //for (int i = 0; i < 100; i++)
-            //{
-            //StartCoroutine(BeginSendPacket<KEEP_ALIVE_SYNCPacket>(ENetworkMessage.KEEP_ALIVE_SYNC, reqPacket));
-            //}
-
             _isKeepAlive = true;
 
             BeginReceivePacket();
@@ -298,8 +293,8 @@ namespace MiniWeChat
                 if (_msgIDSet.Contains(msgID))
                 {
                     _msgIDSet.Remove(msgID);
-                    MessageDispatcher.GetInstance().DispatchMessage(timeoutMessage);
-                    Debug.Log("Send Packet Type : " + networkMessage + " msgID : " + msgID + " timeout ");
+                    MessageDispatcher.GetInstance().DispatchMessage(timeoutMessage, networkMessage);
+                    DialogManager.GetInstance().CreateSingleButtonDialog("Send Packet Type : " + networkMessage + " msgID : " + msgID + " timeout ");
                 }
             }
         }
@@ -313,11 +308,6 @@ namespace MiniWeChat
         /// <param name="packet">向服务器发送的packet</param>
         private void DoBeginSendPacket<T>(ENetworkMessage networkMessage, T packet, byte[] msgID) where T : global::ProtoBuf.IExtensible
         {
-            if (_socket.Connected == false)
-            {
-                DialogManager.GetInstance().CreateSingleButtonDialog("与服务器链接已断开");
-            }
-
             try
             {
                 byte[] sendBuffer = new byte[_socket.SendBufferSize];
@@ -335,7 +325,10 @@ namespace MiniWeChat
                 Array.Copy(streamForProto.ToArray(), 0, sendBuffer, HEAD_SIZE * HEAD_NUM, streamForProto.Length);
                 lock (_socket)
                 {
-                    _socket.BeginSend(sendBuffer, 0, bufferSize, SocketFlags.None, new AsyncCallback(EndSendPacket), null);
+                    if (_socket != null && _socket.Connected)
+                    {
+                        _socket.BeginSend(sendBuffer, 0, bufferSize, SocketFlags.None, new AsyncCallback(EndSendPacket), null);                        
+                    }
                 }
                 streamForProto.Dispose();
 

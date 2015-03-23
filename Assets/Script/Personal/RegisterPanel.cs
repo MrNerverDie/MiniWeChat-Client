@@ -38,6 +38,7 @@ namespace MiniWeChat
             base.OnShow();
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnRegisterRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
         }
 
         public override void OnHide()
@@ -45,9 +46,10 @@ namespace MiniWeChat
             base.OnHide();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnRegisterRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
         }
 
-        public void OnValueChangeRegisterInfo(string text)
+        public void OnValueChangeRegisterInfo(string text = null)
         {
             if (_inputName.text == "" || _inputId.text == "" || _inputPassword.text == "")
             {
@@ -88,6 +90,7 @@ namespace MiniWeChat
             }else
             {
                 DialogManager.GetInstance().CreateSingleButtonDialog(rsp.resultCode.ToString());
+                OnValueChangeRegisterInfo();
             }
         }
 
@@ -104,6 +107,11 @@ namespace MiniWeChat
             {
                 DialogManager.GetInstance().CreateSingleButtonDialog(rsp.resultCode.ToString());
             }
+        }
+
+        public void OnReqTimeOut(uint iMessageType, object kParam)
+        {
+            OnValueChangeRegisterInfo();
         }
     }
 }
