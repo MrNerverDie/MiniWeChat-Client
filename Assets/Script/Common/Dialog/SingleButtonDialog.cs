@@ -36,6 +36,7 @@ namespace MiniWeChat
         public void Hide()
         {
             gameObject.SetActive(false);
+            _buttonConfirm.onClick.RemoveAllListeners();
         }
     }
 }

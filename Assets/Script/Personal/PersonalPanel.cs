@@ -1,11 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using protocol;
 
 namespace MiniWeChat
 {
     public class PersonalPanel : BasePanel
     {
+        public enum PersonalSetType
+        {
+            NAME = 0,
+            PASSWORD,
+            HEAD,
+        }
+
         public Text _laeblName;
         public Text _labelId;
 
@@ -14,14 +22,19 @@ namespace MiniWeChat
         public Button _buttonSetHead;
         public Button _buttonExit;
 
-        public void Start()
-        {
-            _buttonExit.onClick.AddListener(OnClickExitButton);
-        }
+        private PersonalSetType _personalSetType;
 
         public override void Show(object param = null)
         {
             base.Show(param);
+
+            _buttonExit.onClick.AddListener(OnClickExitButton);
+            _buttonSetPassword.onClick.AddListener(OnClickSetPassword);
+            _buttonSetName.onClick.AddListener(OnClickSetName);
+            _buttonSetHead.onClick.AddListener(OnClickSetHead);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+
+
             _laeblName.text = GlobalUser.GetInstance().UserName;
             _labelId.text = GlobalUser.GetInstance().UserId;
         }
@@ -29,6 +42,13 @@ namespace MiniWeChat
         public override void Hide()
         {
             base.Hide();
+
+            _buttonExit.onClick.RemoveAllListeners();
+            _buttonSetName.onClick.RemoveAllListeners();
+            _buttonSetHead.onClick.RemoveAllListeners();
+            _buttonSetPassword.onClick.RemoveAllListeners();
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+
         }
 
         public void OnClickExitButton()
@@ -37,6 +57,48 @@ namespace MiniWeChat
             StateManager.GetInstance().ClearStates();
             GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
             StateManager.GetInstance().PushState<WelcomePanel>(go);
+        }
+
+        public void OnClickSetName()
+        {
+            DialogManager.GetInstance().CreateDoubleButtonInputDialog("修改昵称", "昵称", "长度不能超过6", GlobalUser.GetInstance().UserName, InputField.ContentType.Standard, OnConfirmChange);
+            _personalSetType = PersonalSetType.NAME;
+        }
+
+        public void OnClickSetPassword()
+        {
+            DialogManager.GetInstance().CreateDoubleButtonInputDialog("修改密码", "密码", "长度不能超过20", GlobalUser.GetInstance().UserPassword, InputField.ContentType.Password, OnConfirmChange);
+            _personalSetType = PersonalSetType.PASSWORD;
+        }
+
+        public void OnClickSetHead()
+        {
+
+        }
+
+        public void OnConfirmChange(string text)
+        {
+            PersonalSettingsReq req = new PersonalSettingsReq();
+
+            if (_personalSetType == PersonalSetType.PASSWORD)
+            {
+                req.userPassword = text;
+            }
+            else if (_personalSetType == PersonalSetType.NAME)
+            {
+                req.userName = text;
+            }
+
+            NetworkManager.GetInstance().SendPacket<PersonalSettingsReq>(ENetworkMessage.PERSONALSETTINGS_REQ, req);
+        }
+
+        public void OnGetUserInfoRsp(uint iMessageType, object kParam)
+        {
+            GetUserInfoRsp rsp = kParam as GetUserInfoRsp;
+            if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
+            {
+                _laeblName.text = rsp.userItem.userName;
+            }
         }
 
     }

@@ -39,6 +39,7 @@ namespace MiniWeChat
         {
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
 
             TryLoginWithPref();
         }
@@ -47,6 +48,7 @@ namespace MiniWeChat
         {
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
         }
         #endregion
 
@@ -107,6 +109,22 @@ namespace MiniWeChat
                 PlayerPrefs.SetString(GlobalVars.PREF_USER_PASSWORD, _userPassword);
             }
         }
+
+        public void OnPersonalSetRsp(uint iMessageType, object kParam)
+        {
+            PersonalSettingsRsp rsp = kParam as PersonalSettingsRsp;
+
+            if (rsp.resultCode == PersonalSettingsRsp.ResultCode.SUCCESS)
+            {
+                GetUserInfoReq req = new GetUserInfoReq
+                {
+                    targetUserId = _userId,
+                };
+
+                NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+            }
+        }
+
         #endregion
     }
 }
