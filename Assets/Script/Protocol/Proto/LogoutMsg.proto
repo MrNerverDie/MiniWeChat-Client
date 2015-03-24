@@ -1,0 +1,16 @@
+package protocol;
+
+option java_package = "protocol.Msg";
+
+message LogoutReq{
+
+}
+
+message LogoutRsp{
+	enum ResultCode{
+    	SUCCESS = 0;
+		FAIL = 1;
+	}
+
+	required ResultCode resultCode = 1;
+}

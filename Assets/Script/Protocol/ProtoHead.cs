@@ -51,7 +51,16 @@ namespace protocol
       DELETEFRIEND_REQ = 11,
             
       [global::ProtoBuf.ProtoEnum(Name=@"DELETEFRIEND_RSP", Value=12)]
-      DELETEFRIEND_RSP = 12
+      DELETEFRIEND_RSP = 12,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"OFFLINE", Value=13)]
+      OFFLINE = 13,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"LOGOUT_REQ", Value=14)]
+      LOGOUT_REQ = 14,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"LOGOUT_RSP", Value=15)]
+      LOGOUT_RSP = 15
     }
   
 }
