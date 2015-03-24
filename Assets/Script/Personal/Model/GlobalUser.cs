@@ -7,6 +7,7 @@ namespace MiniWeChat
 {
     public class GlobalUser : Singleton<GlobalUser>
     {
+        #region Prop
         private string _userId;
         public string UserId
         {
@@ -26,30 +27,87 @@ namespace MiniWeChat
             get { return _userName; }
         }
 
+        private bool _isLogin = false;
+        public bool IsLogin
+        {
+            get { return _isLogin; }
+        }
+        #endregion
+
+        #region LifeCycle
         public override void Init()
         {
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfo);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
+
+            TryLoginWithPref();
         }
 
         public override void Release()
         {
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfo);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnGetUserInfoRsp);
         }
+        #endregion
 
-        public void OnGetUserInfo(uint iMessageType, object kParam)
+        #region Login
+        private void TryLoginWithPref()
         {
-            GetUserInfoRsp rsp = kParam as GetUserInfoRsp;
-            _userId = rsp.userItem.userId;
-            _userName = rsp.userItem.userName;
-            if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
+            if (PlayerPrefs.HasKey(GlobalVars.PREF_USER_ID) && PlayerPrefs.HasKey(GlobalVars.PREF_USER_PASSWORD))
             {
-                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
-                StateManager.GetInstance().ClearStates();
-                StateManager.GetInstance().PushState<MainMenuPanel>(go);
+                TryLogin(PlayerPrefs.GetString(GlobalVars.PREF_USER_ID), PlayerPrefs.GetString(GlobalVars.PREF_USER_PASSWORD));                
             }
         }
 
-        
+        public void TryLogin(string id, string password)
+        {
+            LoginReq req = new LoginReq
+            {
+                userId = id,
+                userPassword = password
+            };
+            _userId = id;
+            _userPassword = password;
+            NetworkManager.GetInstance().SendPacket<LoginReq>(ENetworkMessage.LOGIN_REQ, req);
+        }
+
+        public void LogOut()
+        {
+            PlayerPrefs.DeleteKey(GlobalVars.PREF_USER_PASSWORD);
+            _isLogin = false;
+        }
+
+        #endregion
+
+        #region MessageHandler
+        public void OnGetUserInfoRsp(uint iMessageType, object kParam)
+        {
+            GetUserInfoRsp rsp = kParam as GetUserInfoRsp;
+            if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
+            {
+                _userId = rsp.userItem.userId;
+                _userName = rsp.userItem.userName;
+            }
+        }
+
+        public void OnLoginRsp(uint iMessageType, object kParam)
+        {
+            LoginRsp rsp = kParam as LoginRsp;
+            if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
+            {
+                _isLogin = true;
+
+                GetUserInfoReq req = new GetUserInfoReq
+                {
+                    targetUserId = _userId,
+                };
+                NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+
+                PlayerPrefs.SetString(GlobalVars.PREF_USER_ID, _userId);
+                PlayerPrefs.SetString(GlobalVars.PREF_USER_PASSWORD, _userPassword);
+            }
+        }
+        #endregion
     }
 }
 

@@ -14,6 +14,7 @@ namespace MiniWeChat
         public override void OnExit()
         {
             base.OnExit();
+            UIManager.GetInstance().DestroySingleUI(EUIType.MainMenuPanel);
         }
 
 

@@ -22,8 +22,16 @@ namespace MiniWeChat
         private IEnumerator BeginWelcomeLoad()
         {
             yield return new WaitForSeconds(WELCOME_LOAD_DURATION);
-            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.LoginPanel);
-            StateManager.GetInstance().ReplaceState<LoginPanel>(go);
+            if (GlobalUser.GetInstance().IsLogin == false)
+            {
+                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.LoginPanel);
+                StateManager.GetInstance().ReplaceState<LoginPanel>(go);
+            }
+            else
+            {
+                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
+                StateManager.GetInstance().ReplaceState<MainMenuPanel>(go);
+            }
         }
     }
 }

@@ -12,9 +12,6 @@ namespace MiniWeChat
         public Button _buttonLogin;
         public Button _buttonRegister;
 
-        private string _userID;
-        private string _userPassword;
-
         public override void OnEnter(object param = null)
         {
             base.OnEnter(param);
@@ -37,6 +34,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
 
+            _inputId.text = PlayerPrefs.GetString(GlobalVars.PREF_USER_ID);
         }
 
         public override void OnHide()
@@ -61,14 +59,7 @@ namespace MiniWeChat
 
         public void OnClickLoginButton()
         {
-            LoginReq req = new LoginReq
-            {
-                userId = _inputId.text,
-                userPassword = _inputPassword.text,
-            };
-            _userID = req.userId;
-            _userPassword = req.userPassword;
-            NetworkManager.GetInstance().SendPacket<LoginReq>(ENetworkMessage.LOGIN_REQ, req);
+            GlobalUser.GetInstance().TryLogin(_inputId.text, _inputPassword.text);
             _buttonLogin.interactable = false;
         }
 
@@ -84,13 +75,9 @@ namespace MiniWeChat
             Debug.Log(rsp.resultCode);
             if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
             {
-                //GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
-                //StateManager.GetInstance().ReplaceState<MainMenuPanel>(go);
-                GetUserInfoReq req = new GetUserInfoReq
-                {
-                    targetUserId = _userID,
-                };
-                NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
+                StateManager.GetInstance().ClearStates();
+                StateManager.GetInstance().PushState<MainMenuPanel>(go);
             }
             else
             {

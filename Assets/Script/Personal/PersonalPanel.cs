@@ -14,6 +14,11 @@ namespace MiniWeChat
         public Button _buttonSetHead;
         public Button _buttonExit;
 
+        public void Start()
+        {
+            _buttonExit.onClick.AddListener(OnClickExitButton);
+        }
+
         public override void Show(object param = null)
         {
             base.Show(param);
@@ -28,9 +33,10 @@ namespace MiniWeChat
 
         public void OnClickExitButton()
         {
+            GlobalUser.GetInstance().LogOut();
             StateManager.GetInstance().ClearStates();
-            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.LoginPanel);
-            StateManager.GetInstance().PushState<LoginPanel>(go);
+            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
+            StateManager.GetInstance().PushState<WelcomePanel>(go);
         }
 
     }

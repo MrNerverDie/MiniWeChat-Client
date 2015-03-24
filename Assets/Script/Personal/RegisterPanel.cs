@@ -81,12 +81,7 @@ namespace MiniWeChat
             Debug.Log(rsp.resultCode);
             if (rsp.resultCode == RegisterRsp.ResultCode.SUCCESS)
             {
-                LoginReq req = new LoginReq
-                {
-                    userId = _userID,
-                    userPassword = _userPassword,
-                };
-                NetworkManager.GetInstance().SendPacket<LoginReq>(ENetworkMessage.LOGIN_REQ, req);
+                GlobalUser.GetInstance().TryLogin(_userID, _userPassword);
             }else
             {
                 DialogManager.GetInstance().CreateSingleButtonDialog(rsp.resultCode.ToString());
@@ -100,14 +95,9 @@ namespace MiniWeChat
             Debug.Log(rsp.resultCode);
             if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
             {
-                //GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
-                //StateManager.GetInstance().ClearStates();
-                //StateManager.GetInstance().PushState<MainMenuPanel>(go);
-                GetUserInfoReq req = new GetUserInfoReq
-                {
-                    targetUserId = _userID,
-                };
-                NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
+                StateManager.GetInstance().ClearStates();
+                StateManager.GetInstance().PushState<MainMenuPanel>(go);
             }
             else
             {
