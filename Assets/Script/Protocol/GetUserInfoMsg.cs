@@ -40,13 +40,14 @@ namespace protocol
       get { return _resultCode; }
       set { _resultCode = value; }
     }
-    private readonly global::System.Collections.Generic.List<protocol.UserItem> _userItem = new global::System.Collections.Generic.List<protocol.UserItem>();
-    [global::ProtoBuf.ProtoMember(2, Name=@"userItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<protocol.UserItem> userItem
+    private protocol.UserItem _userItem = null;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"userItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public protocol.UserItem userItem
     {
       get { return _userItem; }
+      set { _userItem = value; }
     }
-  
     [global::ProtoBuf.ProtoContract(Name=@"ResultCode")]
     public enum ResultCode
     {

@@ -84,8 +84,13 @@ namespace MiniWeChat
             Debug.Log(rsp.resultCode);
             if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
             {
-                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
-                StateManager.GetInstance().ReplaceState<MainMenuPanel>(go);
+                //GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
+                //StateManager.GetInstance().ReplaceState<MainMenuPanel>(go);
+                GetUserInfoReq req = new GetUserInfoReq
+                {
+                    targetUserId = _userID,
+                };
+                NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
             }
             else
             {

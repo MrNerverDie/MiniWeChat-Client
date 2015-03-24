@@ -398,6 +398,9 @@ namespace MiniWeChat
                     case ENetworkMessage.LOGIN_RSP:
                         packet = Serializer.Deserialize<LoginRsp>(streamForProto);
                         break;
+                    case ENetworkMessage.GETUSERINFO_RSP:
+                        packet = Serializer.Deserialize<GetUserInfoRsp>(streamForProto);
+                        break;
                     default:
                         Debug.Log("No Such Packet, packet type is " + networkMessage);
                         break;

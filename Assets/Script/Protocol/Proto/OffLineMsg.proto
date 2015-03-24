@@ -1,0 +1,7 @@
+package protocol;
+
+option java_package = "protocol.Msg";
+
+message OffLine{
+	
+}

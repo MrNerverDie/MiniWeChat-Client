@@ -4,21 +4,26 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    public class PersonalPanel : MonoBehaviour
+    public class PersonalPanel : BasePanel
     {
+        public Text _laeblName;
+        public Text _labelId;
+
         public Button _buttonSetName;
         public Button _buttonSetPassword;
         public Button _buttonSetHead;
         public Button _buttonExit;
 
-        public void Start()
+        public override void Show(object param = null)
         {
-            
+            base.Show(param);
+            _laeblName.text = GlobalUser.GetInstance().UserName;
+            _labelId.text = GlobalUser.GetInstance().UserId;
         }
 
-        public void Show(bool isShow)
+        public override void Hide()
         {
-            gameObject.SetActive(isShow);
+            base.Hide();
         }
 
         public void OnClickExitButton()

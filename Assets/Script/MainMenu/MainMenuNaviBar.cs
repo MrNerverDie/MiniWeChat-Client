@@ -1,52 +1,66 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace MiniWeChat
 {
 
     public class MainMenuNaviBar : MonoBehaviour
     {
+        public enum MainMenuTab
+        {
+            CHAT_LIST = 0,
+            CONTACTS,
+            EXPLORE,
+            PERSONAL,
+        }
 
-        public ChatListPanel _chatListPanel;
-        public ContactsPanel _contactsPanel;
-        public ExplorePanel _explorePanel;
-        public PersonalPanel _personalPanel;
-        public Toggle _toggleChatList, _toggleContacts, _toggleExplore, _togglePersonal;
+        private const int TAB_NUM = 4;
+
+        public List<BasePanel> _panelList;
+        public List<Toggle> _toggleList;
 
         public void Start()
         {
-            _toggleChatList.onValueChanged.AddListener(SwitchToChatList);
-            _toggleContacts.onValueChanged.AddListener(SwitchToContacts);
-            _toggleExplore.onValueChanged.AddListener(SwitchToExplore);
-            _togglePersonal.onValueChanged.AddListener(SwitchToPersonal);
+            foreach (var toggle in _toggleList)
+            {
+                toggle.onValueChanged.AddListener(SwitchToTab);
+            }
 
-            _toggleChatList.Select();
-            SwitchToChatList(true);
-            SwitchToContacts(false);
-            SwitchToExplore(false);
-            SwitchToPersonal(false);
+            SwitchToTab((int)MainMenuTab.CHAT_LIST);
         }
 
-        public void SwitchToChatList(bool check)
+        public void SwitchToTab(bool check)
         {
-            _chatListPanel.Show(check);
+            if (check)
+            {
+                foreach (var toggle in GetComponent<ToggleGroup>().ActiveToggles())
+                {
+                    int index = _toggleList.IndexOf(toggle);
+                    SwitchToTab(index);
+                }
+            }
         }
 
-        public void SwitchToContacts(bool check)
+        private void SwitchToTab(int index)
         {
-            _contactsPanel.Show(check);
+            _toggleList[index].Select();
+
+            for (int i = 0; i < TAB_NUM; i++)
+            {
+                if (i == index)
+                {
+                    _panelList[i].Show();
+                }
+                else
+                {
+                    _panelList[i].Hide();
+                }
+            }
+            
         }
 
-        public void SwitchToExplore(bool check)
-        {
-            _explorePanel.Show(check);
-        }
-
-        public void SwitchToPersonal(bool check)
-        {
-            _personalPanel.Show(check);
-        }
     }
 }
 

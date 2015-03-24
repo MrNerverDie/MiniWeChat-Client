@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    public class ContactsPanel : MonoBehaviour
+    public class ContactsPanel : BasePanel
     {
         private const int CONTACT_FRAME_HEIGHT = 150;
 
@@ -18,11 +18,6 @@ namespace MiniWeChat
             {
                 GameObject go = UIManager.GetInstance().AddChild(_contactsGrid.gameObject, EUIType.ContactFrame);
             }
-        }
-
-        public void Show(bool isShow)
-        {
-            gameObject.SetActive(isShow);
         }
     }
 }

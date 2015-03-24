@@ -13,5 +13,5 @@ message GetUserInfoRsp{
 		FAIL = 1;//未搜索到用户
 	}
 	required ResultCode resultCode = 1;
-	repeated UserItem userItem = 2;
+	optional UserItem userItem = 2;
 }

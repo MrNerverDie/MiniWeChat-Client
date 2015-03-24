@@ -15,5 +15,7 @@ namespace MiniWeChat
         {
             base.OnExit();
         }
+
+
     }
 }

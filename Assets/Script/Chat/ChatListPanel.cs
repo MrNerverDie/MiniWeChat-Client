@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    public class ChatListPanel : MonoBehaviour
+    public class ChatListPanel : BasePanel
     {
         private const int CHAT_FRAME_HEIGHT = 200;
 
@@ -18,11 +18,6 @@ namespace MiniWeChat
             {
                 GameObject go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.ChatFrame);
             }
-        }
-
-        public void Show(bool isShow)
-        {
-            gameObject.SetActive(isShow);
         }
 
     }
