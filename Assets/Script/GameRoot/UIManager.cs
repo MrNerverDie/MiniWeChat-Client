@@ -77,6 +77,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.LoginPanel, "Personal/LoginPanel");
             _UIPathDict.Add(EUIType.SingleButtonDialog, "Common/Dialog/SingleButtonDialog");
             _UIPathDict.Add(EUIType.DoubleButtonInputDialog, "Common/Dialog/DoubleButtonInputDialog");
+            _UIPathDict.Add(EUIType.ImageListPanel, "Common/ImageListPanel");
         }
     }
 
@@ -94,6 +95,7 @@ namespace MiniWeChat
         LoginPanel,
         SingleButtonDialog,
         DoubleButtonInputDialog,
+        ImageListPanel,
     }
 
     public class BasePanel : MonoBehaviour

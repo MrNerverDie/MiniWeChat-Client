@@ -33,6 +33,8 @@ namespace MiniWeChat
             _buttonSetName.onClick.AddListener(OnClickSetName);
             _buttonSetHead.onClick.AddListener(OnClickSetHead);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+
 
 
             _laeblName.text = GlobalUser.GetInstance().UserName;
@@ -48,15 +50,14 @@ namespace MiniWeChat
             _buttonSetHead.onClick.RemoveAllListeners();
             _buttonSetPassword.onClick.RemoveAllListeners();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+
 
         }
 
         public void OnClickExitButton()
         {
-            GlobalUser.GetInstance().LogOut();
-            StateManager.GetInstance().ClearStates();
-            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
-            StateManager.GetInstance().PushState<WelcomePanel>(go);
+            NetworkManager.GetInstance().SendPacket<LogoutRsp>(ENetworkMessage.LOGOUT_REQ, new LogoutRsp());
         }
 
         public void OnClickSetName()
@@ -73,7 +74,9 @@ namespace MiniWeChat
 
         public void OnClickSetHead()
         {
-
+            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.ImageListPanel);
+            StateManager.GetInstance().PushState<ImageListPanel>(go, new CallBackWithString { callback = OnConfirmChange });
+            _personalSetType = PersonalSetType.HEAD;
         }
 
         public void OnConfirmChange(string text)
@@ -100,6 +103,14 @@ namespace MiniWeChat
                 _laeblName.text = rsp.userItem.userName;
             }
         }
+
+        public void OnLogOutRsp(uint iMessageType, object kParam)
+        {
+            StateManager.GetInstance().ClearStates();
+            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
+            StateManager.GetInstance().PushState<WelcomePanel>(go);
+        }
+
 
     }
 }

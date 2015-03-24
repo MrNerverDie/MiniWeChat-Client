@@ -404,6 +404,9 @@ namespace MiniWeChat
                     case ENetworkMessage.PERSONALSETTINGS_RSP:
                         packet = Serializer.Deserialize<PersonalSettingsRsp>(streamForProto);
                         break;
+                    case ENetworkMessage.LOGOUT_RSP:
+                        packet = Serializer.Deserialize<LogoutRsp>(streamForProto);
+                        break;
                     default:
                         Debug.Log("No Such Packet, packet type is " + networkMessage);
                         break;

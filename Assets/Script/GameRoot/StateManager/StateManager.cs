@@ -115,4 +115,8 @@ namespace MiniWeChat
         }
     }
 
+    public class CallBackWithString
+    {
+        public UnityEngine.Events.UnityAction<string> callback;
+    }
 }

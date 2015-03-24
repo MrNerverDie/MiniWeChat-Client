@@ -6,6 +6,8 @@ namespace MiniWeChat
 {
     public class BackButton : MonoBehaviour
     {
+        private object _param;
+
         public void Start()
         {
             gameObject.GetComponent<Button>().onClick.AddListener(OnClickBackButton);
@@ -13,7 +15,12 @@ namespace MiniWeChat
 
         public void OnClickBackButton()
         {
-            StateManager.GetInstance().PopState();
+            StateManager.GetInstance().PopState(_param);
+        }
+
+        public void SetBackParam(object param)
+        {
+            _param = param;
         }
     }
 }

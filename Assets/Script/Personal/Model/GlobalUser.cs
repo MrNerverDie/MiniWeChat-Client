@@ -40,6 +40,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
 
             TryLoginWithPref();
         }
@@ -49,6 +50,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnGetUserInfoRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnLogOutRsp);
         }
         #endregion
 
@@ -71,12 +73,6 @@ namespace MiniWeChat
             _userId = id;
             _userPassword = password;
             NetworkManager.GetInstance().SendPacket<LoginReq>(ENetworkMessage.LOGIN_REQ, req);
-        }
-
-        public void LogOut()
-        {
-            PlayerPrefs.DeleteKey(GlobalVars.PREF_USER_PASSWORD);
-            _isLogin = false;
         }
 
         #endregion
@@ -122,6 +118,17 @@ namespace MiniWeChat
                 };
 
                 NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+            }
+        }
+
+        public void OnLogOutRsp(uint iMessageType, object kParam)
+        {
+            LogoutRsp rsp = kParam as LogoutRsp;
+
+            if (rsp.resultCode == LogoutRsp.ResultCode.SUCCESS)
+            {
+                PlayerPrefs.DeleteKey(GlobalVars.PREF_USER_PASSWORD);
+                _isLogin = false;
             }
         }
 
