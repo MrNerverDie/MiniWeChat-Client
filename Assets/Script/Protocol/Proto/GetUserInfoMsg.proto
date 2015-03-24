@@ -1,0 +1,17 @@
+package protocol;
+
+option java_package = "protocol.Msg";
+import "UserData.proto";
+
+message GetUserInfoReq{
+	required string targetUserId = 1 ;
+}
+
+message GetUserInfoRsp{
+	enum ResultCode{
+		SUCCESS = 0;//搜索到用户
+		FAIL = 1;//未搜索到用户
+	}
+	required ResultCode resultCode = 1;
+	repeated UserItem userItem = 2;
+}

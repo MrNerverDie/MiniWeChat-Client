@@ -1,6 +1,6 @@
 package protocol;
 
-option java_package = "protocol";
+option java_package = "protocol.Msg";
 
 message LoginReq{
 	required string userId= 1;

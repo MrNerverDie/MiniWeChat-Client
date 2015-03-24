@@ -27,7 +27,31 @@ namespace protocol
       LOGIN_REQ = 3,
             
       [global::ProtoBuf.ProtoEnum(Name=@"LOGIN_RSP", Value=4)]
-      LOGIN_RSP = 4
+      LOGIN_RSP = 4,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"PERSONALSETTINGS_REQ", Value=5)]
+      PERSONALSETTINGS_REQ = 5,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"PERSONALSETTINGS_RSP", Value=6)]
+      PERSONALSETTINGS_RSP = 6,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"GETUSERINFO_REQ", Value=7)]
+      GETUSERINFO_REQ = 7,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"GETUSERINFO_RSP", Value=8)]
+      GETUSERINFO_RSP = 8,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ADDFRIEND_REQ", Value=9)]
+      ADDFRIEND_REQ = 9,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ADDFRIEND_RSP", Value=10)]
+      ADDFRIEND_RSP = 10,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"DELETEFRIEND_REQ", Value=11)]
+      DELETEFRIEND_REQ = 11,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"DELETEFRIEND_RSP", Value=12)]
+      DELETEFRIEND_RSP = 12
     }
   
 }

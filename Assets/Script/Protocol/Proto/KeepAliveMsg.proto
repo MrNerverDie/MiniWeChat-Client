@@ -1,6 +1,6 @@
 package protocol;
 
-option java_package = "protocol";
+option java_package = "protocol.Msg";
 
 message KeepAliveSyncPacket{
 	optional int32 a=1;

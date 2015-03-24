@@ -1,6 +1,6 @@
 package protocol;
 
-option java_package = "protocol";
+option java_package = "protocol.Msg";
 
 message DeleteFriendReq{
 	required string friendUserId = 1;
