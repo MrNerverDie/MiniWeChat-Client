@@ -91,6 +91,10 @@ namespace MiniWeChat
             {
                 req.userName = text;
             }
+            else if (_personalSetType == PersonalSetType.HEAD)
+            {
+                req.headIndex = int.Parse(text);
+            }
 
             NetworkManager.GetInstance().SendPacket<PersonalSettingsReq>(ENetworkMessage.PERSONALSETTINGS_REQ, req);
         }
@@ -101,6 +105,7 @@ namespace MiniWeChat
             if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
             {
                 _laeblName.text = rsp.userItem.userName;
+                
             }
         }
 

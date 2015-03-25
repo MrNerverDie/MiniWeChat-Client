@@ -41,8 +41,8 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
 
-            TryLoginWithPref();
         }
 
         public override void Release()
@@ -51,11 +51,13 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnGetUserInfoRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnLogOutRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
+
         }
         #endregion
 
         #region Login
-        private void TryLoginWithPref()
+        private void TryLoginWithPref(uint iMessageType, object kParam)
         {
             if (PlayerPrefs.HasKey(GlobalVars.PREF_USER_ID) && PlayerPrefs.HasKey(GlobalVars.PREF_USER_PASSWORD))
             {
