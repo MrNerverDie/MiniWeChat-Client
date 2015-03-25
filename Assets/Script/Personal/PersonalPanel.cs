@@ -25,14 +25,19 @@ namespace MiniWeChat
 
         private PersonalSetType _personalSetType;
 
+        public void Start()
+        {
+            _buttonSetPassword.onClick.AddListener(OnClickSetPassword);
+            _buttonSetName.onClick.AddListener(OnClickSetName);
+            _buttonSetHead.onClick.AddListener(OnClickSetHead);
+            _buttonExit.onClick.AddListener(OnClickExitButton);
+        }
+
         public override void Show(object param = null)
         {
             base.Show(param);
 
-            _buttonExit.onClick.AddListener(OnClickExitButton);
-            _buttonSetPassword.onClick.AddListener(OnClickSetPassword);
-            _buttonSetName.onClick.AddListener(OnClickSetName);
-            _buttonSetHead.onClick.AddListener(OnClickSetHead);
+
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
 
             _laeblName.text = GlobalUser.GetInstance().UserName;
@@ -43,11 +48,6 @@ namespace MiniWeChat
         public override void Hide()
         {
             base.Hide();
-
-            _buttonExit.onClick.RemoveAllListeners();
-            _buttonSetName.onClick.RemoveAllListeners();
-            _buttonSetHead.onClick.RemoveAllListeners();
-            _buttonSetPassword.onClick.RemoveAllListeners();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
 
 
