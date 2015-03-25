@@ -10,11 +10,29 @@
 // Generated from: OffLineMsg.proto
 namespace protocol
 {
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"OffLine")]
-  public partial class OffLine : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"OffLineSync")]
+  public partial class OffLineSync : global::ProtoBuf.IExtensible
   {
-    public OffLine() {}
+    public OffLineSync() {}
     
+    private protocol.OffLineSync.CauseCode _causeCode;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"causeCode", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public protocol.OffLineSync.CauseCode causeCode
+    {
+      get { return _causeCode; }
+      set { _causeCode = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"CauseCode")]
+    public enum CauseCode
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_PASSWORD", Value=0)]
+      CHANGE_PASSWORD = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ANOTHER_LOGIN", Value=1)]
+      ANOTHER_LOGIN = 1
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

@@ -42,6 +42,7 @@ namespace MiniWeChat
             _forcePushMessageType = new HashSet<ENetworkMessage> 
             { 
                 ENetworkMessage.KEEP_ALIVE_SYNC,
+                ENetworkMessage.OFFLINE_SYNC,
             };
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
@@ -412,6 +413,9 @@ namespace MiniWeChat
                         break;
                     case ENetworkMessage.DELETEFRIEND_RSP:
                         packet = Serializer.Deserialize<DeleteFriendRsp>(streamForProto);
+                        break;
+                    case ENetworkMessage.OFFLINE_SYNC:
+                        packet = Serializer.Deserialize<OffLineSync>(streamForProto);
                         break;
                     default:
                         Debug.Log("No Such Packet, packet type is " + networkMessage);

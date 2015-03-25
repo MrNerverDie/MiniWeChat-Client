@@ -48,6 +48,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, TryLoginWithPref);
 
         }
 
@@ -58,6 +59,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, TryLoginWithPref);
 
         }
         #endregion
@@ -81,6 +83,16 @@ namespace MiniWeChat
             _userId = id;
             _userPassword = password;
             NetworkManager.GetInstance().SendPacket<LoginReq>(ENetworkMessage.LOGIN_REQ, req);
+        }
+
+        private void DoLogOut()
+        {
+            PlayerPrefs.DeleteKey(GlobalVars.PREF_USER_PASSWORD);
+            _isLogin = false;
+
+            StateManager.GetInstance().ClearStates();
+            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
+            StateManager.GetInstance().PushState<WelcomePanel>(go);
         }
 
         #endregion
@@ -136,10 +148,20 @@ namespace MiniWeChat
 
             if (rsp.resultCode == LogoutRsp.ResultCode.SUCCESS)
             {
-                PlayerPrefs.DeleteKey(GlobalVars.PREF_USER_PASSWORD);
-                _isLogin = false;
+                DoLogOut();
             }
         }
+
+        public void OnOffLineSync(uint iMessageType, object kParam)
+        {
+            OffLineSync rsp = kParam as OffLineSync;
+
+            if (rsp.causeCode == OffLineSync.CauseCode.CHANGE_PASSWORD)
+            {
+                DoLogOut();
+            }
+        }
+
 
         #endregion
     }

@@ -34,7 +34,6 @@ namespace MiniWeChat
             _buttonSetName.onClick.AddListener(OnClickSetName);
             _buttonSetHead.onClick.AddListener(OnClickSetHead);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
 
             _laeblName.text = GlobalUser.GetInstance().UserName;
             _labelId.text = GlobalUser.GetInstance().UserId;
@@ -50,7 +49,6 @@ namespace MiniWeChat
             _buttonSetHead.onClick.RemoveAllListeners();
             _buttonSetPassword.onClick.RemoveAllListeners();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
 
 
         }
@@ -107,13 +105,6 @@ namespace MiniWeChat
                 _laeblName.text = rsp.userItem.userName;
                 UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + rsp.userItem.headIndex);
             }
-        }
-
-        public void OnLogOutRsp(uint iMessageType, object kParam)
-        {
-            StateManager.GetInstance().ClearStates();
-            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
-            StateManager.GetInstance().PushState<WelcomePanel>(go);
         }
 
 
