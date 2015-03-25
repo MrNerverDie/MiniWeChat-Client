@@ -31,15 +31,19 @@ namespace MiniWeChat.Editor
                     {
                         string allPath = pngFile.FullName;
                         string assetPath = allPath.Substring(allPath.IndexOf("Assets"));
-                        Sprite sprite = Resources.LoadAssetAtPath<Sprite>(assetPath);
-                        GameObject go = new GameObject(sprite.name);
-                        go.AddComponent<SpriteRenderer>().sprite = sprite;
                         string prefabPath = assetPath.Insert(assetPath.IndexOf("Raw"), @"Resources\");
                         prefabPath = prefabPath.Replace("png", "prefab");
                         prefabPath = prefabPath.Replace("jpg", "prefab");
                         prefabPath = prefabPath.Replace(@"\", @"/");
-                        PrefabUtility.CreatePrefab(prefabPath, go);
-                        GameObject.DestroyImmediate(go);
+                        string allPrefabPath = Application.dataPath + "/" + prefabPath.Substring(prefabPath.LastIndexOf("Resources"));
+                        if (!File.Exists(allPrefabPath))
+                        {
+                            Sprite sprite = Resources.LoadAssetAtPath<Sprite>(assetPath);
+                            GameObject go = new GameObject(sprite.name);
+                            go.AddComponent<SpriteRenderer>().sprite = sprite;
+                            PrefabUtility.CreatePrefab(prefabPath, go);
+                            GameObject.DestroyImmediate(go);
+                        }
 					}
                 }
             }

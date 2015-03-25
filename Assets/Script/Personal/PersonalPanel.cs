@@ -57,7 +57,7 @@ namespace MiniWeChat
 
         public void OnClickExitButton()
         {
-            NetworkManager.GetInstance().SendPacket<LogoutRsp>(ENetworkMessage.LOGOUT_REQ, new LogoutRsp());
+            NetworkManager.GetInstance().SendPacket<LogoutReq>(ENetworkMessage.LOGOUT_REQ, new LogoutReq());
         }
 
         public void OnClickSetName()
