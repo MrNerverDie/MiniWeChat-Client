@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 42742d506e8920c4797948a7dfbb97b6
+guid: 8f3bdcb3c4a6cb94ea2e577cfc288fd5
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -43,5 +43,5 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites: []
-  spritePackingTag: Chat
+  spritePackingTag: Common
   userData: 

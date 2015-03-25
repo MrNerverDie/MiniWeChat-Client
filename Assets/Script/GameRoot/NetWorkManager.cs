@@ -407,6 +407,12 @@ namespace MiniWeChat
                     case ENetworkMessage.LOGOUT_RSP:
                         packet = Serializer.Deserialize<LogoutRsp>(streamForProto);
                         break;
+                    case ENetworkMessage.ADDFRIEND_RSP:
+                        packet = Serializer.Deserialize<AddFriendRsp>(streamForProto);
+                        break;
+                    case ENetworkMessage.DELETEFRIEND_RSP:
+                        packet = Serializer.Deserialize<DeleteFriendRsp>(streamForProto);
+                        break;
                     default:
                         Debug.Log("No Such Packet, packet type is " + networkMessage);
                         break;
