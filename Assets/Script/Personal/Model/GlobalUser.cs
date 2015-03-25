@@ -32,6 +32,12 @@ namespace MiniWeChat
         {
             get { return _isLogin; }
         }
+
+        private int _headIndex;
+        public int HeadIndex
+        {
+            get { return _headIndex; }
+        }
         #endregion
 
         #region LifeCycle
@@ -87,6 +93,7 @@ namespace MiniWeChat
             {
                 _userId = rsp.userItem.userId;
                 _userName = rsp.userItem.userName;
+                _headIndex = rsp.userItem.headIndex;
             }
         }
 

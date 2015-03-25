@@ -10,6 +10,7 @@ namespace MiniWeChat
 
         private Dictionary<EUIType, GameObject> _UIDict;
         private Dictionary<EUIType, string> _UIPathDict;
+        private Dictionary<EAtlasName, string> _atlasPathDict;
 
         private Transform _canvas;
 
@@ -18,8 +19,10 @@ namespace MiniWeChat
             _canvas = GameObject.Find("Canvas").transform;
             _UIDict = new Dictionary<EUIType, GameObject>();
             _UIPathDict = new Dictionary<EUIType, string>();
+            _atlasPathDict = new Dictionary<EAtlasName, string>();
 
             InitUIPathDict();
+            InitAtlasPathDict();
         }
 
         public GameObject GetSingleUI(EUIType name)
@@ -63,6 +66,12 @@ namespace MiniWeChat
             child.transform.SetSiblingIndex(child.transform.parent.childCount - 1);
         }
 
+        public void SetImage(Image image, EAtlasName eAtlasName, string spriteName)
+        {
+            Sprite sprite = Resources.Load<GameObject>("Raw/Image/" + _atlasPathDict[eAtlasName] + "/" + spriteName).GetComponent<SpriteRenderer>().sprite;
+            image.sprite = sprite;
+        }
+
         private void InitUIPathDict()
         {
             _UIPathDict.Add(EUIType.MainMenuPanel, "Common/MainMenuPanel");
@@ -79,11 +88,20 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.DoubleButtonInputDialog, "Common/Dialog/DoubleButtonInputDialog");
             _UIPathDict.Add(EUIType.ImageListPanel, "Common/ImageListPanel");
         }
+
+        private void InitAtlasPathDict()
+        {
+            _atlasPathDict.Add(EAtlasName.Chat, "Chat");
+            _atlasPathDict.Add(EAtlasName.Common, "Common");
+            _atlasPathDict.Add(EAtlasName.Head, "Head");
+            _atlasPathDict.Add(EAtlasName.MainMenu, "MainMenu");
+            _atlasPathDict.Add(EAtlasName.Single, "Single");
+        }
     }
 
     public enum EUIType
     {
-        MainMenuPanel = 1,
+        MainMenuPanel = 0,
         ChatFrame,
         ContactFrame,
         FriendChatBubbleFrame,
@@ -96,6 +114,15 @@ namespace MiniWeChat
         SingleButtonDialog,
         DoubleButtonInputDialog,
         ImageListPanel,
+    }
+
+    public enum EAtlasName
+    {
+        Chat = 0,
+        Common,
+        Head,
+        MainMenu,
+        Single,
     }
 
     public class BasePanel : MonoBehaviour

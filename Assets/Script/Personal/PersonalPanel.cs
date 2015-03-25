@@ -16,6 +16,7 @@ namespace MiniWeChat
 
         public Text _laeblName;
         public Text _labelId;
+        public Image _imageHead;
 
         public Button _buttonSetName;
         public Button _buttonSetPassword;
@@ -35,10 +36,9 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
 
-
-
             _laeblName.text = GlobalUser.GetInstance().UserName;
             _labelId.text = GlobalUser.GetInstance().UserId;
+            UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + GlobalUser.GetInstance().HeadIndex);
         }
 
         public override void Hide()
@@ -105,7 +105,7 @@ namespace MiniWeChat
             if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
             {
                 _laeblName.text = rsp.userItem.userName;
-                
+                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + rsp.userItem.headIndex);
             }
         }
 

@@ -29,6 +29,14 @@ namespace protocol
       get { return _userName; }
       set { _userName = value; }
     }
+    private int _headIndex = default(int);
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"headIndex", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int headIndex
+    {
+      get { return _headIndex; }
+      set { _headIndex = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
