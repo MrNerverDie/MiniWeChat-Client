@@ -48,7 +48,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, TryLoginWithPref);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
 
         }
 
@@ -59,7 +59,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, TryLoginWithPref);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
 
         }
         #endregion
@@ -101,9 +101,9 @@ namespace MiniWeChat
         public void OnGetUserInfoRsp(uint iMessageType, object kParam)
         {
             GetUserInfoRsp rsp = kParam as GetUserInfoRsp;
-            if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
+            if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS
+                && _userId == rsp.userItem.userId)
             {
-                _userId = rsp.userItem.userId;
                 _userName = rsp.userItem.userName;
                 _headIndex = rsp.userItem.headIndex;
             }
