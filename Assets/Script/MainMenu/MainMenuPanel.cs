@@ -25,7 +25,6 @@ namespace MiniWeChat
         public override void OnShow(object param = null)
         {
             base.OnShow(param);
-            //MessageDispatcher.GetInstance().RegisterMessageHandler((uint))
         }
 
         public override void OnHide()
@@ -35,17 +34,7 @@ namespace MiniWeChat
 
         public void OnClickSearchButton()
         {
-            DialogManager.GetInstance().CreateDoubleButtonInputDialog("搜索用户", "搜索", "长度不能超过20", "", InputField.ContentType.Alphanumeric, OnSubmitSearchReq);
-        }
-
-        public void OnSubmitSearchReq(string text)
-        {
-            GetUserInfoReq req = new GetUserInfoReq
-            {
-                targetUserId = text,
-            };
-
-            NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+            StateManager.GetInstance().PushState<SearchFriendPanel>(EUIType.SearchFriendPanel);
         }
     }
 }

@@ -18,6 +18,12 @@ namespace MiniWeChat
             PushState<WelcomePanel>(welcomePanel);
         }
 
+        public void PushState<T>(EUIType uiType, object param = null) where T : BaseState
+        {
+            GameObject go = UIManager.GetInstance().GetSingleUI(uiType);
+            PushState<T>(go, param);
+        }
+
         public void PushState<T>(GameObject go, object param = null) where T : BaseState
         {
             T nextState = go.GetComponent<T>();

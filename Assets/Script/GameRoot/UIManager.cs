@@ -87,6 +87,8 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.SingleButtonDialog, "Common/Dialog/SingleButtonDialog");
             _UIPathDict.Add(EUIType.DoubleButtonInputDialog, "Common/Dialog/DoubleButtonInputDialog");
             _UIPathDict.Add(EUIType.ImageListPanel, "Common/ImageListPanel");
+            _UIPathDict.Add(EUIType.SearchFriendPanel, "Contacts/SearchFriendPanel");
+            _UIPathDict.Add(EUIType.FriendDetailPanel, "Contacts/FriendDetailPanel");
         }
 
         private void InitAtlasPathDict()
@@ -114,6 +116,8 @@ namespace MiniWeChat
         SingleButtonDialog,
         DoubleButtonInputDialog,
         ImageListPanel,
+        SearchFriendPanel,
+        FriendDetailPanel,
     }
 
     public enum EAtlasName
