@@ -56,7 +56,10 @@ namespace protocol
       SUCCESS = 0,
             
       [global::ProtoBuf.ProtoEnum(Name=@"FAIL", Value=1)]
-      FAIL = 1
+      FAIL = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"USER_NOT_EXIST", Value=2)]
+      USER_NOT_EXIST = 2
     }
   
     private global::ProtoBuf.IExtension extensionObject;

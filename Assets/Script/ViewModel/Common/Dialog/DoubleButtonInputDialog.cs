@@ -40,10 +40,7 @@ namespace MiniWeChat
                 _inputContent.text = inputContent;
             }
 
-            if (contentType != null)
-            {
-                _inputContent.contentType = contentType;
-            }
+            _inputContent.contentType = contentType;
 
             _confirmCallback = confirmCallback;
             _buttonConfirm.onClick.AddListener(OnClickConfirmButton);

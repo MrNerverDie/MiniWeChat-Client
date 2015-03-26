@@ -25,6 +25,12 @@ namespace MiniWeChat
             m_kMessageTable = new Dictionary<uint, List<MessageHandler>>();
         }
 
+        /// <summary>
+        /// 对一个消息注册一个新的回调函数，如果这个消息
+        /// 已经有该回调函数，则不会注册第二次
+        /// </summary>
+        /// <param name="iMessageType"></param>
+        /// <param name="kHandler"></param>
         public void RegisterMessageHandler(uint iMessageType, MessageHandler kHandler)
         {
             if (!m_kMessageTable.ContainsKey(iMessageType))
@@ -32,9 +38,17 @@ namespace MiniWeChat
                 m_kMessageTable.Add(iMessageType, new List<MessageHandler>());
             }
             List<MessageHandler> kHandlerList = m_kMessageTable[iMessageType];
-            kHandlerList.Add(kHandler);
+            if (!kHandlerList.Contains(kHandler))
+            {
+                kHandlerList.Add(kHandler);                
+            }
         }
 
+        /// <summary>
+        /// 对一个消息取消注册一个回调函数
+        /// </summary>
+        /// <param name="iMessageType"></param>
+        /// <param name="kHandler"></param>
         public void UnRegisterMessageHandler(uint iMessageType, MessageHandler kHandler)
         {
             if (m_kMessageTable.ContainsKey(iMessageType))

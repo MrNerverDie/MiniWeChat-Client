@@ -43,6 +43,7 @@ namespace MiniWeChat
             { 
                 ENetworkMessage.KEEP_ALIVE_SYNC,
                 ENetworkMessage.OFFLINE_SYNC,
+                ENetworkMessage.CHANGE_FRIEND_SYNC,
             };
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
@@ -79,13 +80,6 @@ namespace MiniWeChat
         private void OnSocketConnected(uint iMessageType, object kParam)
         {
             _receiveBuffer = new byte[_socket.ReceiveBufferSize];
-
-            KeepAliveSyncPacket reqPacket = new KeepAliveSyncPacket
-            {
-                a = 1,
-                b = false,
-                c = "Hello MiniWeChat Server",
-            };
 
             _isKeepAlive = true;
 
@@ -248,7 +242,7 @@ namespace MiniWeChat
 
                     Debug.Log("bufferSize : " + bufferSize);
                     Debug.Log("networkMessage : " + networkMessage);
-                    Debug.Log("msgID : " + msgID);
+                    //Debug.Log("msgID : " + msgID);
 
                     position += bufferSize;
                 }
@@ -285,6 +279,8 @@ namespace MiniWeChat
             {
                 _msgIDSet.Add(BitConverter.ToString(msgIDBytes));
             }
+
+            Debug.Log("Send : " + networkMessage);
 
             DoBeginSendPacket<T>(networkMessage, packet, msgIDBytes);
             yield return new WaitForSeconds(REQ_TIME_OUT);
@@ -399,7 +395,7 @@ namespace MiniWeChat
                     case ENetworkMessage.LOGIN_RSP:
                         packet = Serializer.Deserialize<LoginRsp>(streamForProto);
                         break;
-                    case ENetworkMessage.GETUSERINFO_RSP:
+                    case ENetworkMessage.GET_USERINFO_RSP:
                         packet = Serializer.Deserialize<GetUserInfoRsp>(streamForProto);
                         break;
                     case ENetworkMessage.PERSONALSETTINGS_RSP:
@@ -408,14 +404,20 @@ namespace MiniWeChat
                     case ENetworkMessage.LOGOUT_RSP:
                         packet = Serializer.Deserialize<LogoutRsp>(streamForProto);
                         break;
-                    case ENetworkMessage.ADDFRIEND_RSP:
+                    case ENetworkMessage.ADD_FRIEND_RSP:
                         packet = Serializer.Deserialize<AddFriendRsp>(streamForProto);
                         break;
-                    case ENetworkMessage.DELETEFRIEND_RSP:
+                    case ENetworkMessage.DELETE_FRIEND_RSP:
                         packet = Serializer.Deserialize<DeleteFriendRsp>(streamForProto);
                         break;
                     case ENetworkMessage.OFFLINE_SYNC:
                         packet = Serializer.Deserialize<OffLineSync>(streamForProto);
+                        break;
+                    case ENetworkMessage.GET_PERSONALINFO_RSP:
+                        packet = Serializer.Deserialize<GetPersonalInfoRsp>(streamForProto);
+                        break;
+                    case ENetworkMessage.CHANGE_FRIEND_SYNC:
+                        packet = Serializer.Deserialize<ChangeFriendSync>(streamForProto);
                         break;
                     default:
                         Debug.Log("No Such Packet, packet type is " + networkMessage);

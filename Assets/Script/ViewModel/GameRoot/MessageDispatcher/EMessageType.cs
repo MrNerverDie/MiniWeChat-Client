@@ -11,6 +11,11 @@ namespace MiniWeChat
         SOCKET_DISCONNECTED,
         REQ_TIMEOUT,
     }
+
+    public enum EUIMessage : uint
+    {
+        UPDATE_FRIEND_DETAIL = 2000,
+    }
     #endregion
 }
 

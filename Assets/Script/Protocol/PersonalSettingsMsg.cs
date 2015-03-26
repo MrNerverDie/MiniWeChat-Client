@@ -31,9 +31,9 @@ namespace protocol
       get { return _userPassword; }
       set { _userPassword = value; }
     }
-    private int _headIndex = (int)0;
+    private int _headIndex = default(int);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"headIndex", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue((int)0)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
     public int headIndex
     {
       get { return _headIndex; }

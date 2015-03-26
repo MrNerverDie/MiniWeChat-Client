@@ -1,0 +1,20 @@
+package protocol;
+
+option java_package = "protocol.Msg";
+import "UserData.proto";
+
+message GetPersonalInfoReq{
+	optional bool userInfo = 1 [default = false];
+	optional bool friendInfo = 2 [default = false];
+}
+
+message GetPersonalInfoRsp{
+	enum ResultCode{
+		SUCCESS = 0;//搜索到用户
+		FAIL = 1;//未搜索到用户
+	}
+	required ResultCode resultCode = 1;
+	
+	optional UserItem userInfo = 2;
+	repeated  UserItem friends = 3;
+}

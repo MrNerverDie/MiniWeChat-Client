@@ -18,8 +18,10 @@ namespace MiniWeChat
 
         private const int TAB_NUM = 4;
 
-        public List<BasePanel> _panelList;
+        public List<BaseWidget> _panelList;
         public List<Toggle> _toggleList;
+
+        private int _curIndex;
 
         public void Start()
         {
@@ -27,8 +29,6 @@ namespace MiniWeChat
             {
                 toggle.onValueChanged.AddListener(SwitchToTab);
             }
-
-            SwitchToTab((int)MainMenuTab.CHAT_LIST);
         }
 
         public void SwitchToTab(bool check)
@@ -43,9 +43,10 @@ namespace MiniWeChat
             }
         }
 
-        private void SwitchToTab(int index)
+        public void SwitchToTab(int index)
         {
             _toggleList[index].Select();
+            _curIndex = index;
 
             for (int i = 0; i < TAB_NUM; i++)
             {
@@ -58,7 +59,11 @@ namespace MiniWeChat
                     _panelList[i].Hide();
                 }
             }
-            
+        }
+
+        public BaseWidget GetCurPanel()
+        {
+            return _panelList[_curIndex];
         }
 
     }

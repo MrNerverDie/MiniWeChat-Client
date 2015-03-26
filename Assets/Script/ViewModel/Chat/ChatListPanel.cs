@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    public class ChatListPanel : BasePanel
+    public class ChatListPanel : BaseWidget
     {
         private const int CHAT_FRAME_HEIGHT = 200;
 

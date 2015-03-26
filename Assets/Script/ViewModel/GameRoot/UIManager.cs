@@ -68,8 +68,12 @@ namespace MiniWeChat
 
         public void SetImage(Image image, EAtlasName eAtlasName, string spriteName)
         {
-            Sprite sprite = Resources.Load<GameObject>("Raw/Image/" + _atlasPathDict[eAtlasName] + "/" + spriteName).GetComponent<SpriteRenderer>().sprite;
-            image.sprite = sprite;
+            GameObject go = Resources.Load<GameObject>("Raw/Image/" + _atlasPathDict[eAtlasName] + "/" + spriteName);
+            if (go != null)
+	        {
+                Sprite sprite = go.GetComponent<SpriteRenderer>().sprite;
+                image.sprite = sprite; 
+	        }
         }
 
         private void InitUIPathDict()
@@ -129,7 +133,7 @@ namespace MiniWeChat
         Single,
     }
 
-    public class BasePanel : MonoBehaviour
+    public class BaseWidget : MonoBehaviour
     {
         public virtual void Show(object param = null)
         {

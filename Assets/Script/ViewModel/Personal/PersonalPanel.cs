@@ -5,7 +5,7 @@ using protocol;
 
 namespace MiniWeChat
 {
-    public class PersonalPanel : BasePanel
+    public class PersonalPanel : BaseWidget
     {
         public enum PersonalSetType
         {
@@ -38,7 +38,7 @@ namespace MiniWeChat
             base.Show(param);
 
 
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
 
             _laeblName.text = GlobalUser.GetInstance().UserName;
             _labelId.text = GlobalUser.GetInstance().UserId;
@@ -48,7 +48,7 @@ namespace MiniWeChat
         public override void Hide()
         {
             base.Hide();
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
 
 
         }
@@ -97,13 +97,14 @@ namespace MiniWeChat
             NetworkManager.GetInstance().SendPacket<PersonalSettingsReq>(ENetworkMessage.PERSONALSETTINGS_REQ, req);
         }
 
-        public void OnGetUserInfoRsp(uint iMessageType, object kParam)
+        public void OnGetPersonalInfoRsp(uint iMessageType, object kParam)
         {
-            GetUserInfoRsp rsp = kParam as GetUserInfoRsp;
-            if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
+            GetPersonalInfoRsp rsp = kParam as GetPersonalInfoRsp;
+            if (rsp.resultCode == GetPersonalInfoRsp.ResultCode.SUCCESS
+                && rsp.userInfo != null)
             {
-                _laeblName.text = rsp.userItem.userName;
-                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + rsp.userItem.headIndex);
+                _laeblName.text = rsp.userInfo.userName;
+                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + rsp.userInfo.headIndex);
             }
         }
 

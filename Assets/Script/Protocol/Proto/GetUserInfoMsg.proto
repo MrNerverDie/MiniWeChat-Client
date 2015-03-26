@@ -11,6 +11,7 @@ message GetUserInfoRsp{
 	enum ResultCode{
 		SUCCESS = 0;//搜索到用户
 		FAIL = 1;//未搜索到用户
+		USER_NOT_EXIST = 2;//用户不存在
 	}
 	required ResultCode resultCode = 1;
 	optional UserItem userItem = 2;

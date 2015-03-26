@@ -15,6 +15,8 @@ namespace MiniWeChat
             base.OnEnter(param);
             _inputUserID.onValueChange.AddListener(OnValueChangeUserID);
             _buttonSearchFriend.onClick.AddListener(OnClickSearchFriendButton);
+
+            UIManager.GetInstance().AddChild(gameObject, EUIType.BackButton);
         }
 
         public override void OnExit()
@@ -29,14 +31,14 @@ namespace MiniWeChat
 
             _inputUserID.text = "";
             _buttonSearchFriend.interactable = false;
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_USERINFO_RSP, OnGetUserInfoRsp);
 
         }
 
         public override void OnHide()
         {
             base.OnHide();
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_USERINFO_RSP, OnGetUserInfoRsp);
         }
 
         public void OnValueChangeUserID(string text)
@@ -51,7 +53,7 @@ namespace MiniWeChat
                 targetUserId = _inputUserID.text,
             };
 
-            NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+            NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GET_USERINFO_REQ, req);
         }
 
         public void OnGetUserInfoRsp(uint iMessageType, object kParam)

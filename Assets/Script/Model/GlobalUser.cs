@@ -43,7 +43,7 @@ namespace MiniWeChat
         #region LifeCycle
         public override void Init()
         {
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
@@ -54,8 +54,8 @@ namespace MiniWeChat
 
         public override void Release()
         {
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GETUSERINFO_RSP, OnGetUserInfoRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnGetUserInfoRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
@@ -98,14 +98,14 @@ namespace MiniWeChat
         #endregion
 
         #region MessageHandler
-        public void OnGetUserInfoRsp(uint iMessageType, object kParam)
+        public void OnGetPersonalInfoRsp(uint iMessageType, object kParam)
         {
-            GetUserInfoRsp rsp = kParam as GetUserInfoRsp;
-            if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS
-                && _userId == rsp.userItem.userId)
+            GetPersonalInfoRsp rsp = kParam as GetPersonalInfoRsp;
+            if (rsp.resultCode == GetPersonalInfoRsp.ResultCode.SUCCESS
+                && rsp.userInfo != null)
             {
-                _userName = rsp.userItem.userName;
-                _headIndex = rsp.userItem.headIndex;
+                _userName = rsp.userInfo.userName;
+                _headIndex = rsp.userInfo.headIndex;
             }
         }
 
@@ -116,11 +116,12 @@ namespace MiniWeChat
             {
                 _isLogin = true;
 
-                GetUserInfoReq req = new GetUserInfoReq
+                GetPersonalInfoReq req = new GetPersonalInfoReq
                 {
-                    targetUserId = _userId,
+                    friendInfo  = true,
+                    userInfo = true,
                 };
-                NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+                NetworkManager.GetInstance().SendPacket<GetPersonalInfoReq>(ENetworkMessage.GET_PERSONALINFO_REQ, req);
 
                 PlayerPrefs.SetString(GlobalVars.PREF_USER_ID, _userId);
                 PlayerPrefs.SetString(GlobalVars.PREF_USER_PASSWORD, _userPassword);
@@ -131,14 +132,16 @@ namespace MiniWeChat
         {
             PersonalSettingsRsp rsp = kParam as PersonalSettingsRsp;
 
+            Debug.Log(rsp.resultCode);
+
             if (rsp.resultCode == PersonalSettingsRsp.ResultCode.SUCCESS)
             {
-                GetUserInfoReq req = new GetUserInfoReq
+                GetPersonalInfoReq req = new GetPersonalInfoReq
                 {
-                    targetUserId = _userId,
+                    userInfo = true,
                 };
 
-                NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GETUSERINFO_REQ, req);
+                NetworkManager.GetInstance().SendPacket<GetPersonalInfoReq>(ENetworkMessage.GET_PERSONALINFO_REQ, req);
             }
         }
 

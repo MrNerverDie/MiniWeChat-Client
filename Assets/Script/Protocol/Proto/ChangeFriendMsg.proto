@@ -1,0 +1,14 @@
+package protocol;
+
+option java_package = "protocol.Msg";
+import "UserData.proto";
+
+message ChangeFriendSync{
+	enum ChangeType{
+		ADD = 0;
+		DELETE = 1;
+		UPDATE = 2;
+	}
+	required ChangeType changeType = 1;
+	required UserItem userItem = 2;
+}

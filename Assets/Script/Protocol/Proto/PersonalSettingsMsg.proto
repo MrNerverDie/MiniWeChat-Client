@@ -3,9 +3,9 @@ package protocol;
 option java_package = "protocol.Msg";
 
 message PersonalSettingsReq{
-	optional string userName = 1 [default = ""];
-	optional string userPassword = 2 [default = ""];
-	optional int32 headIndex = 3 [default = 0];
+	optional string userName = 1 ;
+	optional string userPassword = 2 ;
+	optional int32 headIndex = 3 ;
 }
 
 message PersonalSettingsRsp{

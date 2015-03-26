@@ -35,23 +35,23 @@ namespace protocol
       [global::ProtoBuf.ProtoEnum(Name=@"PERSONALSETTINGS_RSP", Value=6)]
       PERSONALSETTINGS_RSP = 6,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"GETUSERINFO_REQ", Value=7)]
-      GETUSERINFO_REQ = 7,
+      [global::ProtoBuf.ProtoEnum(Name=@"GET_USERINFO_REQ", Value=7)]
+      GET_USERINFO_REQ = 7,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"GETUSERINFO_RSP", Value=8)]
-      GETUSERINFO_RSP = 8,
+      [global::ProtoBuf.ProtoEnum(Name=@"GET_USERINFO_RSP", Value=8)]
+      GET_USERINFO_RSP = 8,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"ADDFRIEND_REQ", Value=9)]
-      ADDFRIEND_REQ = 9,
+      [global::ProtoBuf.ProtoEnum(Name=@"ADD_FRIEND_REQ", Value=9)]
+      ADD_FRIEND_REQ = 9,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"ADDFRIEND_RSP", Value=10)]
-      ADDFRIEND_RSP = 10,
+      [global::ProtoBuf.ProtoEnum(Name=@"ADD_FRIEND_RSP", Value=10)]
+      ADD_FRIEND_RSP = 10,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"DELETEFRIEND_REQ", Value=11)]
-      DELETEFRIEND_REQ = 11,
+      [global::ProtoBuf.ProtoEnum(Name=@"DELETE_FRIEND_REQ", Value=11)]
+      DELETE_FRIEND_REQ = 11,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"DELETEFRIEND_RSP", Value=12)]
-      DELETEFRIEND_RSP = 12,
+      [global::ProtoBuf.ProtoEnum(Name=@"DELETE_FRIEND_RSP", Value=12)]
+      DELETE_FRIEND_RSP = 12,
             
       [global::ProtoBuf.ProtoEnum(Name=@"OFFLINE_SYNC", Value=13)]
       OFFLINE_SYNC = 13,
@@ -60,7 +60,16 @@ namespace protocol
       LOGOUT_REQ = 14,
             
       [global::ProtoBuf.ProtoEnum(Name=@"LOGOUT_RSP", Value=15)]
-      LOGOUT_RSP = 15
+      LOGOUT_RSP = 15,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"GET_PERSONALINFO_REQ", Value=16)]
+      GET_PERSONALINFO_REQ = 16,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"GET_PERSONALINFO_RSP", Value=17)]
+      GET_PERSONALINFO_RSP = 17,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_FRIEND_SYNC", Value=18)]
+      CHANGE_FRIEND_SYNC = 18
     }
   
 }
