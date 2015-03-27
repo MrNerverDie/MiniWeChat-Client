@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 using DG.Tweening;
 
 namespace MiniWeChat
@@ -11,6 +12,9 @@ namespace MiniWeChat
 
         private CanvasGroup _canvasGroup;
 
+        private const float FADE_DURATION = 0.3f;
+        private const float ORIGINAL_SCALE = 0.8f;
+
         /// <summary>
         /// 界面栈初始化的时候被调用的方法
         /// </summary>
@@ -19,10 +23,7 @@ namespace MiniWeChat
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             OnShow();
-            transform.localScale = Vector3.one * 0.8f;
-            transform.DOScale(Vector3.one, 0.3f);
-            _canvasGroup.alpha = 0f;
-            DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 1.0f, 0.3f);
+
         }
 
         /// <summary>
@@ -31,8 +32,10 @@ namespace MiniWeChat
         public virtual void OnExit()
         {
             OnHide();
+
             transform.localScale = Vector3.one;
-            transform.DOScale(Vector3.zero, 0.3f);
+            transform.DOScale(Vector3.zero * ORIGINAL_SCALE, FADE_DURATION);
+            DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 0f, FADE_DURATION);
         }
 
         /// <summary>
@@ -51,6 +54,38 @@ namespace MiniWeChat
         {
             gameObject.SetActive(true);
         }
+
+        public Tweener BeginEnterTween()
+        {
+            Tweener tweener = transform.DOScale(Vector3.one * ORIGINAL_SCALE, FADE_DURATION).From();
+            StartCoroutine(BlockTouchForTween(tweener));
+            return DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 0f, FADE_DURATION).From();
+        }
+
+        public Tweener BeginExitTween()
+        {
+            Tweener tweener = transform.DOScale(Vector3.one * ORIGINAL_SCALE, FADE_DURATION);
+            StartCoroutine(BlockTouchForTween(tweener));
+            return DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 0f, FADE_DURATION);
+        }
+
+        private IEnumerator BlockTouchForTween(Tweener tweener)
+        {
+            DisableTouch();
+            yield return tweener.WaitForCompletion();
+            EnabelTouch();
+        }
+
+        public void DisableTouch()
+        {
+            _canvasGroup.blocksRaycasts = false;
+        }
+
+        public void EnabelTouch()
+        {
+            _canvasGroup.blocksRaycasts = true;
+        }
+
     }
 }
 

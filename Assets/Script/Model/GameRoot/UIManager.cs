@@ -34,7 +34,7 @@ namespace MiniWeChat
 
             if (_UIDict.ContainsKey(name) == false)
             {
-                GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(_UIPathDict[name])) as GameObject;
+                GameObject go = GameObject.Instantiate(Resources.Load<GameObject>("View/" + _UIPathDict[name])) as GameObject;
                 go.transform.SetParent(_canvas, false);
                 go.name = name.ToString();
                 _UIDict.Add(name, go);
@@ -56,7 +56,7 @@ namespace MiniWeChat
 
         public GameObject AddChild(GameObject parent, EUIType name)
         {
-            GameObject go = GameObject.Instantiate(Resources.Load<GameObject>(_UIPathDict[name])) as GameObject;
+            GameObject go = GameObject.Instantiate(Resources.Load<GameObject>("View/" + _UIPathDict[name])) as GameObject;
             go.transform.SetParent(parent.transform, false);
             return go;
         }

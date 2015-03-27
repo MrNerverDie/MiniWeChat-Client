@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 
 namespace MiniWeChat
 {
@@ -27,22 +28,34 @@ namespace MiniWeChat
         public void PushState<T>(GameObject go, object param = null) where T : BaseState
         {
             T nextState = go.GetComponent<T>();
+            nextState.OnEnter(param);
 
             if (_stateStack.Count != 0)
             {
                 BaseState curState = _stateStack.Peek();
-                curState.OnHide();
+                curState.DisableTouch();
+                Tweener tweener = nextState.BeginEnterTween();
+                tweener.OnComplete(delegate()
+                {
+                    curState.OnHide();
+                    curState.EnabelTouch();
+                });
             }
-            nextState.OnEnter(param);
             _stateStack.Push(nextState);
         }
 
         public void PopState(object param = null)
         {
+
+
             if (_stateStack.Count != 0)
             {
                 BaseState curState = _stateStack.Pop();
-                curState.OnExit();
+                Tweener tweener = curState.BeginExitTween();
+                tweener.OnComplete(delegate()
+                {
+                    curState.OnExit();
+                });
             }
 
             if (_stateStack.Count != 0)
@@ -50,6 +63,8 @@ namespace MiniWeChat
                 BaseState lastState = _stateStack.Peek();
                 lastState.OnShow();
             }
+
+
         }
 
         public void ReplaceState<T>(GameObject go, object param = null) where T : BaseState
