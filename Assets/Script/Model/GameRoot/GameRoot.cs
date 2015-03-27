@@ -16,14 +16,24 @@ namespace MiniWeChat
             StartCoroutine(InitSingletons());
         }
 
+        /// <summary>
+        /// 在这里进行所有单例的销毁
+        /// </summary>
         public void OnDestroy()
         {
+            MessageDispatcher.GetInstance().Release();
+            UIManager.GetInstance().Release();
+            StateManager.GetInstance().Release();
+            DialogManager.GetInstance().Release();
             NetworkManager.GetInstance().Release();
             GlobalUser.GetInstance().Release();
             GlobalContacts.GetInstance().Release();
         }
 
-
+        /// <summary>
+        /// 在这里进行所有丹利的初始化
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator InitSingletons()
         {
             ClearCanvas();

@@ -8,6 +8,9 @@ namespace MiniWeChat.Editor
 {
     public class AtlasMaker
     {
+        /// <summary>
+        /// 将Raw/Image目录下面的图片转化为Prefab存在Resources目录下
+        /// </summary>
         [MenuItem("Tools/AtlasMaker")]
         static private void MakeAtlas()
         {

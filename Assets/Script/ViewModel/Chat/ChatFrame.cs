@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    public class ChatFrame : BaseWidget
+    public class ChatFrame : BasePanel
     {
 
         public Button _buttonChatFrame;

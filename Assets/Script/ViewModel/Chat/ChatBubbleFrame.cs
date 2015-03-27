@@ -20,12 +20,10 @@ namespace MiniWeChat
         public RectTransform _frameChatBubble;
         public Text _textChat;
 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
+        /// <summary>
+        /// 在一个聊天窗口中显示一个字符串
+        /// </summary>
+        /// <param name="text">字符串</param>
         public void Show(string text)
         {
             int lines = 0;
@@ -44,6 +42,12 @@ namespace MiniWeChat
                 );
         }
 
+        /// <summary>
+        /// 对传入的字符串进行排版处理
+        /// </summary>
+        /// <param name="text">聊天的字符串</param>
+        /// <param name="lines">需要计算传出的行数</param>
+        /// <param name="maxCharNumInOneLine">最终进行排版之后的字符串中一行中最多的字符数</param>
         private void SetTextParam(ref string text, ref int lines, ref float maxCharNumInOneLine)
         {
             float curCharNumInOneLine = 0;

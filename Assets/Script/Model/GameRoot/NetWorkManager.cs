@@ -145,6 +145,10 @@ namespace MiniWeChat
             }
         }
 
+        /// <summary>
+        /// 当无法接收到心跳包的时候尝试重新连接服务器
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator BeginTryConnect()
         {
             while (true)
@@ -210,7 +214,7 @@ namespace MiniWeChat
                     }
                     string msgID = BitConverter.ToString(msgIDBytes);
                     
-                    object param = UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE);
+                    object param = UnPackTool.UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE, _receiveBuffer);
 
                     MessageArgs args = new MessageArgs
                     {
@@ -247,8 +251,6 @@ namespace MiniWeChat
                     position += bufferSize;
                 }
                 
-
-
                 Array.Clear(_receiveBuffer, 0, _socket.ReceiveBufferSize);
 
                 BeginReceivePacket();
@@ -376,59 +378,6 @@ namespace MiniWeChat
             }
         }
         #endregion
-
-        #region UnPack
-        private object UnPack(ENetworkMessage networkMessage, int startIndex, int length)
-        {
-            object packet = null;
-
-            using (MemoryStream streamForProto = new MemoryStream(_receiveBuffer, startIndex, length))
-            {
-                switch (networkMessage)
-                {
-                    case ENetworkMessage.KEEP_ALIVE_SYNC:
-                        packet = Serializer.Deserialize<KeepAliveSyncPacket>(streamForProto);
-                        break;
-                    case ENetworkMessage.REGISTER_RSP:
-                        packet = Serializer.Deserialize<RegisterRsp>(streamForProto);
-                        break;
-                    case ENetworkMessage.LOGIN_RSP:
-                        packet = Serializer.Deserialize<LoginRsp>(streamForProto);
-                        break;
-                    case ENetworkMessage.GET_USERINFO_RSP:
-                        packet = Serializer.Deserialize<GetUserInfoRsp>(streamForProto);
-                        break;
-                    case ENetworkMessage.PERSONALSETTINGS_RSP:
-                        packet = Serializer.Deserialize<PersonalSettingsRsp>(streamForProto);
-                        break;
-                    case ENetworkMessage.LOGOUT_RSP:
-                        packet = Serializer.Deserialize<LogoutRsp>(streamForProto);
-                        break;
-                    case ENetworkMessage.ADD_FRIEND_RSP:
-                        packet = Serializer.Deserialize<AddFriendRsp>(streamForProto);
-                        break;
-                    case ENetworkMessage.DELETE_FRIEND_RSP:
-                        packet = Serializer.Deserialize<DeleteFriendRsp>(streamForProto);
-                        break;
-                    case ENetworkMessage.OFFLINE_SYNC:
-                        packet = Serializer.Deserialize<OffLineSync>(streamForProto);
-                        break;
-                    case ENetworkMessage.GET_PERSONALINFO_RSP:
-                        packet = Serializer.Deserialize<GetPersonalInfoRsp>(streamForProto);
-                        break;
-                    case ENetworkMessage.CHANGE_FRIEND_SYNC:
-                        packet = Serializer.Deserialize<ChangeFriendSync>(streamForProto);
-                        break;
-                    default:
-                        Debug.Log("No Such Packet, packet type is " + networkMessage);
-                        break;
-                }
-            }
-
-            return packet;
-        }
-        #endregion
-
     }
 }
 

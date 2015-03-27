@@ -18,7 +18,7 @@ namespace MiniWeChat
 
         private const int TAB_NUM = 4;
 
-        public List<BaseWidget> _panelList;
+        public List<BasePanel> _panelList;
         public List<Toggle> _toggleList;
 
         private int _curIndex;
@@ -61,7 +61,7 @@ namespace MiniWeChat
             }
         }
 
-        public BaseWidget GetCurPanel()
+        public BasePanel GetCurPanel()
         {
             return _panelList[_curIndex];
         }

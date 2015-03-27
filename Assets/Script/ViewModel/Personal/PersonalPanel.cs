@@ -5,7 +5,7 @@ using protocol;
 
 namespace MiniWeChat
 {
-    public class PersonalPanel : BaseWidget
+    public class PersonalPanel : BasePanel
     {
         public enum PersonalSetType
         {

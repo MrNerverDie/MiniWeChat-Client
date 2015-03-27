@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 namespace MiniWeChat
 {
+    /// <summary>
+    /// 所有消息回调函数必须遵守的委托定义
+    /// </summary>
+    /// <param name="iMessageType"></param>
+    /// <param name="kParam"></param>
     public delegate void MessageHandler(uint iMessageType, object kParam);
     public class MessageArgs
     {
@@ -58,6 +63,11 @@ namespace MiniWeChat
             }
         }
 
+        /// <summary>
+        /// 分发消息，同步
+        /// </summary>
+        /// <param name="iMessageType">消息类型</param>
+        /// <param name="kParam">附加参数</param>
         public void DispatchMessage(uint iMessageType, object kParam = null)
         {
             if (m_kMessageTable.ContainsKey(iMessageType))
@@ -70,6 +80,10 @@ namespace MiniWeChat
             }
         }
 
+        /// <summary>
+        /// 分发消息，同步
+        /// </summary>
+        /// <param name="kMessageArgs">消息参数</param>
         public void DispatchMessage(MessageArgs kMessageArgs)
         {
             DispatchMessage(kMessageArgs.iMessageType, kMessageArgs.kParam);

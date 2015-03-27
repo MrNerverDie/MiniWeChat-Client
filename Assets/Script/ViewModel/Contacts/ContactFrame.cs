@@ -5,7 +5,7 @@ using protocol;
 
 namespace MiniWeChat
 {
-    public class ContactFrame : BaseWidget
+    public class ContactFrame : MonoBehaviour
     {
         public Image _imageHead;
         public Text _labelName;
@@ -17,10 +17,9 @@ namespace MiniWeChat
             GetComponent<Button>().onClick.AddListener(OnClickContactFrame);
         }
 
-        public override void Show(object param = null)
+        public void Show(UserItem userItem)
         {
-            base.Show(param);
-            _userItem = param as UserItem;
+            _userItem = userItem ;
             if (_userItem != null)
             {
                 UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
@@ -28,9 +27,9 @@ namespace MiniWeChat
             }
         }
 
-        public override void Hide()
+        public void Hide()
         {
-            base.Hide();
+
         }
 
         public void OnClickContactFrame()

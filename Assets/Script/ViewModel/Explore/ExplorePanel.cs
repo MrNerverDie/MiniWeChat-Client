@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    public class ExplorePanel : BaseWidget
+    public class ExplorePanel : BasePanel
     {
 
     }

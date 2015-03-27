@@ -6,7 +6,7 @@ using protocol;
 
 namespace MiniWeChat
 {
-    public class ContactsPanel : BaseWidget
+    public class ContactsPanel : BasePanel
     {
         private const int CONTACT_FRAME_HEIGHT = 150;
 
