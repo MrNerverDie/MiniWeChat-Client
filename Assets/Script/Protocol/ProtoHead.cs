@@ -71,11 +71,14 @@ namespace protocol
       [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_FRIEND_SYNC", Value=18)]
       CHANGE_FRIEND_SYNC = 18,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"SEND_CHAT", Value=19)]
-      SEND_CHAT = 19,
+      [global::ProtoBuf.ProtoEnum(Name=@"SEND_CHAT_REQ", Value=19)]
+      SEND_CHAT_REQ = 19,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"RECEIVE_CHAT", Value=20)]
-      RECEIVE_CHAT = 20
+      [global::ProtoBuf.ProtoEnum(Name=@"SEND_CHAT_RSP", Value=20)]
+      SEND_CHAT_RSP = 20,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"RECEIVE_CHAT_SYNC", Value=21)]
+      RECEIVE_CHAT_SYNC = 21
     }
   
 }

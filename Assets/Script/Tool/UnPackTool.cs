@@ -50,6 +50,12 @@ namespace MiniWeChat
                     case ENetworkMessage.CHANGE_FRIEND_SYNC:
                         packet = Serializer.Deserialize<ChangeFriendSync>(streamForProto);
                         break;
+                    case ENetworkMessage.SEND_CHAT_RSP:
+                        packet = Serializer.Deserialize<SendChatRsp>(streamForProto);
+                        break;
+                    case ENetworkMessage.RECEIVE_CHAT_SYNC:
+                        packet = Serializer.Deserialize<ReceiveChatSync>(streamForProto);
+                        break;
                     default:
                         Debug.Log("No Such Packet, packet type is " + networkMessage);
                         break;

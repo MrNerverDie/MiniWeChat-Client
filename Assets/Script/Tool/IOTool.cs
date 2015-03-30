@@ -27,7 +27,7 @@ namespace MiniWeChat
             }
         }
 
-        public static T DeserializeFromFile<T>(string filePath, T proto) where T : global::ProtoBuf.IExtensible
+        public static T DeserializeFromFile<T>(string filePath) where T : global::ProtoBuf.IExtensible
         {
             using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read))
             {

@@ -39,12 +39,7 @@ namespace MiniWeChat
 
             _receiveMessageQueue = new Queue<MessageArgs>();
             _msgIDSet = new HashSet<string>();
-            _forcePushMessageType = new HashSet<ENetworkMessage> 
-            { 
-                ENetworkMessage.KEEP_ALIVE_SYNC,
-                ENetworkMessage.OFFLINE_SYNC,
-                ENetworkMessage.CHANGE_FRIEND_SYNC,
-            };
+            InitForcePushMessageType();
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
@@ -259,6 +254,20 @@ namespace MiniWeChat
             {
                 Debug.Log(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// 配置需要回复服务器的消息类型
+        /// </summary>
+        private void InitForcePushMessageType()
+        {
+            _forcePushMessageType = new HashSet<ENetworkMessage> 
+            { 
+                ENetworkMessage.KEEP_ALIVE_SYNC,
+                ENetworkMessage.OFFLINE_SYNC,
+                ENetworkMessage.CHANGE_FRIEND_SYNC,
+                ENetworkMessage.RECEIVE_CHAT_SYNC,
+            };
         }
 
         #endregion

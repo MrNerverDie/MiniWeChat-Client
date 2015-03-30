@@ -4,6 +4,7 @@ import "ChatDataItem.proto";
 
 message ChatLog
 {
-	optional int64 date = 1;
+	required string userId = 1;
+	required int64 date = 2;
 	repeated ChatDataItem itemList=3;
 }
