@@ -69,7 +69,13 @@ namespace protocol
       GET_PERSONALINFO_RSP = 17,
             
       [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_FRIEND_SYNC", Value=18)]
-      CHANGE_FRIEND_SYNC = 18
+      CHANGE_FRIEND_SYNC = 18,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SEND_CHAT", Value=19)]
+      SEND_CHAT = 19,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"RECEIVE_CHAT", Value=20)]
+      RECEIVE_CHAT = 20
     }
   
 }

@@ -1,0 +1,17 @@
+package MiniWeChat;
+
+message ChatDataItem
+{
+	enum ChatType{
+    	TEXT = 0;
+		IMAGE = 1;
+	}
+
+	required string sendUserId= 1;
+	required string receiveUserId= 2;
+	required ChatType chatType= 3;
+	required string chatBody= 4;
+
+	optional bool isRead = 5[default=false];
+	optional bool isSend = 6[default=false];
+}

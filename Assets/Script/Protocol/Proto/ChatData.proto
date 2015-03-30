@@ -1,0 +1,15 @@
+package protocol;
+
+option java_package = "protocol.Data";
+
+message ChatItem{
+	enum ChatType{
+    	TEXT = 0;
+		IMAGE = 1;
+	}
+
+	required string sendUserId= 1;
+	required string receiveUserId= 2;
+	required ChatType chatType= 3;
+	required string chatBody= 4;
+}

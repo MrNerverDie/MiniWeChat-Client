@@ -1,0 +1,8 @@
+package MiniWeChat;
+
+import "ChatDataItem.proto";
+
+message ChatLog
+{
+	repeated ChatDataItem itemList=1;
+}

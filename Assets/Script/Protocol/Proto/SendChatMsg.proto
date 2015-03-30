@@ -1,0 +1,17 @@
+package protocol;
+
+option java_package = "protocol.Msg";
+import "ChatData.proto";
+
+message SendChatReq{
+	required ChatItem chatData = 1;
+
+}
+message SendChatRsp{
+	enum ResultCode{
+    	SUCCESS = 0;
+		FAIL = 1;
+	}
+
+	required ResultCode resultCode = 1;
+}
