@@ -11,7 +11,8 @@ message ChatDataItem
 	required string receiveUserId= 2;
 	required ChatType chatType= 3;
 	required string chatBody= 4;
+	optional int64 date = 5;
 
-	optional bool isRead = 5[default=false];
-	optional bool isSend = 6[default=false];
+	optional bool isRead = 6[default=false];
+	optional bool isSend = 7[default=false];
 }

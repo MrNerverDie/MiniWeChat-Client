@@ -22,7 +22,7 @@ namespace MiniWeChat
         private IEnumerator BeginWelcomeLoad()
         {
             yield return new WaitForSeconds(WELCOME_LOAD_DURATION);
-            if (GlobalUser.GetInstance().IsLogin == false)
+            if (GlobalUser.GetInstance().IsEnterMainMenu == false)
             {
                 GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.LoginPanel);
                 StateManager.GetInstance().ReplaceState<LoginPanel>(go);

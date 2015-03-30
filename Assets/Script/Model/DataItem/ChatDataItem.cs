@@ -43,8 +43,16 @@ namespace MiniWeChat
       get { return _chatBody; }
       set { _chatBody = value; }
     }
+    private long _date = default(long);
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"date", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(long))]
+    public long date
+    {
+      get { return _date; }
+      set { _date = value; }
+    }
     private bool _isRead = (bool)false;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"isRead", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"isRead", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue((bool)false)]
     public bool isRead
     {
@@ -52,7 +60,7 @@ namespace MiniWeChat
       set { _isRead = value; }
     }
     private bool _isSend = (bool)false;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"isSend", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"isSend", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue((bool)false)]
     public bool isSend
     {

@@ -12,4 +12,5 @@ message ChatItem{
 	required string receiveUserId= 2;
 	required ChatType chatType= 3;
 	required string chatBody= 4;
+	optional int64 date = 5;
 }

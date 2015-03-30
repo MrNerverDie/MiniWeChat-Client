@@ -43,6 +43,14 @@ namespace protocol
       get { return _chatBody; }
       set { _chatBody = value; }
     }
+    private long _date = default(long);
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"date", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(long))]
+    public long date
+    {
+      get { return _date; }
+      set { _date = value; }
+    }
     [global::ProtoBuf.ProtoContract(Name=@"ChatType")]
     public enum ChatType
     {

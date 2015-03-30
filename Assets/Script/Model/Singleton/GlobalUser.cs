@@ -38,6 +38,11 @@ namespace MiniWeChat
         {
             get { return _headIndex; }
         }
+
+        public bool IsEnterMainMenu
+        {
+            get { return PlayerPrefs.HasKey(GlobalVars.PREF_USER_PASSWORD); }
+        }
         #endregion
 
         #region LifeCycle
@@ -125,6 +130,8 @@ namespace MiniWeChat
 
                 PlayerPrefs.SetString(GlobalVars.PREF_USER_ID, _userId);
                 PlayerPrefs.SetString(GlobalVars.PREF_USER_PASSWORD, _userPassword);
+
+                CreateDir();
             }
         }
 
@@ -165,6 +172,26 @@ namespace MiniWeChat
             }
         }
 
+
+        #endregion
+
+        #region Misc
+        
+        public void CreateDir()
+        {
+            string[] dirPathList = new string[]
+            {
+                Application.dataPath + "/" + _userId,
+                Application.dataPath + "/" + _userId + "/Head",
+                Application.dataPath + "/" + _userId + "/Chat",
+                Application.dataPath + "/" + _userId + "/Image",
+            };
+
+            foreach (var dirPath in dirPathList)
+            {
+                IOTool.CreateDir(dirPath);
+            }
+        }
 
         #endregion
     }

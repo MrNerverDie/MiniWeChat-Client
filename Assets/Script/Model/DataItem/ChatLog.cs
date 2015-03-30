@@ -16,8 +16,16 @@ namespace MiniWeChat
   {
     public ChatLog() {}
     
+    private long _date = default(long);
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"date", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(long))]
+    public long date
+    {
+      get { return _date; }
+      set { _date = value; }
+    }
     private readonly global::System.Collections.Generic.List<MiniWeChat.ChatDataItem> _itemList = new global::System.Collections.Generic.List<MiniWeChat.ChatDataItem>();
-    [global::ProtoBuf.ProtoMember(1, Name=@"itemList", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, Name=@"itemList", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<MiniWeChat.ChatDataItem> itemList
     {
       get { return _itemList; }

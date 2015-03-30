@@ -1,23 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.IO;
+using ProtoBuf;
 
 namespace MiniWeChat
 {
     public class GlobalChat : Singleton<GlobalChat>
     {
-        Dictionary<string, List<ChatDataItem>> _chatDict;
+        Dictionary<string, ChatLog> _chatLogDict;
+
+        private static readonly string _dirPath = Application.persistentDataPath + "/Chat";
 
         public int Count
         {
-            get { return _chatDict.Count; }
+            get { return _chatLogDict.Count; }
         }
 
         public override void Init()
         {
             base.Init();
 
-            _chatDict = new Dictionary<string, List<ChatDataItem>>();
+            _chatLogDict = new Dictionary<string, ChatLog>();
         }
 
         public override void Release()
@@ -27,12 +31,26 @@ namespace MiniWeChat
 
         public List<ChatDataItem> GetChatDataItemList(string userID)
         {
-            return _chatDict[userID];
+            return _chatLogDict[userID].itemList;
         }
 
-        
-        
+        private void SaveLogDict()
+        {
+            foreach (var userID in _chatLogDict.Keys)
+            {
+                string filePath = _dirPath + "/" + userID;
+                IOTool.SerializeToFile<ChatLog>(filePath, _chatLogDict[userID]);
+            }
+        }
 
+        private void InitLogDict()
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(_dirPath);
+            foreach (var item in dirInfo.GetFiles())
+            {
+                
+            }
+        }
     }
 }
 
