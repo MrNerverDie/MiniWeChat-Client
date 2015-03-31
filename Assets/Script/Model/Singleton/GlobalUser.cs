@@ -43,6 +43,12 @@ namespace MiniWeChat
         {
             get { return PlayerPrefs.HasKey(GlobalVars.PREF_USER_PASSWORD); }
         }
+
+        public UserItem Self
+        {
+            get { return new UserItem{ userName = _userName, userId = _userId, headIndex = _headIndex}; }
+        }
+
         #endregion
 
         #region LifeCycle
@@ -181,10 +187,10 @@ namespace MiniWeChat
         {
             string[] dirPathList = new string[]
             {
-                Application.dataPath + "/" + _userId,
-                Application.dataPath + "/" + _userId + "/Head",
-                Application.dataPath + "/" + _userId + "/Chat",
-                Application.dataPath + "/" + _userId + "/Image",
+                Application.persistentDataPath + "/" + _userId,
+                Application.persistentDataPath + "/" + _userId + "/Head",
+                Application.persistentDataPath + "/" + _userId + "/Chat",
+                Application.persistentDataPath + "/" + _userId + "/Image",
             };
 
             foreach (var dirPath in dirPathList)

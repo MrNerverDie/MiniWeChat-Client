@@ -36,19 +36,21 @@ namespace MiniWeChat
         {
             _contactsGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, CONTACT_FRAME_HEIGHT * GlobalContacts.GetInstance().Count);
 
-            for (int i = 0; i < GlobalContacts.GetInstance().Count; i++)
+            int i = 0;
+            foreach (UserItem userItem in GlobalContacts.GetInstance())
             {
                 if (i >= _contactFrameList.Count)
                 {
                     GameObject go = UIManager.GetInstance().AddChild(_contactsGrid.gameObject, EUIType.ContactFrame);
                     _contactFrameList.Add(go.GetComponent<ContactFrame>());
                 }
-                _contactFrameList[i].Show(GlobalContacts.GetInstance().GetUserItemByIndex(i));
+                _contactFrameList[i].Show(userItem);
+                i++;
             }
 
             if (_contactFrameList.Count >  GlobalContacts.GetInstance().Count)
             {
-                for (int i = GlobalContacts.GetInstance().Count; i < _contactFrameList.Count; i++)
+                for (i = GlobalContacts.GetInstance().Count; i < _contactFrameList.Count; i++)
                 {
                     GameObject.Destroy(_contactFrameList[i].gameObject);
                 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace MiniWeChat
 {
-    #region 内部事件 Internal 1000 - 2000
+    #region 主要事件 General 1000 - 2000
 
     public enum EGeneralMessage : uint
     {
@@ -12,10 +12,17 @@ namespace MiniWeChat
         REQ_TIMEOUT,
     }
 
+    #endregion
+
+    #region 界面事件 General 1000 - 2000
+
     public enum EUIMessage : uint
     {
         UPDATE_FRIEND_DETAIL = 2000,
+        UPDATE_SEND_CHAT,
+        UPDATE_RECEIVE_CHAT,
     }
+
     #endregion
 }
 

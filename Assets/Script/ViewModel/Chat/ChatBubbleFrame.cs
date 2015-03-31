@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using protocol;
 
 namespace MiniWeChat
 {
@@ -19,12 +20,13 @@ namespace MiniWeChat
         public RectTransform _imageChatBubble;
         public RectTransform _frameChatBubble;
         public Text _textChat;
+        public Image _imageHead;
 
         /// <summary>
         /// 在一个聊天窗口中显示一个字符串
         /// </summary>
         /// <param name="text">字符串</param>
-        public void Show(string text)
+        public void Show(string text, UserItem userItem)
         {
             int lines = 0;
             float maxCharNumInOneLine = 0;
@@ -40,6 +42,9 @@ namespace MiniWeChat
                 GlobalVars.DEFAULT_SCREEN_WIDTH,
                 FRAME_BUBBLE_HEIGHT_BASE + HEIGHT_INCREMENT * (lines - 1) 
                 );
+            _frameChatBubble.GetComponent<LayoutElement>().preferredHeight = _frameChatBubble.sizeDelta.y;
+
+            UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + userItem.headIndex);
         }
 
         /// <summary>

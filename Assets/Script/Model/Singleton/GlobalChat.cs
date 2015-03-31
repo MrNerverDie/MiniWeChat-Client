@@ -9,8 +9,9 @@ namespace MiniWeChat
 {
     public class GlobalChat : Singleton<GlobalChat>
     {
-        Dictionary<string, ChatLog> _chatLogDict;
-        List<ChatLog> _sortedChatLogList;
+        private Dictionary<string, ChatLog> _chatLogDict;
+        private Dictionary<string, ChatDataItem> _waitSendChatDict;
+        private List<ChatLog> _sortedChatLogList;
 
         private static readonly string _dirPath = Application.persistentDataPath + "/Chat";
 
@@ -23,19 +24,23 @@ namespace MiniWeChat
         {
             base.Init();
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.RECEIVE_CHAT_SYNC, OnReceiveChatSync);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
 
             _chatLogDict = new Dictionary<string, ChatLog>();
+            _waitSendChatDict = new Dictionary<string, ChatDataItem>();
+            _sortedChatLogList = new List<ChatLog>();
         }
 
         public override void Release()
         {
             base.Release();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.RECEIVE_CHAT_SYNC, OnReceiveChatSync);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
         }
 
-        public List<ChatDataItem> GetChatDataItemList(string userID)
+        public ChatLog GetChatLog(string userID)
         {
-            return _chatLogDict[userID].itemList;
+            return _chatLogDict[userID];
         }
 
         private void SaveLogDict()
@@ -56,8 +61,6 @@ namespace MiniWeChat
                 _sortedChatLogList.Add(chatLog);
                 _chatLogDict[chatLog.userId] = chatLog;
             }
-
-            _sortedChatLogList.Sort(SortChatLogByDate);
         }
 
         private static int SortChatLogByDate(ChatLog c1, ChatLog c2)
@@ -74,7 +77,8 @@ namespace MiniWeChat
 
             AddChatDataItem(chatDataItem);
 
-            NetworkManager.GetInstance().SendPacket<SendChatReq>(ENetworkMessage.SEND_CHAT_REQ, req);
+            string msgID = NetworkManager.GetInstance().SendPacket<SendChatReq>(ENetworkMessage.SEND_CHAT_REQ, req);
+            _waitSendChatDict.Add(msgID, chatDataItem);
         }
 
         private void AddChatDataItem(ChatDataItem chatDataItem)
@@ -91,13 +95,27 @@ namespace MiniWeChat
                 ChatLog chatLog = new ChatLog
                 {
                     userId = guestUserID,
-                    date = chatDataItem.date,
                 };
 
                 _chatLogDict.Add(guestUserID, chatLog);
             }
 
+            _chatLogDict[guestUserID].itemList.Remove(chatDataItem);
+
+            _chatLogDict[guestUserID].date = chatDataItem.date;
             _chatLogDict[guestUserID].itemList.Add(chatDataItem);
+        }
+
+        public List<ChatLog>.Enumerator GetEnumerator()
+        {
+            _sortedChatLogList.Sort(SortChatLogByDate);
+            return _sortedChatLogList.GetEnumerator();
+        }
+
+        public ChatDataItem GetLastChat(string userId)
+        {
+            List<ChatDataItem> itemList = GetChatLog(userId).itemList;
+            return itemList[itemList.Count - 1];
         }
 
         #region MessageHandler
@@ -108,6 +126,20 @@ namespace MiniWeChat
             foreach (var chatItem in rsp.chatData)
             {
                 AddChatDataItem(MiniConverter.ChatItemToDataItem(chatItem));
+            }
+        }
+
+        public void OnSendChatRsp(uint iMessageType, object kParam)
+        {
+            NetworkMessageParam param = kParam as NetworkMessageParam;
+            SendChatRsp rsp = param.rsp as SendChatRsp;
+            if (rsp.resultCode == SendChatRsp.ResultCode.SUCCESS)
+            {
+                if (_waitSendChatDict.ContainsKey(param.msgID))
+                {
+                    _waitSendChatDict[param.msgID].isSend = true;
+                    _waitSendChatDict.Remove(param.msgID);                    
+                }
             }
         }
 

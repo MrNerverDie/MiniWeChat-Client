@@ -10,6 +10,13 @@ using System.IO;
 
 namespace MiniWeChat
 {
+    public class NetworkMessageParam
+    {
+        public IExtensible req;
+        public IExtensible rsp;
+        public string msgID;
+    }
+
     public class NetworkManager : Singleton<NetworkManager>
     {
         private Socket _socket;
@@ -25,12 +32,13 @@ namespace MiniWeChat
 
         private bool _isKeepAlive = false;
 
-        HashSet<string> _msgIDSet;
+        Dictionary<string, IExtensible> _msgIDDict;
 
         Queue<MessageArgs> _receiveMessageQueue;
         private const float CHECK_QUEUE_DURATION = 0.1f;
 
         private HashSet<ENetworkMessage> _forcePushMessageType;
+        private HashSet<ENetworkMessage> _needReqMessageType;
 
         #region LifeCycle
         public override void Init()
@@ -38,8 +46,9 @@ namespace MiniWeChat
             Debug.Log("Client Running...");
 
             _receiveMessageQueue = new Queue<MessageArgs>();
-            _msgIDSet = new HashSet<string>();
+            _msgIDDict = new Dictionary<string, IExtensible>();
             InitForcePushMessageType();
+            InitNeedReqMessageType();
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
@@ -208,18 +217,34 @@ namespace MiniWeChat
                         msgIDBytes[i] = _receiveBuffer[position + HEAD_SIZE * 2 + i];
                     }
                     string msgID = BitConverter.ToString(msgIDBytes);
-                    
-                    object param = UnPackTool.UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE, _receiveBuffer);
+
+                    IExtensible rspPacket = UnPackTool.UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE, _receiveBuffer);
 
                     MessageArgs args = new MessageArgs
                     {
                         iMessageType = (uint)networkMessage,
-                        kParam = param,
+                        kParam = rspPacket,
                     };
 
-                    lock (_msgIDSet)
+                    NetworkMessageParam networkParam = new NetworkMessageParam
                     {
-                        if (_forcePushMessageType.Contains(networkMessage) || _msgIDSet.Contains(msgID))
+                        rsp = rspPacket,
+                        msgID = msgID,
+                    };
+
+                    lock (_msgIDDict)
+                    {
+                        if (_msgIDDict.ContainsKey(msgID))
+                        {
+                            networkParam.req = _msgIDDict[msgID];
+                        }
+
+                        if (_needReqMessageType.Contains(networkMessage))
+                        {
+                            args.kParam = networkParam;                            
+                        }
+
+                        if (_forcePushMessageType.Contains(networkMessage) || _msgIDDict.ContainsKey(msgID))
                         {
                             lock (_receiveMessageQueue)
                             {
@@ -227,9 +252,9 @@ namespace MiniWeChat
                             }
                         }
 
-                        if (_msgIDSet.Contains(msgID))
+                        if (_msgIDDict.ContainsKey(msgID))
                         {
-                            _msgIDSet.Remove(msgID);
+                            _msgIDDict.Remove(msgID);
                         }
                     }
                     
@@ -270,25 +295,39 @@ namespace MiniWeChat
             };
         }
 
+        /// <summary>
+        /// 配置在Rsp包中同时需要Req包信息的消息类型
+        /// </summary>
+        private void InitNeedReqMessageType()
+        {
+            _needReqMessageType = new HashSet<ENetworkMessage>
+            {
+                //ENetworkMessage.SEND_CHAT_RSP,
+            };
+        }
+
         #endregion
 
 
         #region SendPacket
 
-        public void SendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage = (uint)EGeneralMessage.REQ_TIMEOUT) where T : global::ProtoBuf.IExtensible
-        {
-            StartCoroutine(BeginSendPacket<T>(networkMessage, packet, timeoutMessage));
-        }
-
-        private IEnumerator BeginSendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage) where T : global::ProtoBuf.IExtensible
+        public string SendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage = (uint)EGeneralMessage.REQ_TIMEOUT) where T : global::ProtoBuf.IExtensible
         {
             byte[] msgIDBytes = BitConverter.GetBytes(UnityEngine.Random.value);
+                        
+            StartCoroutine(BeginSendPacket<T>(networkMessage, packet, timeoutMessage, msgIDBytes));
+
+            return BitConverter.ToString(msgIDBytes);
+        }
+
+        private IEnumerator BeginSendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage, byte[] msgIDBytes) where T : global::ProtoBuf.IExtensible
+        {
             string msgID = BitConverter.ToString(msgIDBytes);
 
 
-            lock(_msgIDSet)
+            lock(_msgIDDict)
             {
-                _msgIDSet.Add(BitConverter.ToString(msgIDBytes));
+                _msgIDDict.Add(BitConverter.ToString(msgIDBytes), packet);
             }
 
             Debug.Log("Send : " + networkMessage);
@@ -296,11 +335,11 @@ namespace MiniWeChat
             DoBeginSendPacket<T>(networkMessage, packet, msgIDBytes);
             yield return new WaitForSeconds(REQ_TIME_OUT);
 
-            lock (_msgIDSet)
+            lock (_msgIDDict)
             {
-                if (_msgIDSet.Contains(msgID))
+                if (_msgIDDict.ContainsKey(msgID))
                 {
-                    _msgIDSet.Remove(msgID);
+                    _msgIDDict.Remove(msgID);
                     MessageDispatcher.GetInstance().DispatchMessage(timeoutMessage, networkMessage);
                     DialogManager.GetInstance().CreateSingleButtonDialog("Send Packet Type : " + networkMessage + " msgID : " + msgID + " timeout ");
                 }

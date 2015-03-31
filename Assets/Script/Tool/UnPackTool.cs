@@ -9,9 +9,9 @@ namespace MiniWeChat
 {
     public class UnPackTool
     {
-        public static object UnPack(ENetworkMessage networkMessage, int startIndex, int length, byte[] buffer)
+        public static IExtensible UnPack(ENetworkMessage networkMessage, int startIndex, int length, byte[] buffer)
         {
-            object packet = null;
+            IExtensible packet = null;
 
             using (MemoryStream streamForProto = new MemoryStream(buffer, startIndex, length))
             {
