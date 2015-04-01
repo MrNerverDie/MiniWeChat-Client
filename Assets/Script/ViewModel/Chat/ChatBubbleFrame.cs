@@ -26,8 +26,15 @@ namespace MiniWeChat
         /// 在一个聊天窗口中显示一个字符串
         /// </summary>
         /// <param name="text">字符串</param>
-        public void Show(string text, UserItem userItem)
+        public void Show(ChatDataItem chatDataItem)
         {
+            string text = chatDataItem.chatBody;
+            UserItem userItem = GlobalUser.GetInstance().Self;
+            if (chatDataItem.sendUserId != GlobalUser.GetInstance().UserId)
+            {
+                userItem = GlobalContacts.GetInstance().GetUserItemById(chatDataItem.sendUserId);
+            }
+
             int lines = 0;
             float maxCharNumInOneLine = 0;
 

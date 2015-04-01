@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using protocol;
 
 namespace MiniWeChat
@@ -13,6 +14,9 @@ namespace MiniWeChat
         public VerticalLayoutGroup _gridChatBubble;
 
         private UserItem _guestUserItem;
+        private ChatLog _chatLog;
+
+        private List<ChatBubbleFrame> _chatBubbleList;
 
         public override void OnEnter(object param = null)
         {
@@ -23,6 +27,10 @@ namespace MiniWeChat
             _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, 0);
             _buttonSend.onClick.AddListener(OnClickSendButton);
             _scrollChatLog.verticalNormalizedPosition = 0;
+
+            _chatLog = GlobalChat.GetInstance().GetChatLog(_guestUserItem.userId);
+            _chatBubbleList = new List<ChatBubbleFrame>();
+            RefreshChatLog();
         }
 
         public override void OnExit()
@@ -41,14 +49,22 @@ namespace MiniWeChat
             base.OnHide();
         }
 
+        private void RefreshChatLog()
+        {
+
+            foreach (var chatDataItem in _chatLog.itemList)
+            {
+                GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, EUIType.PersonalChatBubbleFrame);
+                _gridChatBubble.GetComponent<RectTransform>().sizeDelta += new Vector2(0, bubbleFrame.GetComponent<LayoutElement>().preferredHeight);
+                bubbleFrame.GetComponent<ChatBubbleFrame>().Show(chatDataItem);
+                _chatBubbleList.Add(bubbleFrame.GetComponent<ChatBubbleFrame>());
+            }
+
+            _scrollChatLog.verticalNormalizedPosition = 0;
+        }
+
         public void OnClickSendButton()
         {
-            GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, EUIType.PersonalChatBubbleFrame);
-            bubbleFrame.GetComponent<ChatBubbleFrame>().Show(_inputChat.text, GlobalUser.GetInstance().Self);
-            _inputChat.text = "";
-            _gridChatBubble.GetComponent<RectTransform>().sizeDelta += new Vector2(0, bubbleFrame.GetComponent<RectTransform>().sizeDelta.y);
-            _scrollChatLog.verticalNormalizedPosition = 0;
-
             ChatDataItem chatDataItem = new ChatDataItem
             {
                 sendUserId = GlobalUser.GetInstance().UserId,
@@ -59,6 +75,13 @@ namespace MiniWeChat
             };
             GlobalChat.GetInstance().SendChatReq(chatDataItem);
 
+            GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, EUIType.PersonalChatBubbleFrame);
+            _gridChatBubble.GetComponent<RectTransform>().sizeDelta += new Vector2(0, bubbleFrame.GetComponent<LayoutElement>().preferredHeight);
+            bubbleFrame.GetComponent<ChatBubbleFrame>().Show(chatDataItem);
+            _chatBubbleList.Add(bubbleFrame.GetComponent<ChatBubbleFrame>());
+
+            _inputChat.text = "";
+            _scrollChatLog.verticalNormalizedPosition = 0;
         }
     }
 }

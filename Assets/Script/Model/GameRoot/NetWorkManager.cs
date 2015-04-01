@@ -302,7 +302,7 @@ namespace MiniWeChat
         {
             _needReqMessageType = new HashSet<ENetworkMessage>
             {
-                //ENetworkMessage.SEND_CHAT_RSP,
+                ENetworkMessage.SEND_CHAT_RSP,
             };
         }
 

@@ -57,6 +57,7 @@ namespace MiniWeChat
             if (rsp.resultCode == GetPersonalInfoRsp.ResultCode.SUCCESS
                 && rsp.friends != null)
             {
+                _friendDict.Clear();
                 foreach (UserItem friend in rsp.friends)
                 {
                     _friendDict[friend.userId] = friend;

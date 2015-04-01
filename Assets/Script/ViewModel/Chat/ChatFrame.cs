@@ -15,6 +15,8 @@ namespace MiniWeChat
 
         public Button _buttonChatFrame;
 
+        private UserItem _userItem;
+
         // Use this for initialization
         void Start()
         {
@@ -23,17 +25,17 @@ namespace MiniWeChat
 
         public void Show(ChatLog chatLog)
         {
-            UserItem userItem = GlobalContacts.GetInstance().GetUserItemById(chatLog.userId);
-            UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + userItem.headIndex);
+            _userItem = GlobalContacts.GetInstance().GetUserItemById(chatLog.userId);
+            UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
             _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.userId).chatBody;
-            _labelUserName.text = userItem.userName;
+            _labelUserName.text = _userItem.userName;
             _labelDate.text = new DateTime(chatLog.date).ToString();
         }
 
         public void OnClickChatFrameButton()
         {
             GameObject chatPanel = UIManager.GetInstance().GetSingleUI(EUIType.ChatPanel);
-            StateManager.GetInstance().PushState<ChatPanel>(chatPanel);
+            StateManager.GetInstance().PushState<ChatPanel>(chatPanel, _userItem);
         }
 
     }

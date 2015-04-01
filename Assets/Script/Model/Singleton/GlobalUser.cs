@@ -61,6 +61,10 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
 
+            if (PlayerPrefs.HasKey(GlobalVars.PREF_USER_ID))
+            {
+                _userId = PlayerPrefs.GetString(GlobalVars.PREF_USER_ID);                
+            }
         }
 
         public override void Release()

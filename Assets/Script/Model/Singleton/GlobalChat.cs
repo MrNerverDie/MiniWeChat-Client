@@ -13,8 +13,6 @@ namespace MiniWeChat
         private Dictionary<string, ChatDataItem> _waitSendChatDict;
         private List<ChatLog> _sortedChatLogList;
 
-        private static string _dirPath ;
-
         public int Count
         {
             get { return _chatLogDict.Count; }
@@ -26,12 +24,11 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.RECEIVE_CHAT_SYNC, OnReceiveChatSync);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
             _sortedChatLogList = new List<ChatLog>();
-
-            _dirPath = GlobalUser.GetInstance().GetUserDir() + "/Chat";
 
             InitLogDict();
         }
@@ -42,6 +39,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.RECEIVE_CHAT_SYNC, OnReceiveChatSync);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
 
             SaveLogDict();
         }
@@ -56,23 +54,31 @@ namespace MiniWeChat
             return GetChatLog(userID).itemList[index];
         }
 
+        private string GetChatDirPath()
+        {
+            return GlobalUser.GetInstance().GetUserDir() + "/Chat";
+        }
+
         private void SaveLogDict()
         {
             foreach (var userID in _chatLogDict.Keys)
             {
-                string filePath = _dirPath + "/" + userID;
+                string filePath = GetChatDirPath() + "/" + userID;
                 IOTool.SerializeToFile<ChatLog>(filePath, _chatLogDict[userID]);
             }
         }
 
         private void InitLogDict()
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(_dirPath);
-            foreach (var item in dirInfo.GetFiles())
+            DirectoryInfo dirInfo = new DirectoryInfo(GetChatDirPath());
+            if (dirInfo.Exists)
             {
-                ChatLog chatLog = IOTool.DeserializeFromFile<ChatLog>(item.FullName);
-                _sortedChatLogList.Add(chatLog);
-                _chatLogDict[chatLog.userId] = chatLog;
+                foreach (var item in dirInfo.GetFiles())
+                {
+                    ChatLog chatLog = IOTool.DeserializeFromFile<ChatLog>(item.FullName);
+                    _sortedChatLogList.Add(chatLog);
+                    _chatLogDict[chatLog.userId] = chatLog;
+                }
             }
         }
 
@@ -172,6 +178,15 @@ namespace MiniWeChat
                 _waitSendChatDict.Remove(param.msgID);
             }
             MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT, index);
+        }
+
+        public void OnLoginRsp(uint iMessageType, object kParam)
+        {
+            LoginRsp rsp = kParam as LoginRsp;
+            if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
+            {
+                InitLogDict();
+            }
         }
 
         #endregion

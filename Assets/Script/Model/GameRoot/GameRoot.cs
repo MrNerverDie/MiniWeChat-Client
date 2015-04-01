@@ -26,9 +26,9 @@ namespace MiniWeChat
             StateManager.GetInstance().Release();
             DialogManager.GetInstance().Release();
             NetworkManager.GetInstance().Release();
-            GlobalUser.GetInstance().Release();
             GlobalContacts.GetInstance().Release();
             GlobalChat.GetInstance().Release();
+            GlobalUser.GetInstance().Release();
         }
 
         /// <summary>

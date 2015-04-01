@@ -13,16 +13,6 @@ namespace MiniWeChat
 
         private List<ChatFrame> _chatFrameList = new List<ChatFrame>();
 
-        public void Start()
-        {
-            //int chatNum = 10;
-            //_chatGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, CHAT_FRAME_HEIGHT * chatNum);
-            //for (int i = 0; i < chatNum; i++)
-            //{
-            //    GameObject go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.ChatFrame);
-            //}
-        }
-
         public override void Show(object param = null)
         {
             base.Show(param);
@@ -48,7 +38,7 @@ namespace MiniWeChat
             int i = 0;
             foreach (ChatLog chatLog in GlobalChat.GetInstance())
             {
-                if (i >= GlobalChat.GetInstance().Count)
+                if (i >= _chatFrameList.Count)
                 {
                     GameObject go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.ChatFrame);
                     _chatFrameList.Add(go.GetComponent<ChatFrame>());
