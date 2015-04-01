@@ -340,7 +340,12 @@ namespace MiniWeChat
                 if (_msgIDDict.ContainsKey(msgID))
                 {
                     _msgIDDict.Remove(msgID);
-                    MessageDispatcher.GetInstance().DispatchMessage(timeoutMessage, networkMessage);
+                    NetworkMessageParam param = new NetworkMessageParam
+                    {
+                        msgID = msgID,
+                        req = packet,
+                    };
+                    MessageDispatcher.GetInstance().DispatchMessage(timeoutMessage, param);
                     DialogManager.GetInstance().CreateSingleButtonDialog("Send Packet Type : " + networkMessage + " msgID : " + msgID + " timeout ");
                 }
             }

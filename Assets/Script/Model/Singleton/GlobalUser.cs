@@ -199,6 +199,11 @@ namespace MiniWeChat
             }
         }
 
+        public string GetUserDir()
+        {
+            return Application.persistentDataPath + "/" + _userId;
+        }
+
         #endregion
     }
 }

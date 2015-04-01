@@ -10,6 +10,7 @@ namespace MiniWeChat
         SOCKET_CONNECTED = 1000,
         SOCKET_DISCONNECTED,
         REQ_TIMEOUT,
+        SEND_CHAT_TIMEOUT,
     }
 
     #endregion

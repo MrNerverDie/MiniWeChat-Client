@@ -13,7 +13,7 @@ namespace MiniWeChat
         private Dictionary<string, ChatDataItem> _waitSendChatDict;
         private List<ChatLog> _sortedChatLogList;
 
-        private static readonly string _dirPath = Application.persistentDataPath + "/Chat";
+        private static string _dirPath ;
 
         public int Count
         {
@@ -25,10 +25,15 @@ namespace MiniWeChat
             base.Init();
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.RECEIVE_CHAT_SYNC, OnReceiveChatSync);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
             _sortedChatLogList = new List<ChatLog>();
+
+            _dirPath = GlobalUser.GetInstance().GetUserDir() + "/Chat";
+
+            InitLogDict();
         }
 
         public override void Release()
@@ -36,11 +41,19 @@ namespace MiniWeChat
             base.Release();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.RECEIVE_CHAT_SYNC, OnReceiveChatSync);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
+
+            SaveLogDict();
         }
 
         public ChatLog GetChatLog(string userID)
         {
             return _chatLogDict[userID];
+        }
+
+        public ChatDataItem GetChatDataItem(string userID, int index)
+        {
+            return GetChatLog(userID).itemList[index];
         }
 
         private void SaveLogDict()
@@ -77,7 +90,7 @@ namespace MiniWeChat
 
             AddChatDataItem(chatDataItem);
 
-            string msgID = NetworkManager.GetInstance().SendPacket<SendChatReq>(ENetworkMessage.SEND_CHAT_REQ, req);
+            string msgID = NetworkManager.GetInstance().SendPacket<SendChatReq>(ENetworkMessage.SEND_CHAT_REQ, req, (uint)EGeneralMessage.SEND_CHAT_TIMEOUT);
             _waitSendChatDict.Add(msgID, chatDataItem);
         }
 
@@ -135,12 +148,30 @@ namespace MiniWeChat
             SendChatRsp rsp = param.rsp as SendChatRsp;
             if (rsp.resultCode == SendChatRsp.ResultCode.SUCCESS)
             {
+                int index = -1;
                 if (_waitSendChatDict.ContainsKey(param.msgID))
                 {
+                    SendChatReq req = param.req as SendChatReq;
+                    index = _chatLogDict[req.chatData.receiveUserId].itemList.LastIndexOf(_waitSendChatDict[param.msgID]);
                     _waitSendChatDict[param.msgID].isSend = true;
-                    _waitSendChatDict.Remove(param.msgID);                    
+                    _waitSendChatDict.Remove(param.msgID);                
                 }
+                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT, index);
             }
+        }
+
+        public void OnSendChatTimeOut(uint iMessageType, object kParam)
+        {
+            NetworkMessageParam param = kParam as NetworkMessageParam;
+            int index = -1;
+            if (_waitSendChatDict.ContainsKey(param.msgID))
+            {
+                SendChatReq req = param.req as SendChatReq;
+                index = _chatLogDict[req.chatData.receiveUserId].itemList.LastIndexOf(_waitSendChatDict[param.msgID]);
+                _waitSendChatDict[param.msgID].isSend = false;
+                _waitSendChatDict.Remove(param.msgID);
+            }
+            MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT, index);
         }
 
         #endregion
