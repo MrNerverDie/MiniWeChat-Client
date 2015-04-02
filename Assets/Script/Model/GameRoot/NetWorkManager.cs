@@ -27,7 +27,7 @@ namespace MiniWeChat
         private const int HEAD_NUM = 3;
 
         private float CONNECT_TIME_OUT = 3.0f;
-        private float REQ_TIME_OUT = 3.0f;
+        private float REQ_TIME_OUT = 4.0f;
         private float KEEP_ALIVE_TIME_OUT = 5.0f;
 
         private bool _isKeepAlive = false;
@@ -40,6 +40,13 @@ namespace MiniWeChat
         private HashSet<ENetworkMessage> _forcePushMessageType;
         private HashSet<ENetworkMessage> _needReqMessageType;
 
+        private StatusLabel _labelStatus;
+
+        public bool IsConncted
+        {
+            get { return _socket != null && _socket.Connected; }
+        }
+
         #region LifeCycle
         public override void Init()
         {
@@ -51,15 +58,17 @@ namespace MiniWeChat
             InitNeedReqMessageType();
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
 
             StartCoroutine(BeginHandleReceiveMessageQueue());
-            StartCoroutine(BeginTryConnect());
+            StartCoroutine(BeginTryConnect());    
         }
 
         public override void Release()
         {
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
 
             CloseConnection();
@@ -81,13 +90,18 @@ namespace MiniWeChat
             }
         }
 
-        private void OnSocketConnected(uint iMessageType, object kParam)
+        public void OnSocketConnected(uint iMessageType, object kParam)
         {
             _receiveBuffer = new byte[_socket.ReceiveBufferSize];
 
             _isKeepAlive = true;
 
             BeginReceivePacket();
+        }
+
+        public void OnSocketDisConnected(uint iMessageType, object kParam)
+        {
+            StartCoroutine(BeginTryConnect());
         }
 
         #endregion
@@ -155,17 +169,20 @@ namespace MiniWeChat
         /// <returns></returns>
         private IEnumerator BeginTryConnect()
         {
-            while (true)
+            while(_socket == null || !_socket.Connected)
             {
-                if (_isKeepAlive == false)
-                {
-                    Debug.Log("Begin Connect...");
-                    CloseConnection();
-                    yield return StartCoroutine(BeginConnection());
-                }
+                Debug.Log("Begin Connect...");
+                CloseConnection();
+                yield return StartCoroutine(BeginConnection());
+            }
+
+            while (_isKeepAlive)
+            {
                 _isKeepAlive = false;
                 yield return new WaitForSeconds(KEEP_ALIVE_TIME_OUT);
             }
+
+            MessageDispatcher.GetInstance().DispatchMessage((uint)EGeneralMessage.SOCKET_DISCONNECTED, null);
         }
 
         private void OnKeepAliveSync(uint iMessageType, object kParam)

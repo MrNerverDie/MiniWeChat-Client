@@ -29,6 +29,7 @@ namespace MiniWeChat
             GlobalContacts.GetInstance().Release();
             GlobalChat.GetInstance().Release();
             GlobalUser.GetInstance().Release();
+            UIDebugger.GetInstance().Release();
         }
 
         /// <summary>
@@ -47,6 +48,7 @@ namespace MiniWeChat
             AddSingleton<GlobalUser>(_rootObj);
             AddSingleton<GlobalContacts>(_rootObj);
             AddSingleton<GlobalChat>(_rootObj);
+            AddSingleton<UIDebugger>(_rootObj);
         }
 
         private static T AddSingleton<T>(GameObject go) where T : Singleton<T>

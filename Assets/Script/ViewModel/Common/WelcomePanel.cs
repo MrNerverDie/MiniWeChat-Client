@@ -32,6 +32,9 @@ namespace MiniWeChat
                 GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
                 StateManager.GetInstance().ReplaceState<MainMenuPanel>(go);
             }
+
+            GameObject label = UIManager.GetInstance().GetSingleUI(EUIType.StatusLabel);
+            label.GetComponent<StatusLabel>().Show();
         }
     }
 }
