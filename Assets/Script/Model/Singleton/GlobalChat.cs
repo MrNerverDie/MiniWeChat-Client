@@ -25,12 +25,15 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
             _sortedChatLogList = new List<ChatLog>();
 
-            InitLogDict();
+            LoadLogDict();
         }
 
         public override void Release()
@@ -40,46 +43,32 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
 
             SaveLogDict();
         }
 
         public ChatLog GetChatLog(string userID)
         {
+            if (!_chatLogDict.ContainsKey(userID))
+            {
+                ChatLog chatLog = new ChatLog
+                {
+                    userId = userID,
+                };
+
+                _chatLogDict.Add(userID, chatLog);
+            }
+
             return _chatLogDict[userID];
+
         }
 
         public ChatDataItem GetChatDataItem(string userID, int index)
         {
             return GetChatLog(userID).itemList[index];
-        }
-
-        private string GetChatDirPath()
-        {
-            return GlobalUser.GetInstance().GetUserDir() + "/Chat";
-        }
-
-        private void SaveLogDict()
-        {
-            foreach (var userID in _chatLogDict.Keys)
-            {
-                string filePath = GetChatDirPath() + "/" + userID;
-                IOTool.SerializeToFile<ChatLog>(filePath, _chatLogDict[userID]);
-            }
-        }
-
-        private void InitLogDict()
-        {
-            DirectoryInfo dirInfo = new DirectoryInfo(GetChatDirPath());
-            if (dirInfo.Exists)
-            {
-                foreach (var item in dirInfo.GetFiles())
-                {
-                    ChatLog chatLog = IOTool.DeserializeFromFile<ChatLog>(item.FullName);
-                    _sortedChatLogList.Add(chatLog);
-                    _chatLogDict[chatLog.userId] = chatLog;
-                }
-            }
         }
 
         private static int SortChatLogByDate(ChatLog c1, ChatLog c2)
@@ -185,7 +174,49 @@ namespace MiniWeChat
             LoginRsp rsp = kParam as LoginRsp;
             if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
             {
-                InitLogDict();
+                LoadLogDict();
+            }
+        }
+
+        public void OnLogOutRsp(uint iMessageType, object kParam)
+        {
+            SaveLogDict();
+        }
+
+        public void OnEnterMainMenu(uint iMessageType, object kParam)
+        {
+            LoadLogDict();
+        }
+
+        #endregion
+
+        #region LocalData
+
+        private string GetChatDirPath()
+        {
+            return GlobalUser.GetInstance().GetUserDir() + "/Chat";
+        }
+
+        private void SaveLogDict()
+        {
+            foreach (var userID in _chatLogDict.Keys)
+            {
+                string filePath = GetChatDirPath() + "/" + userID;
+                IOTool.SerializeToFile<ChatLog>(filePath, _chatLogDict[userID]);
+            }
+            _chatLogDict.Clear();
+        }
+
+        private void LoadLogDict()
+        {
+            if (IOTool.IsDirExist(GetChatDirPath()))
+            {
+                foreach (var file in IOTool.GetFiles(GetChatDirPath()))
+                {
+                    ChatLog chatLog = IOTool.DeserializeFromFile<ChatLog>(file.FullName);
+                    _sortedChatLogList.Add(chatLog);
+                    _chatLogDict[chatLog.userId] = chatLog;
+                }
             }
         }
 

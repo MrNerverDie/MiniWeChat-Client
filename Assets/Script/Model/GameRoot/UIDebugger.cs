@@ -42,7 +42,10 @@ namespace MiniWeChat
                 PlayerPrefs.DeleteKey(GlobalVars.PREF_USER_PASSWORD);
 
                 DirectoryInfo dirInfo = new DirectoryInfo(GlobalUser.GetInstance().GetUserDir());
-                dirInfo.Delete(true);
+                foreach (var item in dirInfo.GetFiles())
+                {
+                    item.Delete();
+                }
             }
 
             _inputDebug.gameObject.SetActive(false);

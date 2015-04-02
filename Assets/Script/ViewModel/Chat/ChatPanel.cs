@@ -12,6 +12,7 @@ namespace MiniWeChat
         public ScrollRect _scrollChatLog;
         public Button _buttonSend;
         public VerticalLayoutGroup _gridChatBubble;
+        public Text _labelGuestUserName;
 
         private UserItem _guestUserItem;
         private ChatLog _chatLog;
@@ -27,6 +28,7 @@ namespace MiniWeChat
             _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, 0);
             _buttonSend.onClick.AddListener(OnClickSendButton);
             _scrollChatLog.verticalNormalizedPosition = 0;
+            _labelGuestUserName.text = _guestUserItem.userName;
 
             _chatLog = GlobalChat.GetInstance().GetChatLog(_guestUserItem.userId);
             _chatBubbleList = new List<ChatBubbleFrame>();

@@ -281,8 +281,7 @@ namespace MiniWeChat
                         DoBeginSendPacket(networkMessage, msgIDBytes);
                     }
 
-                    Debug.Log("bufferSize : " + bufferSize);
-                    Debug.Log("networkMessage : " + networkMessage);
+                    Debug.Log("networkMessage : " + networkMessage + "msgID : " + msgID);
                     //Debug.Log("msgID : " + msgID);
 
                     position += bufferSize;
@@ -347,7 +346,7 @@ namespace MiniWeChat
                 _msgIDDict.Add(BitConverter.ToString(msgIDBytes), packet);
             }
 
-            Debug.Log("Send : " + networkMessage);
+            Debug.Log("Send : " + networkMessage + " msgID : " + msgID);
 
             DoBeginSendPacket<T>(networkMessage, packet, msgIDBytes);
             yield return new WaitForSeconds(REQ_TIME_OUT);
@@ -357,6 +356,7 @@ namespace MiniWeChat
                 if (_msgIDDict.ContainsKey(msgID))
                 {
                     _msgIDDict.Remove(msgID);
+
                     NetworkMessageParam param = new NetworkMessageParam
                     {
                         msgID = msgID,

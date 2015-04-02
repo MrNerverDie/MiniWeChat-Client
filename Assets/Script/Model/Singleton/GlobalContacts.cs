@@ -22,6 +22,12 @@ namespace MiniWeChat
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_FRIEND_SYNC, OnChangeFriendSync);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
+
+
+            LoadFriendDict();
         }
 
         public override void Release()
@@ -30,7 +36,12 @@ namespace MiniWeChat
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_FRIEND_SYNC, OnChangeFriendSync);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
 
+
+            SaveFriendDict();
         }
 
 
@@ -78,6 +89,46 @@ namespace MiniWeChat
             }
 
             MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_FRIEND_DETAIL);
+        }
+
+        public void OnLogOutRsp(uint iMessageType, object kParam)
+        {
+            SaveFriendDict();
+        }
+
+        public void OnEnterMainMenu(uint iMessageType, object kParam)
+        {
+            LoadFriendDict();
+        }
+
+        #endregion
+
+        #region LocalData
+        private string GetContactsDirPath()
+        {
+            return GlobalUser.GetInstance().GetUserDir() + "/Contacts";
+        }
+
+        private void SaveFriendDict()
+        {
+            foreach (var userID in _friendDict.Keys)
+            {
+                string filePath = GetContactsDirPath() + "/" + userID;
+                IOTool.SerializeToFile<UserItem>(filePath, _friendDict[userID]);
+            }
+            _friendDict.Clear();            
+        }
+
+        private void LoadFriendDict()
+        {
+            if (_friendDict.Count == 0 && IOTool.IsDirExist(GetContactsDirPath()))
+            {
+                foreach (var file in IOTool.GetFiles(GetContactsDirPath()))
+                {
+                    UserItem userItem = IOTool.DeserializeFromFile<UserItem>(file.FullName);
+                    _friendDict[userItem.userId] = userItem;
+                }
+            }
         }
         #endregion
 

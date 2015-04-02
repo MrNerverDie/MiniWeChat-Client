@@ -34,6 +34,18 @@ namespace MiniWeChat
                 return Serializer.Deserialize<T>(fs);
             }
         }
+
+        public static bool IsDirExist(string dirPath)
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+            return dirInfo.Exists;
+        }
+
+        public static FileInfo[] GetFiles(string dirPath)
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+            return dirInfo.GetFiles();
+        }
     }
 }
 

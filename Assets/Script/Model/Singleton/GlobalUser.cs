@@ -192,8 +192,9 @@ namespace MiniWeChat
             string[] dirPathList = new string[]
             {
                 Application.persistentDataPath + "/" + _userId,
-                Application.persistentDataPath + "/" + _userId + "/Head",
                 Application.persistentDataPath + "/" + _userId + "/Chat",
+                Application.persistentDataPath + "/" + _userId + "/Contacts",
+                Application.persistentDataPath + "/" + _userId + "/Head",
                 Application.persistentDataPath + "/" + _userId + "/Image",
             };
 

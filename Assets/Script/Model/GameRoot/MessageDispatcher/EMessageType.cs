@@ -9,6 +9,7 @@ namespace MiniWeChat
     {
         SOCKET_CONNECTED = 1000,
         SOCKET_DISCONNECTED,
+        ENTER_MAINMENU,
         REQ_TIMEOUT,
         SEND_CHAT_TIMEOUT,
     }
