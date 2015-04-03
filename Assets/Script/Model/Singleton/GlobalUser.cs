@@ -60,13 +60,13 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
 
 
             if (PlayerPrefs.HasKey(GlobalVars.PREF_USER_ID))
             {
                 _userId = PlayerPrefs.GetString(GlobalVars.PREF_USER_ID);                
             }
+            LoadUserInfo();
         }
 
         public override void Release()
@@ -77,7 +77,6 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
 
             SaveUserInfo();
         }
@@ -101,6 +100,7 @@ namespace MiniWeChat
             };
             _userId = id;
             _userPassword = password;
+            MessageDispatcher.GetInstance().DispatchMessage((uint)EGeneralMessage.TRY_LOGIN, null);
             NetworkManager.GetInstance().SendPacket<LoginReq>(ENetworkMessage.LOGIN_REQ, req);
         }
 
@@ -187,14 +187,6 @@ namespace MiniWeChat
                 DoLogOut();
             }
         }
-        public void OnEnterMainMenu(uint iMessageType, object kParam)
-        {
-            if (!_isLogin)
-            {
-                LoadUserInfo();
-            }
-        }
-
 
         #endregion
 

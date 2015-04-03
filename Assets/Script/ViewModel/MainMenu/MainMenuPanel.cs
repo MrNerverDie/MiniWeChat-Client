@@ -13,8 +13,6 @@ namespace MiniWeChat
 
         public override void OnEnter(object param = null)
         {
-            MessageDispatcher.GetInstance().DispatchMessage((uint)EGeneralMessage.ENTER_MAINMENU, null);
-
             base.OnEnter(param);
 
             _searchButton.onClick.AddListener(OnClickSearchButton);

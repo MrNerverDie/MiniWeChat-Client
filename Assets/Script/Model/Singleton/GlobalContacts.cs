@@ -24,7 +24,9 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_FRIEND_SYNC, OnChangeFriendSync);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.TRY_LOGIN, OnTryLogin);
+
+            LoadFriendDict();
         }
 
         public override void Release()
@@ -35,7 +37,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_FRIEND_SYNC, OnChangeFriendSync);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.TRY_LOGIN, OnTryLogin);
 
 
             SaveFriendDict();
@@ -93,7 +95,7 @@ namespace MiniWeChat
             SaveFriendDict();
         }
 
-        public void OnEnterMainMenu(uint iMessageType, object kParam)
+        public void OnTryLogin(uint iMessageType, object kParam)
         {
             LoadFriendDict();
         }
