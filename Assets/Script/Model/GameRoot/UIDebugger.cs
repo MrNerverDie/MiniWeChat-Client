@@ -41,10 +41,13 @@ namespace MiniWeChat
                 PlayerPrefs.DeleteKey(GlobalVars.PREF_USER_ID);
                 PlayerPrefs.DeleteKey(GlobalVars.PREF_USER_PASSWORD);
 
+                GlobalChat.GetInstance().ClearLogDict();
+                GlobalContacts.GetInstance().ClearFriendDict();
+
                 DirectoryInfo dirInfo = new DirectoryInfo(GlobalUser.GetInstance().GetUserDir());
-                foreach (var item in dirInfo.GetFiles())
+                foreach (var item in dirInfo.GetDirectories())
                 {
-                    item.Delete();
+                    item.Delete(true);
                 }
             }
 

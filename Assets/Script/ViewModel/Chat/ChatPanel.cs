@@ -21,9 +21,8 @@ namespace MiniWeChat
 
         public override void OnEnter(object param = null)
         {
-            _guestUserItem = param as UserItem;
-
             base.OnEnter(param);
+            _guestUserItem = param as UserItem;            
             UIManager.GetInstance().AddChild(gameObject, EUIType.BackButton);
             _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, 0);
             _buttonSend.onClick.AddListener(OnClickSendButton);
@@ -33,6 +32,7 @@ namespace MiniWeChat
             _chatLog = GlobalChat.GetInstance().GetChatLog(_guestUserItem.userId);
             _chatBubbleList = new List<ChatBubbleFrame>();
             RefreshChatLog();
+
         }
 
         public override void OnExit()

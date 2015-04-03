@@ -264,6 +264,10 @@ namespace MiniWeChat
 
                 BeginReceivePacket();
             }
+            catch (ObjectDisposedException ex)
+            {
+                Debug.Log("Receive Closed");
+            }
             catch (Exception ex)
             {
                 Debug.Log(ex.Message);

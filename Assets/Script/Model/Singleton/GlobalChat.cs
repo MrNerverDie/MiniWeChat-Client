@@ -11,7 +11,6 @@ namespace MiniWeChat
     {
         private Dictionary<string, ChatLog> _chatLogDict;
         private Dictionary<string, ChatDataItem> _waitSendChatDict;
-        private List<ChatLog> _sortedChatLogList;
 
         public int Count
         {
@@ -31,7 +30,6 @@ namespace MiniWeChat
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
-            _sortedChatLogList = new List<ChatLog>();
 
             LoadLogDict();
         }
@@ -116,8 +114,13 @@ namespace MiniWeChat
 
         public List<ChatLog>.Enumerator GetEnumerator()
         {
-            _sortedChatLogList.Sort(SortChatLogByDate);
-            return _sortedChatLogList.GetEnumerator();
+            List<ChatLog> sortedChatLogList = new List<ChatLog>();
+            foreach (var chatLog in _chatLogDict.Values)
+            {
+                sortedChatLogList.Add(chatLog);
+            }
+            sortedChatLogList.Sort(SortChatLogByDate);
+            return sortedChatLogList.GetEnumerator();
         }
 
         public ChatDataItem GetLastChat(string userId)
@@ -204,7 +207,7 @@ namespace MiniWeChat
                 string filePath = GetChatDirPath() + "/" + userID;
                 IOTool.SerializeToFile<ChatLog>(filePath, _chatLogDict[userID]);
             }
-            _chatLogDict.Clear();
+            ClearLogDict();
         }
 
         private void LoadLogDict()
@@ -214,10 +217,14 @@ namespace MiniWeChat
                 foreach (var file in IOTool.GetFiles(GetChatDirPath()))
                 {
                     ChatLog chatLog = IOTool.DeserializeFromFile<ChatLog>(file.FullName);
-                    _sortedChatLogList.Add(chatLog);
                     _chatLogDict[chatLog.userId] = chatLog;
                 }
             }
+        }
+
+        public void ClearLogDict()
+        {
+            _chatLogDict.Clear();
         }
 
         #endregion

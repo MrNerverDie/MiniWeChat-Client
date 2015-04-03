@@ -116,7 +116,7 @@ namespace MiniWeChat
                 string filePath = GetContactsDirPath() + "/" + userID;
                 IOTool.SerializeToFile<UserItem>(filePath, _friendDict[userID]);
             }
-            _friendDict.Clear();            
+            ClearFriendDict();
         }
 
         private void LoadFriendDict()
@@ -130,6 +130,12 @@ namespace MiniWeChat
                 }
             }
         }
+
+        public void ClearFriendDict()
+        {
+            _friendDict.Clear();            
+        }
+
         #endregion
 
     }
