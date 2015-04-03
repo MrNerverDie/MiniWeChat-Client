@@ -28,19 +28,14 @@ namespace MiniWeChat
 
         private float CONNECT_TIME_OUT = 3.0f;
         private float REQ_TIME_OUT = 4.0f;
-        private float KEEP_ALIVE_TIME_OUT = 5.0f;
+        private float KEEP_ALIVE_TIME_OUT = 6.0f;
 
         private bool _isKeepAlive = false;
 
         Dictionary<string, IExtensible> _msgIDDict;
 
-        Queue<MessageArgs> _receiveMessageQueue;
-        private const float CHECK_QUEUE_DURATION = 0.1f;
-
         private HashSet<ENetworkMessage> _forcePushMessageType;
         private HashSet<ENetworkMessage> _needReqMessageType;
-
-        private StatusLabel _labelStatus;
 
         public bool IsConncted
         {
@@ -52,7 +47,6 @@ namespace MiniWeChat
         {
             Debug.Log("Client Running...");
 
-            _receiveMessageQueue = new Queue<MessageArgs>();
             _msgIDDict = new Dictionary<string, IExtensible>();
             InitForcePushMessageType();
             InitNeedReqMessageType();
@@ -61,7 +55,6 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
 
-            StartCoroutine(BeginHandleReceiveMessageQueue());
             StartCoroutine(BeginTryConnect());    
         }
 
@@ -74,25 +67,14 @@ namespace MiniWeChat
             CloseConnection();
         }
 
-        private IEnumerator BeginHandleReceiveMessageQueue()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(CHECK_QUEUE_DURATION);
-                lock (_receiveMessageQueue)
-                {
-                    while(_receiveMessageQueue.Count != 0)
-                    {
-                        MessageArgs args = _receiveMessageQueue.Dequeue();
-                        MessageDispatcher.GetInstance().DispatchMessage(args);
-                    }
-                }
-            }
-        }
+
 
         public void OnSocketConnected(uint iMessageType, object kParam)
         {
-            _receiveBuffer = new byte[_socket.ReceiveBufferSize];
+            if (_receiveBuffer == null)
+            {
+                _receiveBuffer = new byte[_socket.ReceiveBufferSize];                
+            }
 
             _isKeepAlive = true;
 
@@ -128,6 +110,8 @@ namespace MiniWeChat
                 Debug.Log("Client Connect Time Out...");
                 CloseConnection();
             }
+
+            _isKeepAlive = _socket.Connected;
         }
 
         private void FinishConnection(IAsyncResult ar)
@@ -136,16 +120,7 @@ namespace MiniWeChat
 
             if (_socket.Connected)
             {
-                lock(_receiveMessageQueue)
-                {
-                    MessageArgs args = new MessageArgs()
-                    {
-                        iMessageType = (uint)EGeneralMessage.SOCKET_CONNECTED,
-                        kParam = null
-                    };
-
-                    _receiveMessageQueue.Enqueue(args);
-                }
+                MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EGeneralMessage.SOCKET_CONNECTED, null);
             }
         }
 
@@ -169,7 +144,8 @@ namespace MiniWeChat
         /// <returns></returns>
         private IEnumerator BeginTryConnect()
         {
-            while(_socket == null || !_socket.Connected)
+            yield return null;
+            while (_socket == null || !_socket.Connected || !_isKeepAlive)
             {
                 Debug.Log("Begin Connect...");
                 CloseConnection();
@@ -182,7 +158,7 @@ namespace MiniWeChat
                 yield return new WaitForSeconds(KEEP_ALIVE_TIME_OUT);
             }
 
-            MessageDispatcher.GetInstance().DispatchMessage((uint)EGeneralMessage.SOCKET_DISCONNECTED, null);
+            MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EGeneralMessage.SOCKET_DISCONNECTED, null);
         }
 
         private void OnKeepAliveSync(uint iMessageType, object kParam)
@@ -258,15 +234,12 @@ namespace MiniWeChat
 
                         if (_needReqMessageType.Contains(networkMessage))
                         {
-                            args.kParam = networkParam;                            
+                            args.kParam = networkParam;
                         }
 
                         if (_forcePushMessageType.Contains(networkMessage) || _msgIDDict.ContainsKey(msgID))
                         {
-                            lock (_receiveMessageQueue)
-                            {
-                                _receiveMessageQueue.Enqueue(args);
-                            }
+                            MessageDispatcher.GetInstance().DispatchMessageAsync(args.iMessageType, args.kParam);
                         }
 
                         if (_msgIDDict.ContainsKey(msgID))
@@ -274,7 +247,7 @@ namespace MiniWeChat
                             _msgIDDict.Remove(msgID);
                         }
                     }
-                    
+
                     if (_forcePushMessageType.Contains(networkMessage))
                     {
 
@@ -286,7 +259,7 @@ namespace MiniWeChat
 
                     position += bufferSize;
                 }
-                
+
                 Array.Clear(_receiveBuffer, 0, _socket.ReceiveBufferSize);
 
                 BeginReceivePacket();
@@ -294,6 +267,8 @@ namespace MiniWeChat
             catch (Exception ex)
             {
                 Debug.Log(ex.Message);
+                Debug.Log(ex.StackTrace);
+                Debug.Log(ex.Source);
             }
         }
 

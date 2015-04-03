@@ -19,8 +19,10 @@ namespace MiniWeChat
 
     public class MessageDispatcher : Singleton<MessageDispatcher>
     {
+        private const float CHECK_QUEUE_DURATION = 0.1f;
 
         Dictionary<uint, List<MessageHandler>> m_kMessageTable;
+        Queue<MessageArgs> _receiveMessageQueue;
 
         /// <summary>
         /// 进行单例的初始化 //
@@ -28,6 +30,9 @@ namespace MiniWeChat
         public override void Init()
         {
             m_kMessageTable = new Dictionary<uint, List<MessageHandler>>();
+            _receiveMessageQueue = new Queue<MessageArgs>();
+
+            StartCoroutine(BeginHandleReceiveMessageQueue());
         }
 
         /// <summary>
@@ -81,12 +86,39 @@ namespace MiniWeChat
         }
 
         /// <summary>
-        /// 分发消息，同步
+        /// 分发消息，异步，会在协程BeginHandleReceiveMessageQueue的下一次检查中进行真正的消息分发
         /// </summary>
-        /// <param name="kMessageArgs">消息参数</param>
-        public void DispatchMessage(MessageArgs kMessageArgs)
+        /// <param name="iMessageType">消息类型</param>
+        /// <param name="kParam">附加参数</param>
+        public void DispatchMessageAsync(uint iMessageType, object kParam = null)
         {
-            DispatchMessage(kMessageArgs.iMessageType, kMessageArgs.kParam);
+            lock (_receiveMessageQueue)
+            {
+                MessageArgs args = new MessageArgs()
+                {
+                    iMessageType = iMessageType,
+                    kParam = kParam,
+                };
+
+                _receiveMessageQueue.Enqueue(args);
+            }
         }
+
+        private IEnumerator BeginHandleReceiveMessageQueue()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(CHECK_QUEUE_DURATION);
+                lock (_receiveMessageQueue)
+                {
+                    while (_receiveMessageQueue.Count != 0)
+                    {
+                        MessageArgs args = _receiveMessageQueue.Dequeue();
+                        DispatchMessage(args.iMessageType, args.kParam);
+                    }
+                }
+            }
+        }
+
     }
 }

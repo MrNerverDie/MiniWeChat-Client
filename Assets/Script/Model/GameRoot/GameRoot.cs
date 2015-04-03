@@ -22,14 +22,14 @@ namespace MiniWeChat
         public void OnDestroy()
         {
             MessageDispatcher.GetInstance().Release();
-            UIManager.GetInstance().Release();
-            StateManager.GetInstance().Release();
-            DialogManager.GetInstance().Release();
+            //UIManager.GetInstance().Release();
+            //StateManager.GetInstance().Release();
+            //DialogManager.GetInstance().Release();
             NetworkManager.GetInstance().Release();
-            GlobalContacts.GetInstance().Release();
-            GlobalChat.GetInstance().Release();
-            GlobalUser.GetInstance().Release();
-            UIDebugger.GetInstance().Release();
+            //GlobalContacts.GetInstance().Release();
+            //GlobalChat.GetInstance().Release();
+            //GlobalUser.GetInstance().Release();
+            //UIDebugger.GetInstance().Release();
         }
 
         /// <summary>
@@ -41,19 +41,20 @@ namespace MiniWeChat
             ClearCanvas();
             yield return null;
             AddSingleton<MessageDispatcher>(_rootObj);
-            AddSingleton<UIManager>(_rootObj);
-            AddSingleton<StateManager>(_rootObj);
+            //AddSingleton<UIManager>(_rootObj);
+            //AddSingleton<StateManager>(_rootObj);
             AddSingleton<NetworkManager>(_rootObj);
-            AddSingleton<DialogManager>(_rootObj);
-            AddSingleton<GlobalUser>(_rootObj);
-            AddSingleton<GlobalContacts>(_rootObj);
-            AddSingleton<GlobalChat>(_rootObj);
-            AddSingleton<UIDebugger>(_rootObj);
+            //AddSingleton<DialogManager>(_rootObj);
+            //AddSingleton<GlobalUser>(_rootObj);
+            //AddSingleton<GlobalContacts>(_rootObj);
+            //AddSingleton<GlobalChat>(_rootObj);
+            //AddSingleton<UIDebugger>(_rootObj);
         }
 
         private static T AddSingleton<T>(GameObject go) where T : Singleton<T>
         {
             T t = go.AddComponent<T>();
+            t.SetInstance(t);
             t.Init();
             return t;
         }
