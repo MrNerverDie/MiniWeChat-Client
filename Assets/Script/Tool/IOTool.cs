@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+
 using System.Collections.Generic;
 using System.IO;
-using ProtoBuf;
+using System;
 using System.Text;
+
+using ProtoBuf;
+
 
 namespace MiniWeChat
 {
@@ -32,6 +36,24 @@ namespace MiniWeChat
             using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read))
             {
                 return Serializer.Deserialize<T>(fs);
+            }
+        }
+
+        public static string SerializeToString<T>(T proto) where T : global::ProtoBuf.IExtensible
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Serializer.Serialize<T>(ms, proto);
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+
+        public static T DeserializeFromString<T>(string protoStr) where T : global::ProtoBuf.IExtensible
+        {
+            byte[] protoBytes = Convert.FromBase64String(protoStr);
+            using (MemoryStream ms = new MemoryStream(protoBytes))
+            {
+                return Serializer.Deserialize<T>(ms);
             }
         }
 

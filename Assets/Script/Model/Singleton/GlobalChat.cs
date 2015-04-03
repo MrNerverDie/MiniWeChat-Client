@@ -30,8 +30,6 @@ namespace MiniWeChat
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
-
-            LoadLogDict();
         }
 
         public override void Release()

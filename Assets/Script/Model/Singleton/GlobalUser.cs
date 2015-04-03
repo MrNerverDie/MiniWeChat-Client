@@ -60,6 +60,8 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
+
 
             if (PlayerPrefs.HasKey(GlobalVars.PREF_USER_ID))
             {
@@ -75,7 +77,9 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.ENTER_MAINMENU, OnEnterMainMenu);
 
+            SaveUserInfo();
         }
         #endregion
 
@@ -168,6 +172,7 @@ namespace MiniWeChat
 
             if (rsp.resultCode == LogoutRsp.ResultCode.SUCCESS)
             {
+                SaveUserInfo();
                 DoLogOut();
             }
         }
@@ -178,7 +183,15 @@ namespace MiniWeChat
 
             if (rsp.causeCode == OffLineSync.CauseCode.CHANGE_PASSWORD)
             {
+                SaveUserInfo();
                 DoLogOut();
+            }
+        }
+        public void OnEnterMainMenu(uint iMessageType, object kParam)
+        {
+            if (!_isLogin)
+            {
+                LoadUserInfo();
             }
         }
 
@@ -208,6 +221,21 @@ namespace MiniWeChat
         {
             return Application.persistentDataPath + "/" + _userId;
         }
+
+        public void LoadUserInfo()
+        {
+            UserItem userItem = IOTool.DeserializeFromString<UserItem>(PlayerPrefs.GetString(GlobalVars.PREF_USER_ITEM));
+            _headIndex = userItem.headIndex;
+            _userName = userItem.userName;
+        }
+
+        public void SaveUserInfo()
+        {
+            PlayerPrefs.SetString(GlobalVars.PREF_USER_ITEM, IOTool.SerializeToString<UserItem>(Self));
+            _headIndex = 0;
+            _userName = "";
+        }
+
 
         #endregion
     }
