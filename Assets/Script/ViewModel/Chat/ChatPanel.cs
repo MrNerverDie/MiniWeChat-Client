@@ -11,6 +11,7 @@ namespace MiniWeChat
         public InputField _inputChat;
         public ScrollRect _scrollChatLog;
         public Button _buttonSend;
+        public Button _buttonFriendDetail;
         public VerticalLayoutGroup _gridChatBubble;
         public Text _labelGuestUserName;
 
@@ -26,6 +27,7 @@ namespace MiniWeChat
             UIManager.GetInstance().AddChild(gameObject, EUIType.BackButton);
             _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, 0);
             _buttonSend.onClick.AddListener(OnClickSendButton);
+            _buttonFriendDetail.onClick.AddListener(OnClickFriendDetailButton);
             _scrollChatLog.verticalNormalizedPosition = 0;
             _labelGuestUserName.text = _guestUserItem.userName;
 
@@ -84,6 +86,11 @@ namespace MiniWeChat
 
             _inputChat.text = "";
             _scrollChatLog.verticalNormalizedPosition = 0;
+        }
+
+        public void OnClickFriendDetailButton()
+        {
+            StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _guestUserItem);
         }
     }
 }

@@ -37,15 +37,15 @@ namespace MiniWeChat
 
         public void OnSocketConnected(uint iMessageType, object kParam)
         {
-            Show();
+            DOTween.ToAlpha(() => _labelStatus.color, x => _labelStatus.color = x, 0f, FADE_DURATION).OnComplete(delegate()
+            {
+                gameObject.SetActive(false);
+            });
         }
 
         public void OnSocketDisConnected(uint iMessageType, object kParam)
         {
-            DOTween.ToAlpha(() => _labelStatus.color, x => _labelStatus.color = x, 0f, FADE_DURATION).OnComplete(delegate()
-            {
-                GameObject.Destroy(gameObject);
-            });
+            Show();
         }
 
     }
