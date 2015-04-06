@@ -10,7 +10,7 @@ namespace MiniWeChat
         private const float IMAGE_BUBBLE_WIDTH_BASE = 150f;
         private const float IMAGE_BUBBLE_HEIGHT_BASE = 125f;
 
-        private const float FRAME_BUBBLE_HEIGHT_BASE = 200f;
+        public const float FRAME_BUBBLE_HEIGHT_BASE = 200f;
 
         private const float WIDTH_INCREMENT = 50f;
         private const float HEIGHT_INCREMENT = 55f;

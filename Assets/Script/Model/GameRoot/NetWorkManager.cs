@@ -197,7 +197,6 @@ namespace MiniWeChat
                 {
                     bytesRead = _socket.EndReceive(ar);
                 }
-                Debug.Log("Raed Data Length is : " + bytesRead);
 
                 int position = 0;
 
@@ -212,6 +211,11 @@ namespace MiniWeChat
                         msgIDBytes[i] = _receiveBuffer[position + HEAD_SIZE * 2 + i];
                     }
                     string msgID = BitConverter.ToString(msgIDBytes);
+
+                    if (networkMessage != ENetworkMessage.KEEP_ALIVE_SYNC)
+                    {
+                        Debug.Log("networkMessage : " + networkMessage + "msgID : " + msgID);
+                    }
 
                     IExtensible rspPacket = UnPackTool.UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE, _receiveBuffer);
 
@@ -255,9 +259,6 @@ namespace MiniWeChat
 
                         DoBeginSendPacket(networkMessage, msgIDBytes);
                     }
-
-                    Debug.Log("networkMessage : " + networkMessage + "msgID : " + msgID);
-                    //Debug.Log("msgID : " + msgID);
 
                     position += bufferSize;
                 }
@@ -428,6 +429,15 @@ namespace MiniWeChat
                 Debug.Log(ex.Message);
             }
         }
+        #endregion
+
+        #region SendFile
+        
+        //public IEnumerator DoSendFile()
+        //{
+
+        //}
+
         #endregion
     }
 }

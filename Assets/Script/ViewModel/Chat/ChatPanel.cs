@@ -58,11 +58,13 @@ namespace MiniWeChat
 
             foreach (var chatDataItem in _chatLog.itemList)
             {
-                GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, EUIType.PersonalChatBubbleFrame);
-                _gridChatBubble.GetComponent<RectTransform>().sizeDelta += new Vector2(0, bubbleFrame.GetComponent<LayoutElement>().preferredHeight);
+                EUIType uiType = (chatDataItem.sendUserId == GlobalUser.GetInstance().UserId) ? EUIType.PersonalChatBubbleFrame : EUIType.FriendChatBubbleFrame;
+                GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, uiType);
                 bubbleFrame.GetComponent<ChatBubbleFrame>().Show(chatDataItem);
                 _chatBubbleList.Add(bubbleFrame.GetComponent<ChatBubbleFrame>());
             }
+
+            _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, ChatBubbleFrame.FRAME_BUBBLE_HEIGHT_BASE * _chatLog.itemList.Count);
 
             _scrollChatLog.verticalNormalizedPosition = 0;
         }
