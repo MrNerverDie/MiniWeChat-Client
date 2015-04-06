@@ -38,7 +38,7 @@ namespace MiniWeChat
             base.Show(param);
 
 
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_PERSONAL_DETAIL, OnUpdatePersonalDetail);
 
             _laeblName.text = GlobalUser.GetInstance().UserName;
             _labelId.text = GlobalUser.GetInstance().UserId;
@@ -48,7 +48,7 @@ namespace MiniWeChat
         public override void Hide()
         {
             base.Hide();
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_PERSONAL_DETAIL, OnUpdatePersonalDetail);
 
 
         }
@@ -97,15 +97,10 @@ namespace MiniWeChat
             NetworkManager.GetInstance().SendPacket<PersonalSettingsReq>(ENetworkMessage.PERSONALSETTINGS_REQ, req);
         }
 
-        public void OnGetPersonalInfoRsp(uint iMessageType, object kParam)
+        public void OnUpdatePersonalDetail(uint iMessageType, object kParam)
         {
-            GetPersonalInfoRsp rsp = kParam as GetPersonalInfoRsp;
-            if (rsp.resultCode == GetPersonalInfoRsp.ResultCode.SUCCESS
-                && rsp.userInfo != null)
-            {
-                _laeblName.text = rsp.userInfo.userName;
-                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + rsp.userInfo.headIndex);
-            }
+            _laeblName.text = GlobalUser.GetInstance().UserName;
+            UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + GlobalUser.GetInstance().HeadIndex);
         }
 
 

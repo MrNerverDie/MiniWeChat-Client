@@ -29,7 +29,8 @@ namespace MiniWeChat
             GlobalChat.GetInstance().Release();
             GlobalUser.GetInstance().Release();
             UIDebugger.GetInstance().Release();
-            NetworkManager.GetInstance().Release();            
+            NetworkManager.GetInstance().Release();
+            FileNetworkManager.GetInstance().Release();        
         }
 
         /// <summary>
@@ -49,6 +50,7 @@ namespace MiniWeChat
             AddSingleton<DialogManager>(_rootObj);
             AddSingleton<UIDebugger>(_rootObj);
             AddSingleton<NetworkManager>(_rootObj);
+            AddSingleton<FileNetworkManager>(_rootObj);
         }
 
         private static T AddSingleton<T>(GameObject go) where T : Singleton<T>

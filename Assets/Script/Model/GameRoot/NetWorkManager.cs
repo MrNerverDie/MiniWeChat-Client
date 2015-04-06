@@ -97,6 +97,7 @@ namespace MiniWeChat
             try
             {
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                 _socket.BeginConnect(GlobalVars.IPAddress, GlobalVars.IPPort, new AsyncCallback(FinishConnection), null);
             }
             catch (Exception ex)
@@ -217,6 +218,12 @@ namespace MiniWeChat
                         Debug.Log("networkMessage : " + networkMessage + "msgID : " + msgID);
                     }
 
+                    if (position + bufferSize > bytesRead)
+                    {
+                        Debug.Log("Error receive packet, packet is too long : " + bufferSize);
+                        break;
+                    }
+
                     IExtensible rspPacket = UnPackTool.UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE, _receiveBuffer);
 
                     MessageArgs args = new MessageArgs
@@ -267,7 +274,7 @@ namespace MiniWeChat
 
                 BeginReceivePacket();
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException  ex)
             {
                 Debug.Log("Receive Closed");
             }
@@ -301,6 +308,7 @@ namespace MiniWeChat
             _needReqMessageType = new HashSet<ENetworkMessage>
             {
                 ENetworkMessage.SEND_CHAT_RSP,
+                ENetworkMessage.GET_PERSONALINFO_RSP,
             };
         }
 
@@ -429,15 +437,6 @@ namespace MiniWeChat
                 Debug.Log(ex.Message);
             }
         }
-        #endregion
-
-        #region SendFile
-        
-        //public IEnumerator DoSendFile()
-        //{
-
-        //}
-
         #endregion
     }
 }

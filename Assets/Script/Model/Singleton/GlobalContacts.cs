@@ -63,9 +63,12 @@ namespace MiniWeChat
         #region MessageHandler
         public void OnGetPersonalInfoRsp(uint iMessageType, object kParam)
         {
-            GetPersonalInfoRsp rsp = kParam as GetPersonalInfoRsp;
+            NetworkMessageParam param = kParam as NetworkMessageParam;
+            GetPersonalInfoRsp rsp = param.rsp as GetPersonalInfoRsp;
+            GetPersonalInfoReq req = param.req as GetPersonalInfoReq;
+            Debug.Log("rsp.friends : " + rsp.friends);
             if (rsp.resultCode == GetPersonalInfoRsp.ResultCode.SUCCESS
-                && rsp.friends != null)
+                && req.friendInfo)
             {
                 _friendDict.Clear();
                 foreach (UserItem friend in rsp.friends)
@@ -125,7 +128,10 @@ namespace MiniWeChat
                 foreach (var file in IOTool.GetFiles(GetContactsDirPath()))
                 {
                     UserItem userItem = IOTool.DeserializeFromFile<UserItem>(file.FullName);
-                    _friendDict[userItem.userId] = userItem;
+                    if (userItem != null)
+                    {
+                        _friendDict[userItem.userId] = userItem;
+                    }
                 }
             }
         }

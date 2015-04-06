@@ -138,6 +138,7 @@ namespace MiniWeChat
             {
                 AddChatDataItem(MiniConverter.ChatItemToDataItem(chatItem));
             }
+            MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_FRIEND_DETAIL, null);
         }
 
         public void OnSendChatRsp(uint iMessageType, object kParam)

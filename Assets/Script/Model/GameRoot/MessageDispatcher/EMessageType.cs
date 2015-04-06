@@ -23,6 +23,7 @@ namespace MiniWeChat
         UPDATE_FRIEND_DETAIL = 2000,
         UPDATE_SEND_CHAT,
         UPDATE_RECEIVE_CHAT,
+        UPDATE_PERSONAL_DETAIL,
     }
 
     #endregion

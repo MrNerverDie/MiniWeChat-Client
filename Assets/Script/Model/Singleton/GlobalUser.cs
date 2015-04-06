@@ -119,12 +119,15 @@ namespace MiniWeChat
         #region MessageHandler
         public void OnGetPersonalInfoRsp(uint iMessageType, object kParam)
         {
-            GetPersonalInfoRsp rsp = kParam as GetPersonalInfoRsp;
+            NetworkMessageParam param = kParam as NetworkMessageParam;
+            GetPersonalInfoRsp rsp = param.rsp as GetPersonalInfoRsp;
+            GetPersonalInfoReq req = param.req as GetPersonalInfoReq;
             if (rsp.resultCode == GetPersonalInfoRsp.ResultCode.SUCCESS
-                && rsp.userInfo != null)
+                && req.userInfo)
             {
                 _userName = rsp.userInfo.userName;
                 _headIndex = rsp.userInfo.headIndex;
+                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_PERSONAL_DETAIL, null);
             }
         }
 

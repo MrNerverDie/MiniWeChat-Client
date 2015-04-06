@@ -33,10 +33,18 @@ namespace MiniWeChat
 
         public static T DeserializeFromFile<T>(string filePath) where T : global::ProtoBuf.IExtensible
         {
+            T item = default(T);
             using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read))
             {
-                return Serializer.Deserialize<T>(fs);
+                try
+                {
+                    item = Serializer.Deserialize<T>(fs);
+                }catch(Exception ex)
+                {
+                    Debug.Log(ex);
+                }
             }
+            return item;
         }
 
         public static string SerializeToString<T>(T proto) where T : global::ProtoBuf.IExtensible
