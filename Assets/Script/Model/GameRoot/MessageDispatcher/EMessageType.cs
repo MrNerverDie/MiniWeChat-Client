@@ -24,6 +24,7 @@ namespace MiniWeChat
         UPDATE_SEND_CHAT,
         UPDATE_RECEIVE_CHAT,
         UPDATE_PERSONAL_DETAIL,
+        UPDATE_CHAT_LIST,
     }
 
     #endregion

@@ -57,7 +57,14 @@ namespace MiniWeChat
 
         public UserItem GetUserItemById(string id)
         {
-            return _friendDict[id];
+            if (_friendDict.ContainsKey(id))
+            {
+                return _friendDict[id];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         #region MessageHandler
@@ -75,6 +82,7 @@ namespace MiniWeChat
                 {
                     _friendDict[friend.userId] = friend;
                 }
+                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_CHAT_LIST, null);
             }
         }
 

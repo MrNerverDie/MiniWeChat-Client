@@ -16,17 +16,17 @@ namespace MiniWeChat
         public override void Show(object param = null)
         {
             base.Show(param);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_RECEIVE_CHAT, OnUpdateReceiveChat);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_CHAT_LIST, OnUpdateChatList);
             RefreshChatFrames();
         }
 
         public override void Hide()
         {
             base.Hide();
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_RECEIVE_CHAT, OnUpdateReceiveChat);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_CHAT_LIST, OnUpdateChatList);
         }
 
-        public void OnUpdateReceiveChat(uint iMessageType, object kParam)
+        public void OnUpdateChatList(uint iMessageType, object kParam)
         {
             RefreshChatFrames();
         }

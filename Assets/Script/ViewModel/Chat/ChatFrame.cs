@@ -26,9 +26,16 @@ namespace MiniWeChat
         public void Show(ChatLog chatLog)
         {
             _userItem = GlobalContacts.GetInstance().GetUserItemById(chatLog.userId);
-            UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
+
+            // Set UserItem //
+            if (_userItem != null)
+            {
+                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
+                _labelUserName.text = _userItem.userName;
+            }
+
+            // Set ChatItem //
             _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.userId).chatBody;
-            _labelUserName.text = _userItem.userName;
             _labelDate.text = new DateTime(chatLog.date).ToString();
         }
 

@@ -35,22 +35,31 @@ namespace MiniWeChat
             _chatBubbleList = new List<ChatBubbleFrame>();
             RefreshChatLog();
 
+
         }
 
         public override void OnExit()
         {
             base.OnExit();
             UIManager.GetInstance().DestroySingleUI(EUIType.ChatPanel);
+
         }
 
         public override void OnShow(object param = null)
         {
             base.OnShow(param);
+
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_RECEIVE_CHAT, OnUpdateReceiveChat);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_SEND_CHAT, OnUpdateSendChat);
         }
 
         public override void OnHide()
         {
             base.OnHide();
+
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_RECEIVE_CHAT, OnUpdateReceiveChat);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_SEND_CHAT, OnUpdateSendChat);
+
         }
 
         private void RefreshChatLog()
@@ -97,6 +106,20 @@ namespace MiniWeChat
         {
             StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _guestUserItem);
         }
+
+        #region Messagehandler
+
+        public void OnUpdateReceiveChat(uint iMessageType, object kParam)
+        {
+            RefreshChatLog();
+        }
+
+        public void OnUpdateSendChat(uint iMessageType, object kParam)
+        {
+
+        }
+
+        #endregion
     }
 }
 
