@@ -67,14 +67,10 @@ namespace MiniWeChat
 
             foreach (var chatDataItem in _chatLog.itemList)
             {
-                EUIType uiType = (chatDataItem.sendUserId == GlobalUser.GetInstance().UserId) ? EUIType.PersonalChatBubbleFrame : EUIType.FriendChatBubbleFrame;
-                GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, uiType);
-                bubbleFrame.GetComponent<ChatBubbleFrame>().Show(chatDataItem);
-                _chatBubbleList.Add(bubbleFrame.GetComponent<ChatBubbleFrame>());
+                AddBubbleFrame(chatDataItem);
             }
 
-            _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, ChatBubbleFrame.FRAME_BUBBLE_HEIGHT_BASE * _chatLog.itemList.Count);
-            _scrollChatLog.verticalNormalizedPosition = 0;
+            UpdateChatBubbleGrid();
         }
 
         public void OnClickSendButton()
@@ -89,16 +85,10 @@ namespace MiniWeChat
             };
             GlobalChat.GetInstance().SendChatReq(chatDataItem);
 
-            // Add a ChatBubbleFrame //
-            GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, EUIType.PersonalChatBubbleFrame);
-            bubbleFrame.GetComponent<ChatBubbleFrame>().Show(chatDataItem);
-            _chatBubbleList.Add(bubbleFrame.GetComponent<ChatBubbleFrame>());
+            AddBubbleFrame(chatDataItem);
 
-            // Update Grid Chat Bubble //
-            _gridChatBubble.GetComponent<RectTransform>().sizeDelta += new Vector2(0, ChatBubbleFrame.FRAME_BUBBLE_HEIGHT_BASE);
-            _scrollChatLog.verticalNormalizedPosition = 0;
+            UpdateChatBubbleGrid();
 
-            // reset input bar //
             _inputChat.text = "";
         }
 
@@ -113,15 +103,10 @@ namespace MiniWeChat
         {
             for (int i = _chatBubbleList.Count; i < _chatLog.itemList.Count; i++)
             {
-                ChatDataItem chatDataItem = _chatLog.itemList[i];
-                EUIType uiType = (chatDataItem.sendUserId == GlobalUser.GetInstance().UserId) ? EUIType.PersonalChatBubbleFrame : EUIType.FriendChatBubbleFrame;
-                GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, uiType);
-                bubbleFrame.GetComponent<ChatBubbleFrame>().Show(chatDataItem);
-                _chatBubbleList.Add(bubbleFrame.GetComponent<ChatBubbleFrame>()); 
+                AddBubbleFrame(_chatLog.itemList[i]);
             }
 
-            _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, ChatBubbleFrame.FRAME_BUBBLE_HEIGHT_BASE * _chatLog.itemList.Count);
-            _scrollChatLog.verticalNormalizedPosition = 0;
+            UpdateChatBubbleGrid();
         }
 
         public void OnUpdateSendChat(uint iMessageType, object kParam)
@@ -130,6 +115,20 @@ namespace MiniWeChat
         }
 
         #endregion
+
+        private void AddBubbleFrame(ChatDataItem chatDataItem)
+        {
+            EUIType uiType = (chatDataItem.sendUserId == GlobalUser.GetInstance().UserId) ? EUIType.PersonalChatBubbleFrame : EUIType.FriendChatBubbleFrame;
+            GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, uiType);
+            bubbleFrame.GetComponent<ChatBubbleFrame>().Show(chatDataItem);
+            _chatBubbleList.Add(bubbleFrame.GetComponent<ChatBubbleFrame>()); 
+        }
+
+        private void UpdateChatBubbleGrid()
+        {
+            _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, ChatBubbleFrame.FRAME_BUBBLE_HEIGHT_BASE * _chatLog.itemList.Count);
+            _scrollChatLog.verticalNormalizedPosition = 0;
+        }
     }
 }
 

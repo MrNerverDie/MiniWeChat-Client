@@ -1,1 +1,3 @@
-# freezing-bugfixes
+#MiniWeChat
+
+一个使用Unity3D编写的微信客户端
