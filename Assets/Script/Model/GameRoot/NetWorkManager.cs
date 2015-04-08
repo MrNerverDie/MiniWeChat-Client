@@ -199,80 +199,11 @@ namespace MiniWeChat
                     bytesRead = _socket.EndReceive(ar);
                 }
 
-                int position = 0;
-
-                while (position < bytesRead)
+                if (bytesRead == -1)
                 {
-                    int bufferSize = MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 0);
-                    ENetworkMessage networkMessage = (ENetworkMessage)MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 1);
-
-                    byte[] msgIDBytes = new byte[HEAD_SIZE];
-                    for (int i = 0; i < HEAD_SIZE; i++)
-                    {
-                        msgIDBytes[i] = _receiveBuffer[position + HEAD_SIZE * 2 + i];
-                    }
-                    string msgID = BitConverter.ToString(msgIDBytes);
-
-                    if (networkMessage != ENetworkMessage.KEEP_ALIVE_SYNC)
-                    {
-                        Debug.Log("networkMessage : " + networkMessage + "msgID : " + msgID);
-                    }
-
-                    if (position + bufferSize > bytesRead)
-                    {
-                        Debug.Log("Error receive packet, packet is too long : " + bufferSize);
-                        break;
-                    }
-
-                    IExtensible rspPacket = UnPackTool.UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE, _receiveBuffer);
-
-                    MessageArgs args = new MessageArgs
-                    {
-                        iMessageType = (uint)networkMessage,
-                        kParam = rspPacket,
-                    };
-
-                    NetworkMessageParam networkParam = new NetworkMessageParam
-                    {
-                        rsp = rspPacket,
-                        msgID = msgID,
-                    };
-
-                    lock (_msgIDDict)
-                    {
-                        if (_msgIDDict.ContainsKey(msgID))
-                        {
-                            networkParam.req = _msgIDDict[msgID];
-                        }
-
-                        if (_needReqMessageType.Contains(networkMessage))
-                        {
-                            args.kParam = networkParam;
-                        }
-
-                        if (_forcePushMessageType.Contains(networkMessage) || _msgIDDict.ContainsKey(msgID))
-                        {
-                            MessageDispatcher.GetInstance().DispatchMessageAsync(args.iMessageType, args.kParam);
-                        }
-
-                        if (_msgIDDict.ContainsKey(msgID))
-                        {
-                            _msgIDDict.Remove(msgID);
-                        }
-                    }
-
-                    if (_forcePushMessageType.Contains(networkMessage))
-                    {
-
-                        DoBeginSendPacket(networkMessage, msgIDBytes);
-                    }
-
-                    position += bufferSize;
+                    CloseConnection();
+                    return;
                 }
-
-                Array.Clear(_receiveBuffer, 0, _socket.ReceiveBufferSize);
-
-                BeginReceivePacket();
             }
             catch (ObjectDisposedException  ex)
             {
@@ -284,6 +215,86 @@ namespace MiniWeChat
                 Debug.Log(ex.StackTrace);
                 Debug.Log(ex.Source);
             }
+
+            // Begin Read //
+            int position = 0;
+
+            while (position < bytesRead)
+            {
+                int bufferSize = MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 0);
+                ENetworkMessage networkMessage = (ENetworkMessage)MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 1);
+
+                byte[] msgIDBytes = new byte[HEAD_SIZE];
+                for (int i = 0; i < HEAD_SIZE; i++)
+                {
+                    msgIDBytes[i] = _receiveBuffer[position + HEAD_SIZE * 2 + i];
+                }
+                string msgID = BitConverter.ToString(msgIDBytes);
+
+                if (networkMessage != ENetworkMessage.KEEP_ALIVE_SYNC)
+                {
+                    Debug.Log("networkMessage : " + networkMessage + "msgID : " + msgID);
+                }
+
+                if (position + bufferSize > bytesRead)
+                {
+                    Debug.Log("Error receive packet, packet is too long : " + bufferSize);
+                    break;
+                }
+
+                IExtensible rspPacket = UnPackTool.UnPack(networkMessage, position + HEAD_SIZE * HEAD_NUM, bufferSize - HEAD_NUM * HEAD_SIZE, _receiveBuffer);
+                if (rspPacket == null)
+                {
+                    continue;
+                }
+
+                MessageArgs args = new MessageArgs
+                {
+                    iMessageType = (uint)networkMessage,
+                    kParam = rspPacket,
+                };
+
+                NetworkMessageParam networkParam = new NetworkMessageParam
+                {
+                    rsp = rspPacket,
+                    msgID = msgID,
+                };
+
+                lock (_msgIDDict)
+                {
+                    if (_msgIDDict.ContainsKey(msgID))
+                    {
+                        networkParam.req = _msgIDDict[msgID];
+                    }
+
+                    if (_needReqMessageType.Contains(networkMessage))
+                    {
+                        args.kParam = networkParam;
+                    }
+
+                    if (_forcePushMessageType.Contains(networkMessage) || _msgIDDict.ContainsKey(msgID))
+                    {
+                        MessageDispatcher.GetInstance().DispatchMessageAsync(args.iMessageType, args.kParam);
+                    }
+
+                    if (_msgIDDict.ContainsKey(msgID))
+                    {
+                        _msgIDDict.Remove(msgID);
+                    }
+                }
+
+                if (_forcePushMessageType.Contains(networkMessage))
+                {
+
+                    DoBeginSendPacket(networkMessage, msgIDBytes);
+                }
+
+                position += bufferSize;
+            }
+
+            Array.Clear(_receiveBuffer, 0, _socket.ReceiveBufferSize);
+
+            BeginReceivePacket();
         }
 
         /// <summary>
