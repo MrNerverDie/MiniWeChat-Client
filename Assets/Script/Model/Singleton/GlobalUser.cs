@@ -156,7 +156,7 @@ namespace MiniWeChat
         {
             PersonalSettingsRsp rsp = kParam as PersonalSettingsRsp;
 
-            Debug.Log(rsp.resultCode);
+            Log4U.LogInfo(rsp.resultCode);
 
             if (rsp.resultCode == PersonalSettingsRsp.ResultCode.SUCCESS)
             {

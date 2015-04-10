@@ -41,7 +41,7 @@ namespace MiniWeChat
                     item = Serializer.Deserialize<T>(fs);
                 }catch(Exception ex)
                 {
-                    Debug.Log(ex);
+                    Log4U.LogInfo(ex);
                 }
             }
             return item;

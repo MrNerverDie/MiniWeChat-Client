@@ -59,16 +59,16 @@ namespace MiniWeChat
                             packet = Serializer.Deserialize<ReceiveChatSync>(streamForProto);
                             break;
                         default:
-                            Debug.Log("No Such Packet, packet type is " + networkMessage);
+                            Log4U.LogInfo("No Such Packet, packet type is " + networkMessage);
                             break;
                     }
                 }
             }
             catch (System.Exception ex)
             {
-                Debug.Log(ex.Message);
-                Debug.Log(ex.StackTrace);
-                Debug.Log(ex.Source);
+                Log4U.LogInfo(ex.Message);
+                Log4U.LogInfo(ex.StackTrace);
+                Log4U.LogInfo(ex.Source);
             }
 
             return packet;

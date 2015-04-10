@@ -83,7 +83,7 @@ namespace MiniWeChat
             NetworkMessageParam param = kParam as NetworkMessageParam;
             GetPersonalInfoRsp rsp = param.rsp as GetPersonalInfoRsp;
             GetPersonalInfoReq req = param.req as GetPersonalInfoReq;
-            Debug.Log("rsp.friends : " + rsp.friends);
+            Log4U.LogInfo("rsp.friends : " + rsp.friends);
             if (rsp.resultCode == GetPersonalInfoRsp.ResultCode.SUCCESS
                 && req.friendInfo)
             {

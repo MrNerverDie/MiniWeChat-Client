@@ -56,7 +56,7 @@ namespace MiniWeChat
             WWW uploadReq = new WWW(urlPath, form);
             _uploadFileDict.Add(msgID, uploadReq);
 
-            Debug.Log(System.Convert.ToBase64String(form.data));
+            Log4U.LogInfo(System.Convert.ToBase64String(form.data));
 
             StartCoroutine(DoUploadFile(msgID, uploadReq));
         }
@@ -68,7 +68,7 @@ namespace MiniWeChat
             _uploadFileDict.Remove(msgID);
             if (uploadReq.error != null)
             {
-                Debug.Log("Error uploading file : " + msgID);
+                Log4U.LogInfo("Error uploading file : " + msgID);
             }
             else
             {
@@ -108,7 +108,7 @@ namespace MiniWeChat
             _uploadFileDict.Remove(msgID);
             if (downloadReq.error != null)
             {
-                Debug.Log("Error downloading file : " + msgID);
+                Log4U.LogInfo("Error downloading file : " + msgID);
             }
             else
             {

@@ -78,7 +78,7 @@ namespace MiniWeChat
         public void OnRegisterRsp(uint iMessageType, object kParam)
         {
             RegisterRsp rsp = kParam as RegisterRsp;
-            Debug.Log(rsp.resultCode);
+            Log4U.LogInfo(rsp.resultCode);
             if (rsp.resultCode == RegisterRsp.ResultCode.SUCCESS)
             {
                 GlobalUser.GetInstance().TryLogin(_userID, _userPassword);
@@ -92,7 +92,7 @@ namespace MiniWeChat
         public void OnLoginRsp(uint iMessageType, object kParam)
         {
             LoginRsp rsp = kParam as LoginRsp;
-            Debug.Log(rsp.resultCode);
+            Log4U.LogInfo(rsp.resultCode);
             if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
             {
                 GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);

@@ -45,7 +45,7 @@ namespace MiniWeChat
         #region LifeCycle
         public override void Init()
         {
-            Debug.Log("Client Running...");
+            Log4U.LogInfo("Client Running...");
 
             _msgIDDict = new Dictionary<string, IExtensible>();
             InitForcePushMessageType();
@@ -54,6 +54,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, OnSocketConnected);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.REQ_FINISH, OnReqFinish);
 
             MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EModelMessage.SOCKET_DISCONNECTED, null);
         }
@@ -63,6 +64,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, OnSocketConnected);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.REQ_FINISH, OnReqFinish);
 
             CloseConnection();
         }
@@ -102,7 +104,7 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.StackTrace);
+                Log4U.LogInfo(ex.StackTrace);
                 yield break;
             }
 
@@ -110,7 +112,7 @@ namespace MiniWeChat
 
             if (_socket.Connected == false)
             {
-                Debug.Log("Client Connect Time Out...");
+                Log4U.LogInfo("Client Connect Time Out...");
                 CloseConnection();
             }
 
@@ -137,7 +139,7 @@ namespace MiniWeChat
                     _socket.Disconnect(true);
                 }
                 _socket.Close();
-                Debug.Log("Client Close...");
+                Log4U.LogInfo("Client Close...");
             }
         }
 
@@ -150,7 +152,7 @@ namespace MiniWeChat
             yield return null;
             while (_socket == null || !_socket.Connected || !_isKeepAlive)
             {
-                Debug.Log("Begin Connect...");
+                Log4U.LogInfo("Begin Connect...");
                 CloseConnection();
                 yield return StartCoroutine(BeginConnection());
             }
@@ -184,7 +186,7 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message);
+                Log4U.LogInfo(ex.Message);
             }
 
         }
@@ -210,11 +212,11 @@ namespace MiniWeChat
             }
             catch (ObjectDisposedException  ex)
             {
-                Debug.Log("Receive Closed");
+                Log4U.LogInfo("Receive Closed");
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message + "\n "+  ex.StackTrace + "\n" + ex.Source);
+                Log4U.LogError(ex.Message + "\n "+  ex.StackTrace + "\n" + ex.Source);
             }
 
             // Begin Read //
@@ -234,12 +236,12 @@ namespace MiniWeChat
 
                 if (networkMessage != ENetworkMessage.KEEP_ALIVE_SYNC)
                 {
-                    Debug.Log("networkMessage : " + networkMessage + "msgID : " + msgID);
+                    Log4U.LogInfo("networkMessage : " + networkMessage, "msgID : " + msgID);
                 }
 
                 if (position + bufferSize > bytesRead)
                 {
-                    Debug.Log("Error receive packet, packet is too long : " + bufferSize);
+                    Log4U.LogError("Error receive packet, packet is too long : " + bufferSize);
                     break;
                 }
 
@@ -263,6 +265,7 @@ namespace MiniWeChat
 
                 lock (_msgIDDict)
                 {
+
                     if (_msgIDDict.ContainsKey(msgID))
                     {
                         networkParam.req = _msgIDDict[msgID];
@@ -352,7 +355,7 @@ namespace MiniWeChat
                 _msgIDDict.Add(BitConverter.ToString(msgIDBytes), packet);
             }
 
-            Debug.Log("Send : " + networkMessage + " msgID : " + msgID);
+            Log4U.LogInfo("Send : " + networkMessage + " msgID : " + msgID);
 
             DoBeginSendPacket<T>(networkMessage, packet, msgIDBytes);
             yield return new WaitForSeconds(REQ_TIME_OUT);
@@ -410,7 +413,7 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message);
+                Log4U.LogError(ex.Message);
             }
         }
 
@@ -434,7 +437,7 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message);
+                Log4U.LogError(ex.Message);
             }
         }
 
@@ -450,7 +453,7 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message);
+                Log4U.LogError(ex.Message);
             }
         }
         #endregion
@@ -460,6 +463,13 @@ namespace MiniWeChat
         private void RemoveMsgID(string msgID)
         {
             _msgIDDict.Remove(msgID);
+
+            MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EModelMessage.REQ_FINISH, null);
+
+        }
+
+        public void OnReqFinish(uint iMessageType, object kParam)
+        {
             DialogManager.GetInstance().HideLoadingDialog();
         }
 

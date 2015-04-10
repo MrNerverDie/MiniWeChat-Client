@@ -18,43 +18,48 @@ namespace MiniWeChat
             NOLOG,
         }
 
-        private static LogLevel _currentLevel = LogLevel.NOLOG;
+        private static LogLevel _currentLevel = LogLevel.DEBUG;
 
-        public static void LogDebug(object msg)
+        public static void LogDebug(params object[] msgParams)
         {
             if (_currentLevel <= LogLevel.DEBUG)
             {
-                Debug.Log(GetLogStr(LogLevel.DEBUG, msg));
+                Debug.Log(GetLogStr(LogLevel.DEBUG, msgParams));
             }
         }
 
-        public static void LogInfo(object msg)
+        public static void LogInfo(params object[] msgParams)
         {
             if (_currentLevel <= LogLevel.INFO)
             {
-                Debug.Log(GetLogStr(LogLevel.INFO, msg));
+                Debug.Log(GetLogStr(LogLevel.INFO, msgParams));
             }
         }
 
-        public static void LogWarning(object msg)
+        public static void LogWarning(params object[] msgParams)
         {
             if (_currentLevel <= LogLevel.WARNING)
             {
-                Debug.LogWarning(GetLogStr(LogLevel.WARNING, msg));
+                Debug.LogWarning(GetLogStr(LogLevel.WARNING, msgParams));
             }
         }
 
-        public static void LogError(object msg)
+        public static void LogError(params object[] msgParams)
         {
             if (_currentLevel <= LogLevel.ERROR)
             {
-                Debug.LogError(GetLogStr(LogLevel.ERROR, msg));
+                Debug.LogError(GetLogStr(LogLevel.ERROR, msgParams));
             }
         }
 
-        public static string GetLogStr(LogLevel level, object msg)
+        public static string GetLogStr(LogLevel level, params object[] msgParams)
         {
-            return String.Format("[{0}][{1}]{2}", DateTime.Now.ToShortTimeString(), level, msg); 
+            String str = String.Format("[{0}] [{1}]", DateTime.Now.ToLongTimeString(), level);
+            foreach (var msg in msgParams)
+	        {
+	            str += String.Format(" {0} ", msg);
+	        }
+            return str; 
         }
     }
 }

@@ -14,7 +14,7 @@ namespace MiniWeChat
 
         public void OnDragScrollRect(Vector2 dragVec)
         {
-            Debug.Log(dragVec);
+            Log4U.LogInfo(dragVec);
         }
     }
 }

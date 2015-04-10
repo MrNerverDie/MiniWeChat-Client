@@ -21,7 +21,7 @@ namespace MiniWeChat.Editor
                 string prefabDirPath = dirInfo.FullName;
                 prefabDirPath = prefabDirPath.Insert(prefabDirPath.IndexOf("Raw"), @"Resources\");
 
-                Debug.Log(prefabDirPath);
+                Log4U.LogInfo(prefabDirPath);
 
                 if (!Directory.Exists(prefabDirPath))
                 {
