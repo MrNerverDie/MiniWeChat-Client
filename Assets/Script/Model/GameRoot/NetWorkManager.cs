@@ -282,7 +282,7 @@ namespace MiniWeChat
 
                     if (_msgIDDict.ContainsKey(msgID))
                     {
-                        _msgIDDict.Remove(msgID);
+                        RemoveMsgID(msgID);
                     }
                 }
 
@@ -334,7 +334,12 @@ namespace MiniWeChat
         public string SendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage = (uint)EModelMessage.REQ_TIMEOUT) where T : global::ProtoBuf.IExtensible
         {
             byte[] msgIDBytes = BitConverter.GetBytes(UnityEngine.Random.value);
-                        
+
+            if (timeoutMessage == (uint)EModelMessage.REQ_TIMEOUT)
+            {
+                DialogManager.GetInstance().ShowLoadingDialog();
+            }
+
             StartCoroutine(BeginSendPacket<T>(networkMessage, packet, timeoutMessage, msgIDBytes));
 
             return BitConverter.ToString(msgIDBytes);
@@ -343,7 +348,6 @@ namespace MiniWeChat
         private IEnumerator BeginSendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage, byte[] msgIDBytes) where T : global::ProtoBuf.IExtensible
         {
             string msgID = BitConverter.ToString(msgIDBytes);
-
 
             lock(_msgIDDict)
             {
@@ -359,7 +363,7 @@ namespace MiniWeChat
             {
                 if (_msgIDDict.ContainsKey(msgID))
                 {
-                    _msgIDDict.Remove(msgID);
+                    RemoveMsgID(msgID);
 
                     NetworkMessageParam param = new NetworkMessageParam
                     {
@@ -451,6 +455,16 @@ namespace MiniWeChat
                 Debug.Log(ex.Message);
             }
         }
+        #endregion
+
+        #region Misc
+
+        private void RemoveMsgID(string msgID)
+        {
+            _msgIDDict.Remove(msgID);
+            DialogManager.GetInstance().HideLoadingDialog();
+        }
+
         #endregion
     }
 }
