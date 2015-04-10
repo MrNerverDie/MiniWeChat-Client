@@ -17,6 +17,8 @@ namespace MiniWeChat
             get { return _chatLogDict.Count; }
         }
 
+#region LifeCycle
+
         public override void Init()
         {
             base.Init();
@@ -45,8 +47,18 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
 
-            SaveLogDict();
+            SaveAndClearLogDict();
         }
+
+        public void OnApplicationPause(bool pause)
+        {
+            if (pause)
+            {
+                SaveLogDict();                
+            }
+        }
+
+#endregion
 
         public ChatLog GetChatLog(string userID)
         {
@@ -185,7 +197,7 @@ namespace MiniWeChat
 
         public void OnLogOutRsp(uint iMessageType, object kParam)
         {
-            SaveLogDict();
+            SaveAndClearLogDict();
         }
 
         public void OnTryLogin(uint iMessageType, object kParam)
@@ -209,6 +221,11 @@ namespace MiniWeChat
                 string filePath = GetChatDirPath() + "/" + userID;
                 IOTool.SerializeToFile<ChatLog>(filePath, _chatLogDict[userID]);
             }
+        }
+
+        private void SaveAndClearLogDict()
+        {
+            SaveLogDict();
             ClearLogDict();
         }
 

@@ -24,24 +24,12 @@ namespace MiniWeChat
         /// <summary>
         /// 在这里进行所有单例的销毁
         /// </summary>
-        public void OnDestroy()
+        public void OnApplicationQuit()
         {
-            //MessageDispatcher.GetInstance().Release();
-            //UIManager.GetInstance().Release();
-            //StateManager.GetInstance().Release();
-            //DialogManager.GetInstance().Release();
-            //GlobalContacts.GetInstance().Release();
-            //GlobalChat.GetInstance().Release();
-            //GlobalUser.GetInstance().Release();
-            //UIDebugger.GetInstance().Release();
-            //NetworkManager.GetInstance().Release();
-            //FileNetworkManager.GetInstance().Release();        
-
-            for (int i = _singletonReleaseList.Count - 1; i >= 0 ; i--)
+            for (int i = _singletonReleaseList.Count - 1; i >= 0; i--)
             {
                 _singletonReleaseList[i]();
             }
-
         }
 
         /// <summary>

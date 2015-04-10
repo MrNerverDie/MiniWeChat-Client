@@ -15,6 +15,8 @@ namespace MiniWeChat
             get { return _friendDict.Count; }
 	    }
 
+        #region LifeCycle
+
         public override void Init()
         {
             base.Init();
@@ -40,10 +42,18 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
 
 
-            SaveFriendDict();
+            SaveAndClearFriendDict();
         }
 
+        public void OnApplicationPause(bool pause)
+        {
+            if (pause)
+            {
+                SaveFriendDict();                
+            }
+        }
 
+        #endregion
 
         public bool Contains(string userId)
         {
@@ -103,7 +113,7 @@ namespace MiniWeChat
 
         public void OnLogOutRsp(uint iMessageType, object kParam)
         {
-            SaveFriendDict();
+            SaveAndClearFriendDict();
         }
 
         public void OnTryLogin(uint iMessageType, object kParam)
@@ -126,6 +136,11 @@ namespace MiniWeChat
                 string filePath = GetContactsDirPath() + "/" + userID;
                 IOTool.SerializeToFile<UserItem>(filePath, _friendDict[userID]);
             }
+        }
+
+        private void SaveAndClearFriendDict()
+        {
+            SaveFriendDict();
             ClearFriendDict();
         }
 
