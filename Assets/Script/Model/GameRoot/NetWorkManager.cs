@@ -191,12 +191,15 @@ namespace MiniWeChat
 
         private void EndReceivePacket(IAsyncResult ar)
         {
-            int bytesRead = 0;
+            int bytesRead = -1;
             try
             {
                 lock (_socket)
                 {
-                    bytesRead = _socket.EndReceive(ar);
+                    if (IsConncted)
+                    {
+                        bytesRead = _socket.EndReceive(ar);                              
+                    }
                 }
 
                 if (bytesRead == -1)

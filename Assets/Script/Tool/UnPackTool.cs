@@ -64,7 +64,7 @@ namespace MiniWeChat
                     }
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
                 Debug.Log(ex.Message);
                 Debug.Log(ex.StackTrace);
