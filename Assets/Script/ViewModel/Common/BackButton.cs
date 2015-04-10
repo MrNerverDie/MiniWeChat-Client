@@ -22,6 +22,16 @@ namespace MiniWeChat
         {
             _param = param;
         }
+
+        public void Update()
+        {
+#if UNITY_ANDROID
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                OnClickBackButton();
+            }
+#endif
+        }
     }
 }
 

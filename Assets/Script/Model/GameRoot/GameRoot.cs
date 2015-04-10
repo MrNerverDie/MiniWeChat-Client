@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace MiniWeChat
 {
@@ -8,10 +9,14 @@ namespace MiniWeChat
     {
         private static GameObject _rootObj;
 
+        private static List<Action> _singletonReleaseList;
+
         public void Awake()
         {
             _rootObj = gameObject;
             GameObject.DontDestroyOnLoad(_rootObj);
+
+            _singletonReleaseList = new List<Action>();
 
             StartCoroutine(InitSingletons());
         }
@@ -21,16 +26,22 @@ namespace MiniWeChat
         /// </summary>
         public void OnDestroy()
         {
-            MessageDispatcher.GetInstance().Release();
-            UIManager.GetInstance().Release();
-            StateManager.GetInstance().Release();
-            DialogManager.GetInstance().Release();
-            GlobalContacts.GetInstance().Release();
-            GlobalChat.GetInstance().Release();
-            GlobalUser.GetInstance().Release();
-            UIDebugger.GetInstance().Release();
-            NetworkManager.GetInstance().Release();
-            FileNetworkManager.GetInstance().Release();        
+            //MessageDispatcher.GetInstance().Release();
+            //UIManager.GetInstance().Release();
+            //StateManager.GetInstance().Release();
+            //DialogManager.GetInstance().Release();
+            //GlobalContacts.GetInstance().Release();
+            //GlobalChat.GetInstance().Release();
+            //GlobalUser.GetInstance().Release();
+            //UIDebugger.GetInstance().Release();
+            //NetworkManager.GetInstance().Release();
+            //FileNetworkManager.GetInstance().Release();        
+
+            for (int i = _singletonReleaseList.Count - 1; i >= 0 ; i--)
+            {
+                _singletonReleaseList[i]();
+            }
+
         }
 
         /// <summary>
@@ -58,6 +69,12 @@ namespace MiniWeChat
             T t = go.AddComponent<T>();
             t.SetInstance(t);
             t.Init();
+
+            _singletonReleaseList.Add(delegate()
+            {
+                t.Release();
+            });
+
             return t;
         }
 

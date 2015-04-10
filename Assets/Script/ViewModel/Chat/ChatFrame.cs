@@ -36,7 +36,7 @@ namespace MiniWeChat
 
             // Set ChatItem //
             _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.userId).chatBody;
-            _labelDate.text = new DateTime(chatLog.date).ToString();
+            _labelDate.text = new DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm");
         }
 
         public void OnClickChatFrameButton()
