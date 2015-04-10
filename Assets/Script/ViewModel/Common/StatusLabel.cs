@@ -11,18 +11,6 @@ namespace MiniWeChat
         private const float FADE_DURATION = 0.3f;
         private Text _labelStatus;
 
-        public void Start()
-        {
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, OnSocketConnected);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
-        }
-
-        public void OnDestroy()
-        {
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, OnSocketConnected);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
-        }
-
 		public void Show()
         {
             _labelStatus = GetComponent<Text>();
@@ -35,17 +23,12 @@ namespace MiniWeChat
             }
         }
 
-        public void OnSocketConnected(uint iMessageType, object kParam)
+        public void Hide()
         {
             DOTween.ToAlpha(() => _labelStatus.color, x => _labelStatus.color = x, 0f, FADE_DURATION).OnComplete(delegate()
             {
                 gameObject.SetActive(false);
             });
-        }
-
-        public void OnSocketDisConnected(uint iMessageType, object kParam)
-        {
-            Show();
         }
 
     }

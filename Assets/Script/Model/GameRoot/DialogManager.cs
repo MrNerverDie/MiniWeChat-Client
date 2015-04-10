@@ -9,11 +9,15 @@ namespace MiniWeChat
         public override void Init()
         {
             base.Init();
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, OnSocketConnected);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
         }
 
         public override void Release()
         {
             base.Release();
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, OnSocketConnected);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
         }
 
         public GameObject CreateSingleButtonDialog(string content, string title = null, UnityEngine.Events.UnityAction confirmCallback = null)
@@ -45,6 +49,22 @@ namespace MiniWeChat
             go.SetActive(false);
             return go;
         }
+
+#region MessageHandler
+
+        public void OnSocketConnected(uint iMessageType, object kParam)
+        {
+            GameObject label = UIManager.GetInstance().GetSingleUI(EUIType.StatusLabel);
+            label.GetComponent<StatusLabel>().Hide();
+        }
+
+        public void OnSocketDisConnected(uint iMessageType, object kParam)
+        {
+            GameObject label = UIManager.GetInstance().GetSingleUI(EUIType.StatusLabel);
+            label.GetComponent<StatusLabel>().Show();
+        }
+
+#endregion
     }
 }
 

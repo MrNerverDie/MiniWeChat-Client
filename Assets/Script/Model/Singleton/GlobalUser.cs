@@ -111,7 +111,7 @@ namespace MiniWeChat
 
             StateManager.GetInstance().ClearStates();
             GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
-            StateManager.GetInstance().PushState<WelcomePanel>(go);
+            StateManager.GetInstance().PushFirstState();
         }
 
         #endregion
