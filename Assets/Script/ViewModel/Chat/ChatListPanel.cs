@@ -10,6 +10,7 @@ namespace MiniWeChat
         private const int CHAT_FRAME_HEIGHT = 200;
 
         public VerticalLayoutGroup _chatGrid;
+        public ScrollRect _scrollChatList;
 
         private List<ChatFrame> _chatFrameList = new List<ChatFrame>();
 
@@ -55,6 +56,10 @@ namespace MiniWeChat
             }
 
             _chatGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, CHAT_FRAME_HEIGHT * GlobalChat.GetInstance().Count);
+            _scrollChatList.verticalNormalizedPosition = 1.0f;
+
+            Log4U.LogDebug("ChatGrid y : ", _chatGrid.GetComponent<RectTransform>().sizeDelta.y);
+            Log4U.LogDebug("GlobalChat y : ", GlobalChat.GetInstance().Count);
         }
     }
 }

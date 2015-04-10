@@ -9,7 +9,7 @@ namespace MiniWeChat
     {
 		public void Start()
         {
-            GetComponent<ScrollRect>().onValueChanged.AddListener(OnDragScrollRect);
+            //GetComponent<ScrollRect>().onValueChanged.AddListener(OnDragScrollRect);
         }
 
         public void OnDragScrollRect(Vector2 dragVec)
