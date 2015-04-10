@@ -51,8 +51,8 @@ namespace MiniWeChat
             InitForcePushMessageType();
             InitNeedReqMessageType();
 
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, OnSocketConnected);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
 
             StartCoroutine(BeginTryConnect());    
@@ -60,8 +60,8 @@ namespace MiniWeChat
 
         public override void Release()
         {
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, OnSocketConnected);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, OnSocketConnected);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_DISCONNECTED, OnSocketDisConnected);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.KEEP_ALIVE_SYNC, OnKeepAliveSync);
 
             CloseConnection();
@@ -123,7 +123,7 @@ namespace MiniWeChat
 
             if (_socket.Connected)
             {
-                MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EGeneralMessage.SOCKET_CONNECTED, null);
+                MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EModelMessage.SOCKET_CONNECTED, null);
             }
         }
 
@@ -161,7 +161,7 @@ namespace MiniWeChat
                 yield return new WaitForSeconds(KEEP_ALIVE_TIME_OUT);
             }
 
-            MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EGeneralMessage.SOCKET_DISCONNECTED, null);
+            MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EModelMessage.SOCKET_DISCONNECTED, null);
         }
 
         private void OnKeepAliveSync(uint iMessageType, object kParam)
@@ -194,9 +194,9 @@ namespace MiniWeChat
             int bytesRead = -1;
             try
             {
-                lock (_socket)
+                if (IsConncted)
                 {
-                    if (IsConncted)
+                    lock (_socket)
                     {
                         bytesRead = _socket.EndReceive(ar);                              
                     }
@@ -331,7 +331,7 @@ namespace MiniWeChat
 
         #region SendPacket
 
-        public string SendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage = (uint)EGeneralMessage.REQ_TIMEOUT) where T : global::ProtoBuf.IExtensible
+        public string SendPacket<T>(ENetworkMessage networkMessage, T packet, uint timeoutMessage = (uint)EModelMessage.REQ_TIMEOUT) where T : global::ProtoBuf.IExtensible
         {
             byte[] msgIDBytes = BitConverter.GetBytes(UnityEngine.Random.value);
                         

@@ -58,7 +58,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, TryLoginWithPref);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
 
 
@@ -75,7 +75,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnPersonalSetRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.PERSONALSETTINGS_RSP, OnLogOutRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SOCKET_CONNECTED, TryLoginWithPref);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, TryLoginWithPref);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
 
             SaveUserInfo();
@@ -100,7 +100,7 @@ namespace MiniWeChat
             };
             _userId = id;
             _userPassword = password;
-            MessageDispatcher.GetInstance().DispatchMessage((uint)EGeneralMessage.TRY_LOGIN, null);
+            MessageDispatcher.GetInstance().DispatchMessage((uint)EModelMessage.TRY_LOGIN, null);
             NetworkManager.GetInstance().SendPacket<LoginReq>(ENetworkMessage.LOGIN_REQ, req);
         }
 

@@ -32,7 +32,7 @@ namespace MiniWeChat
         {
             base.OnShow(param);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.REQ_TIMEOUT, OnReqTimeOut);
 
             _inputId.text = PlayerPrefs.GetString(GlobalVars.PREF_USER_ID);
         }
@@ -41,7 +41,7 @@ namespace MiniWeChat
         {
             base.OnHide();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.REQ_TIMEOUT, OnReqTimeOut);
 
         }
 

@@ -5,13 +5,15 @@ namespace MiniWeChat
 {
     #region 主要事件 General 1000 - 2000
 
-    public enum EGeneralMessage : uint
+    public enum EModelMessage : uint
     {
         SOCKET_CONNECTED = 1000,
         SOCKET_DISCONNECTED,
         TRY_LOGIN,
         REQ_TIMEOUT,
         SEND_CHAT_TIMEOUT,
+        UPLOAD_FINISH,
+        DOWNLOAD_FINISH,
     }
 
     #endregion

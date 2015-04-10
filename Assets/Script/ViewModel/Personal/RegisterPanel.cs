@@ -38,7 +38,7 @@ namespace MiniWeChat
             base.OnShow(param);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnRegisterRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.REQ_TIMEOUT, OnReqTimeOut);
         }
 
         public override void OnHide()
@@ -46,7 +46,7 @@ namespace MiniWeChat
             base.OnHide();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.REGISTER_RSP, OnRegisterRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.REQ_TIMEOUT, OnReqTimeOut);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.REQ_TIMEOUT, OnReqTimeOut);
         }
 
         public void OnValueChangeRegisterInfo(string text = null)

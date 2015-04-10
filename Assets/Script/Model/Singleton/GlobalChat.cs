@@ -22,11 +22,11 @@ namespace MiniWeChat
             base.Init();
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.RECEIVE_CHAT_SYNC, OnReceiveChatSync);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EGeneralMessage.TRY_LOGIN, OnTryLogin);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
@@ -39,11 +39,11 @@ namespace MiniWeChat
             base.Release();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.RECEIVE_CHAT_SYNC, OnReceiveChatSync);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.SEND_CHAT_RSP, OnSendChatRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SEND_CHAT_TIMEOUT, OnSendChatTimeOut);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGIN_RSP, OnLoginRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EGeneralMessage.TRY_LOGIN, OnTryLogin);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
 
             SaveLogDict();
         }
@@ -83,7 +83,7 @@ namespace MiniWeChat
 
             AddChatDataItem(chatDataItem);
 
-            string msgID = NetworkManager.GetInstance().SendPacket<SendChatReq>(ENetworkMessage.SEND_CHAT_REQ, req, (uint)EGeneralMessage.SEND_CHAT_TIMEOUT);
+            string msgID = NetworkManager.GetInstance().SendPacket<SendChatReq>(ENetworkMessage.SEND_CHAT_REQ, req, (uint)EModelMessage.SEND_CHAT_TIMEOUT);
             _waitSendChatDict.Add(msgID, chatDataItem);
         }
 
