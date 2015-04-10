@@ -104,7 +104,7 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                Log4U.LogInfo(ex.StackTrace);
+                Log4U.LogError(ex.StackTrace);
                 yield break;
             }
 
@@ -185,7 +185,7 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                Log4U.LogInfo(ex.Message);
+                Log4U.LogError(ex.Message);
             }
 
         }

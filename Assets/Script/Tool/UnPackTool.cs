@@ -66,9 +66,7 @@ namespace MiniWeChat
             }
             catch (System.Exception ex)
             {
-                Log4U.LogInfo(ex.Message);
-                Log4U.LogInfo(ex.StackTrace);
-                Log4U.LogInfo(ex.Source);
+                Log4U.LogError(ex.Message + "\n " + ex.StackTrace + "\n" + ex.Source);
             }
 
             return packet;

@@ -18,7 +18,7 @@ namespace MiniWeChat
             NOLOG,
         }
 
-        private static LogLevel _currentLevel = LogLevel.NOLOG;
+        private static LogLevel _currentLevel = LogLevel.INFO;
 
         public static void LogDebug(params object[] msgParams)
         {
