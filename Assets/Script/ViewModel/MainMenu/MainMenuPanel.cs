@@ -11,6 +11,8 @@ namespace MiniWeChat
         public Button _searchButton;
         public MainMenuNaviBar _mainMenuNaviBar;
 
+        public ScrollRect _swipePanel;
+
         public override void OnEnter(object param = null)
         {
             base.OnEnter(param);

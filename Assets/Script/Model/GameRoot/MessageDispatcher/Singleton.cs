@@ -28,7 +28,6 @@ namespace MiniWeChat
 
         public virtual void Release()
         {
-            Debug.Log(typeof(T) + " is release");
             return;
         }
     }

@@ -214,9 +214,7 @@ namespace MiniWeChat
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message);
-                Debug.Log(ex.StackTrace);
-                Debug.Log(ex.Source);
+                Debug.Log(ex.Message + "\n "+  ex.StackTrace + "\n" + ex.Source);
             }
 
             // Begin Read //
