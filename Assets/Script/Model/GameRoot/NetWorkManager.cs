@@ -136,7 +136,6 @@ namespace MiniWeChat
                 if (_socket.Connected)
                 {
                     _socket.Shutdown(SocketShutdown.Both);
-                    _socket.Disconnect(true);
                 }
                 _socket.Close();
                 Log4U.LogInfo("Client Close...");

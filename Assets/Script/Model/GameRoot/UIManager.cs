@@ -84,7 +84,6 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.FriendChatBubbleFrame, "Chat/FriendChatBubbleFrame");
             _UIPathDict.Add(EUIType.PersonalChatBubbleFrame, "Chat/PersonalChatBubbleFrame");
             _UIPathDict.Add(EUIType.ChatPanel, "Chat/ChatPanel");
-            _UIPathDict.Add(EUIType.WelcomePanel, "Common/WelcomePanel");
             _UIPathDict.Add(EUIType.BackButton, "Common/BackButton");
             _UIPathDict.Add(EUIType.RegisterPanel, "Personal/RegisterPanel");
             _UIPathDict.Add(EUIType.LoginPanel, "Personal/LoginPanel");
@@ -116,7 +115,6 @@ namespace MiniWeChat
         FriendChatBubbleFrame,
         PersonalChatBubbleFrame,
         ChatPanel,
-        WelcomePanel,
         BackButton,
         RegisterPanel,
         LoginPanel,

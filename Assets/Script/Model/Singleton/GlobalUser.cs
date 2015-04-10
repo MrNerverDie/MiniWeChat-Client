@@ -110,7 +110,6 @@ namespace MiniWeChat
             _isLogin = false;
 
             StateManager.GetInstance().ClearStates();
-            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.WelcomePanel);
             StateManager.GetInstance().PushFirstState();
         }
 
