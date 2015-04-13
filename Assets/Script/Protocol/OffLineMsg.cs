@@ -30,7 +30,10 @@ namespace protocol
       CHANGE_PASSWORD = 0,
             
       [global::ProtoBuf.ProtoEnum(Name=@"ANOTHER_LOGIN", Value=1)]
-      ANOTHER_LOGIN = 1
+      ANOTHER_LOGIN = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"KEEP_ALIVE_FALSE", Value=2)]
+      KEEP_ALIVE_FALSE = 2
     }
   
     private global::ProtoBuf.IExtension extensionObject;

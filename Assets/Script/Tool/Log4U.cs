@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,13 @@ namespace MiniWeChat
             NOLOG,
         }
 
-        private static LogLevel _currentLevel = LogLevel.DEBUG;
+        private static LogLevel _currentLevel = LogLevel.INFO;
+
+        public MiniWeChat.Log4U.LogLevel Level
+        {
+            get { return _currentLevel; }
+            set { _currentLevel = value; }
+        }
 
         public static void LogDebug(params object[] msgParams)
         {
