@@ -35,23 +35,30 @@ namespace MiniWeChat
                 userItem = GlobalContacts.GetInstance().GetUserItemById(chatDataItem.sendUserId);
             }
 
-            int lines = 0;
-            float maxCharNumInOneLine = 0;
-
-            SetTextParam(ref text,ref lines,ref maxCharNumInOneLine);
-
-            _textChat.text = text;
-            _imageChatBubble.sizeDelta = new Vector2(
-                IMAGE_BUBBLE_WIDTH_BASE + WIDTH_INCREMENT * (maxCharNumInOneLine - 1),
-                IMAGE_BUBBLE_HEIGHT_BASE + HEIGHT_INCREMENT * (lines - 1)
-                );
-            _frameChatBubble.sizeDelta = new Vector2(
-                GlobalVars.DEFAULT_SCREEN_WIDTH,
-                FRAME_BUBBLE_HEIGHT_BASE + HEIGHT_INCREMENT * (lines - 1) 
-                );
-            _frameChatBubble.GetComponent<LayoutElement>().preferredHeight = _frameChatBubble.sizeDelta.y;
-
             UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + userItem.headIndex);
+
+            if (chatDataItem.chatType == ChatDataItem.ChatType.TEXT)
+            {
+                int lines = 0;
+                float maxCharNumInOneLine = 0;
+
+                SetTextParam(ref text, ref lines, ref maxCharNumInOneLine);
+
+                _textChat.text = text;
+                _imageChatBubble.sizeDelta = new Vector2(
+                    IMAGE_BUBBLE_WIDTH_BASE + WIDTH_INCREMENT * (maxCharNumInOneLine - 1),
+                    IMAGE_BUBBLE_HEIGHT_BASE + HEIGHT_INCREMENT * (lines - 1)
+                    );
+                _frameChatBubble.sizeDelta = new Vector2(
+                    GlobalVars.DEFAULT_SCREEN_WIDTH,
+                    FRAME_BUBBLE_HEIGHT_BASE + HEIGHT_INCREMENT * (lines - 1)
+                    );
+                _frameChatBubble.GetComponent<LayoutElement>().preferredHeight = _frameChatBubble.sizeDelta.y;
+            }
+            else if (chatDataItem.chatType == ChatDataItem.ChatType.IMAGE)
+            {
+
+            }
         }
 
         /// <summary>
