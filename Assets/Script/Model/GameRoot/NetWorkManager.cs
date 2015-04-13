@@ -165,7 +165,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EModelMessage.SOCKET_DISCONNECTED, null);
         }
 
-        private void OnKeepAliveSync(uint iMessageType, object kParam)
+        public void OnKeepAliveSync(uint iMessageType, object kParam)
         {
             _isKeepAlive = true;
         }
@@ -286,11 +286,10 @@ namespace MiniWeChat
                     }
                 }
 
-                if (_forcePushMessageType.Contains(networkMessage))
-                {
-
-                    DoBeginSendPacket(networkMessage, msgIDBytes);
-                }
+                //if (_forcePushMessageType.Contains(networkMessage))
+                //{
+                //    DoBeginSendPacket(networkMessage, msgIDBytes);
+                //}
 
                 position += bufferSize;
             }

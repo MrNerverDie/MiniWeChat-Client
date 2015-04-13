@@ -183,7 +183,8 @@ namespace MiniWeChat
         {
             OffLineSync rsp = kParam as OffLineSync;
 
-            if (rsp.causeCode == OffLineSync.CauseCode.CHANGE_PASSWORD)
+            if (rsp.causeCode == OffLineSync.CauseCode.CHANGE_PASSWORD ||
+                rsp.causeCode == OffLineSync.CauseCode.ANOTHER_LOGIN)
             {
                 SaveAndClearUserInfo();
                 DoLogOut();
