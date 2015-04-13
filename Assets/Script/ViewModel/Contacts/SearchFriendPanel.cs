@@ -63,9 +63,9 @@ namespace MiniWeChat
             {
                 StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, rsp.userItem);
             }
-            else if(rsp.resultCode == GetUserInfoRsp.ResultCode.FAIL)
+            else if(rsp.resultCode == GetUserInfoRsp.ResultCode.USER_NOT_EXIST)
             {
-                
+                DialogManager.GetInstance().CreateSingleButtonDialog("没有用户名为" + _inputUserID.text + "的用户哦");
             }
         }
     }

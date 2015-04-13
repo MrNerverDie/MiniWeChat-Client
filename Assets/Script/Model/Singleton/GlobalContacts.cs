@@ -59,9 +59,19 @@ namespace MiniWeChat
         {
             return _friendDict.ContainsKey(userId);
         }
+        private static int SortUserItemByName(UserItem u1, UserItem u2)
+        {
+            return (int)(u1.userName.CompareTo(u2.userName));
+        }
 
         public Dictionary<string, UserItem>.ValueCollection.Enumerator GetEnumerator()
         {
+            List<UserItem> sortedContactList = new List<UserItem>();
+            foreach (var friend in _friendDict.Values)
+            {
+                sortedContactList.Add(friend);
+            }
+            sortedContactList.Sort(SortUserItemByName);
             return _friendDict.Values.GetEnumerator();
         }
 

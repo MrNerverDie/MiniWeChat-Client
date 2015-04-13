@@ -75,6 +75,11 @@ namespace MiniWeChat
 
         public void OnClickSendButton()
         {
+            if (_inputChat.text == "")
+            {
+                return;
+            }
+
             ChatDataItem chatDataItem = new ChatDataItem
             {
                 sendUserId = GlobalUser.GetInstance().UserId,

@@ -82,6 +82,7 @@ namespace MiniWeChat
             else
             {
                 DialogManager.GetInstance().CreateSingleButtonDialog(rsp.resultCode.ToString());
+                _buttonLogin.interactable = true;
             }
         }
 
