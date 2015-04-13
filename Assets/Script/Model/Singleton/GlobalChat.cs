@@ -29,6 +29,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_FRIEND_SYNC, OnChangeFriendSync);
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
@@ -46,6 +47,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_FRIEND_SYNC, OnChangeFriendSync);
 
             SaveAndClearLogDict();
         }
@@ -73,7 +75,6 @@ namespace MiniWeChat
             }
 
             return _chatLogDict[userID];
-
         }
 
         public ChatDataItem GetChatDataItem(string userID, int index)
@@ -205,6 +206,31 @@ namespace MiniWeChat
             LoadLogDict();
         }
 
+        public void OnChangeFriendSync(uint iMessageType, object kParam)
+        {
+            ChangeFriendSync rsp = kParam as ChangeFriendSync;
+            string userID = rsp.userItem.userId;
+            if (rsp.changeType == ChangeFriendSync.ChangeType.ADD)
+            {
+                if (!_chatLogDict.ContainsKey(userID))
+                {
+                    ChatLog chatLog = new ChatLog
+                    {
+                        userId = userID,
+                    };
+
+                    _chatLogDict.Add(userID, chatLog);
+                }
+            }
+            else if (rsp.changeType == ChangeFriendSync.ChangeType.DELETE)
+            {
+                if (_chatLogDict.ContainsKey(userID))
+                {
+                    _chatLogDict.Remove(userID);
+                }
+            }
+        }
+
         #endregion
 
         #region LocalData
@@ -236,7 +262,10 @@ namespace MiniWeChat
                 foreach (var file in IOTool.GetFiles(GetChatDirPath()))
                 {
                     ChatLog chatLog = IOTool.DeserializeFromFile<ChatLog>(file.FullName);
-                    _chatLogDict[chatLog.userId] = chatLog;
+                    if (chatLog != null)
+                    {
+                        _chatLogDict[chatLog.userId] = chatLog;                        
+                    }
                 }
             }
         }

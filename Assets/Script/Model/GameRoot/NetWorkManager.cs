@@ -136,9 +136,9 @@ namespace MiniWeChat
                 if (_socket.Connected)
                 {
                     _socket.Shutdown(SocketShutdown.Both);
+                    Log4U.LogInfo("Client Close...");
                 }
                 _socket.Close();
-                Log4U.LogInfo("Client Close...");
             }
         }
 
@@ -209,7 +209,7 @@ namespace MiniWeChat
                     return;
                 }
             }
-            catch (ObjectDisposedException  ex)
+            catch (ObjectDisposedException)
             {
                 Log4U.LogInfo("Receive Closed");
             }
@@ -441,12 +441,12 @@ namespace MiniWeChat
 
         private void EndSendPacket(IAsyncResult ar)
         {
-            int bytesSend = 0;
+            //int bytesSend = 0;
             try
             {
                 lock (_socket)
                 {
-                    bytesSend = _socket.EndSend(ar);
+                    _socket.EndSend(ar);
                 }
             }
             catch (Exception ex)

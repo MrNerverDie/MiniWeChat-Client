@@ -14,13 +14,9 @@ namespace MiniWeChat
 		public void Show()
         {
             _labelStatus = GetComponent<Text>();
-            _labelStatus.gameObject.SetActive(false);
-            if (!NetworkManager.GetInstance().IsConncted)
-            {
-                _labelStatus.gameObject.SetActive(true);
-                DOTween.ToAlpha(() => _labelStatus.color, x => _labelStatus.color = x, 0f, FADE_DURATION).From();
-                UIManager.GetInstance().SetSiblingToTop(gameObject);
-            }
+            _labelStatus.gameObject.SetActive(true);
+            DOTween.ToAlpha(() => _labelStatus.color, x => _labelStatus.color = x, 1f, FADE_DURATION);
+            UIManager.GetInstance().SetSiblingToTop(gameObject);
         }
 
         public void Hide()
