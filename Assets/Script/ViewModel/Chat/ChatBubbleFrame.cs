@@ -10,6 +10,8 @@ namespace MiniWeChat
         private const float IMAGE_BUBBLE_WIDTH_BASE = 150f;
         private const float IMAGE_BUBBLE_HEIGHT_BASE = 125f;
 
+        public const int IMAGE_EMOTION_HEIGHT = 320;
+
         public const float FRAME_BUBBLE_HEIGHT_BASE = 200f;
 
         private const float WIDTH_INCREMENT = 50f;
@@ -19,6 +21,7 @@ namespace MiniWeChat
 
         public RectTransform _imageChatBubble;
         public RectTransform _frameChatBubble;
+        public Transform _imageEmotionBubble;
         public Text _textChat;
         public Image _imageHead;
 
@@ -37,8 +40,13 @@ namespace MiniWeChat
 
             UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + userItem.headIndex);
 
+            _imageEmotionBubble.gameObject.SetActive(false);
+            _imageChatBubble.gameObject.SetActive(false);
+
             if (chatDataItem.chatType == ChatDataItem.ChatType.TEXT)
             {
+                _imageChatBubble.gameObject.SetActive(true);
+
                 int lines = 0;
                 float maxCharNumInOneLine = 0;
 
@@ -57,8 +65,18 @@ namespace MiniWeChat
             }
             else if (chatDataItem.chatType == ChatDataItem.ChatType.IMAGE)
             {
+                _imageEmotionBubble.gameObject.SetActive(true);
 
+                _imageEmotionBubble.GetComponent<GIFImage>().loadingGifPath = string.Format("Emotion/00{0}.gif", chatDataItem.chatBody);
+
+                _frameChatBubble.sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, IMAGE_EMOTION_HEIGHT);
+                _frameChatBubble.GetComponent<LayoutElement>().preferredHeight = _frameChatBubble.sizeDelta.y;
             }
+        }
+
+        public float GetHeight()
+        {
+            return _frameChatBubble.sizeDelta.y;
         }
 
         /// <summary>

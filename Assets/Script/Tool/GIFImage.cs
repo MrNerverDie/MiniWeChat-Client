@@ -16,12 +16,20 @@ namespace MiniWeChat
         public float speed = 1;
 
         private UnityEngine.UI.Image _showingImage;
-        private static Dictionary<string, List<Sprite>> _gifFrameDict = new Dictionary<string, List<Sprite>>();
+        private static Dictionary<string, List<Texture2D>> _gifFrameDict = new Dictionary<string, List<Texture2D>>();
         private static HashSet<string> _finishGIFs = new HashSet<string>();
 
-        void Awake()
+        void Start()
         {
             StartCoroutine(LoadGifFrames());
+        }
+
+        public void OnDestroy()
+        {
+            if (!_finishGIFs.Contains(loadingGifPath))
+            {
+                _gifFrameDict.Remove(loadingGifPath);
+            }
         }
 
         private IEnumerator LoadGifFrames()
@@ -31,7 +39,7 @@ namespace MiniWeChat
                 yield break;
             }
 
-            List<Sprite> gifFrames = new List<Sprite>();
+            List<Texture2D> gifFrames = new List<Texture2D>();
             _gifFrameDict[loadingGifPath] = gifFrames;
 
             //_showingImage = GetComponent<UnityEngine.UI.Image>();
@@ -48,9 +56,9 @@ namespace MiniWeChat
                 ImageConverter converter = new ImageConverter();
                 frameTexture.LoadImage((byte[])converter.ConvertTo(frame, typeof(byte[])));
 
-                Sprite sprite = Sprite.Create(frameTexture, new Rect(0, 0, frameTexture.width, frameTexture.height), new Vector3(0.5f, 0.5f), 1f);
+                //Sprite sprite = Sprite.Create(frameTexture, new Rect(0, 0, frameTexture.width, frameTexture.height), new Vector3(0.5f, 0.5f), 1f);
 
-                gifFrames.Add(sprite);
+                gifFrames.Add(frameTexture);
                 //yield return new WaitForSeconds(UnityEngine.Random.Range(0.03f, 0.06f)) ;
                 yield return null;
             }
@@ -58,21 +66,28 @@ namespace MiniWeChat
             _finishGIFs.Add(loadingGifPath);
         }
 
-        void OnGUI()
+        void Update()
         {
-            List<Sprite> gifFrames = _gifFrameDict[loadingGifPath];
+            if (!_gifFrameDict.ContainsKey(loadingGifPath))
+            {
+                LoadGifFrames();
+            }
+
+            List<Texture2D> gifFrames = _gifFrameDict[loadingGifPath];
 
             if (IsFinishedLoading())
             {
                 //GUI.DrawTexture(new Rect(transform.position.x, Screen.height - transform.position.y, gifFrames[0].width, gifFrames[0].height), gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count]);
                 //_showingImage.overrideSprite = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
-                GetComponent<SpriteRenderer>().sprite = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
+                //GetComponent<SpriteRenderer>().sprite = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
+                GetComponent<RawImage>().texture = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
             }
             else
             {
                 //GUI.DrawTexture(new Rect(transform.position.x, Screen.height - transform.position.y, gifFrames[0].width, gifFrames[0].height), gifFrames[0]);
                 //_showingImage.overrideSprite = gifFrames[0];
-                GetComponent<SpriteRenderer>().sprite = gifFrames[0];
+                //GetComponent<SpriteRenderer>().sprite = gifFrames[0];
+                GetComponent<RawImage>().texture = gifFrames[0];
             }
         }
 

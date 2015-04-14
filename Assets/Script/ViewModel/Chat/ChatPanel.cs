@@ -14,6 +14,8 @@ namespace MiniWeChat
         public Button _buttonFriendDetail;
         public VerticalLayoutGroup _gridChatBubble;
         public Text _labelGuestUserName;
+        public Toggle _toggleShowEmotion;
+        public HorizontalLayoutGroup _gridEmotion;
 
         private UserItem _guestUserItem;
         private ChatLog _chatLog;
@@ -23,19 +25,18 @@ namespace MiniWeChat
         public override void OnEnter(object param = null)
         {
             base.OnEnter(param);
-            _guestUserItem = param as UserItem;            
-            UIManager.GetInstance().AddChild(gameObject, EUIType.BackButton);
+            _guestUserItem = param as UserItem;
+            UIManager.GetInstance().AddChild(transform.Find("TopBar").gameObject, EUIType.BackButton);
             _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, 0);
             _buttonSend.onClick.AddListener(OnClickSendButton);
             _buttonFriendDetail.onClick.AddListener(OnClickFriendDetailButton);
+            _toggleShowEmotion.onValueChanged.AddListener(OnClickShowEmotionButton);
             _scrollChatLog.verticalNormalizedPosition = 0;
             _labelGuestUserName.text = _guestUserItem.userName;
 
             _chatLog = GlobalChat.GetInstance().GetChatLog(_guestUserItem.userId);
             _chatBubbleList = new List<ChatBubbleFrame>();
             RefreshChatLog();
-
-
         }
 
         public override void OnExit()
@@ -73,6 +74,8 @@ namespace MiniWeChat
             UpdateChatBubbleGrid();
         }
 
+#region ButtonHandler
+
         public void OnClickSendButton()
         {
             if (_inputChat.text == "")
@@ -101,6 +104,32 @@ namespace MiniWeChat
         {
             StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _guestUserItem);
         }
+
+        public void OnClickShowEmotionButton(bool check)
+        {
+            _gridEmotion.gameObject.SetActive(check);
+            
+        }
+
+        public void OnClickSendEmotionButton(int index)
+        {
+            ChatDataItem chatDataItem = new ChatDataItem
+            {
+                sendUserId = GlobalUser.GetInstance().UserId,
+                receiveUserId = _guestUserItem.userId,
+                date = System.DateTime.Now.Ticks,
+                chatType = ChatDataItem.ChatType.IMAGE,
+                chatBody = index.ToString(),
+            };
+            GlobalChat.GetInstance().SendChatReq(chatDataItem);
+
+            AddBubbleFrame(chatDataItem);
+
+            UpdateChatBubbleGrid();
+        }
+
+#endregion
+
 
         #region Messagehandler
 
@@ -131,7 +160,13 @@ namespace MiniWeChat
 
         private void UpdateChatBubbleGrid()
         {
-            _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, ChatBubbleFrame.FRAME_BUBBLE_HEIGHT_BASE * _chatLog.itemList.Count);
+            float sumHeight = 0;
+            foreach (var item in _chatBubbleList)
+            {
+                sumHeight += item.GetHeight();
+            }
+
+            _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, sumHeight);
             _scrollChatLog.verticalNormalizedPosition = 0;
         }
     }
