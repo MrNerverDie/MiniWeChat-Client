@@ -67,7 +67,9 @@ namespace MiniWeChat
             {
                 _imageEmotionBubble.gameObject.SetActive(true);
 
-                _imageEmotionBubble.GetComponent<GIFImage>().loadingGifPath = string.Format("Emotion/00{0}.gif", chatDataItem.chatBody);
+                Log4U.LogDebug(string.Format("Raw/Bytes/Emotion/00{0}.gif", chatDataItem.chatBody));
+
+                _imageEmotionBubble.GetComponent<UniGifTexture>().gifTextAsset = Resources.Load<TextAsset>(string.Format("Raw/Bytes/Emotion/00{0}", chatDataItem.chatBody));
 
                 _frameChatBubble.sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, IMAGE_EMOTION_HEIGHT);
                 _frameChatBubble.GetComponent<LayoutElement>().preferredHeight = _frameChatBubble.sizeDelta.y;

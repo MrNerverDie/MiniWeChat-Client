@@ -9,19 +9,20 @@ using System.Drawing.Imaging;
 
 namespace MiniWeChat
 {
-    //[RequireComponent(typeof(UnityEngine.UI.Image))]
+    [RequireComponent(typeof(RawImage))]
     public class GIFImage : MonoBehaviour
     {
         public string loadingGifPath;
-        public float speed = 1;
 
-        private UnityEngine.UI.Image _showingImage;
+        private int interval = 2;
         private static Dictionary<string, List<Texture2D>> _gifFrameDict = new Dictionary<string, List<Texture2D>>();
         private static HashSet<string> _finishGIFs = new HashSet<string>();
+        private RawImage _showingImage;
 
         void Start()
         {
             StartCoroutine(LoadGifFrames());
+            _showingImage = GetComponent<RawImage>();
         }
 
         public void OnDestroy()
@@ -43,7 +44,24 @@ namespace MiniWeChat
             _gifFrameDict[loadingGifPath] = gifFrames;
 
             //_showingImage = GetComponent<UnityEngine.UI.Image>();
-            var gifImage = System.Drawing.Image.FromFile(Application.dataPath + "/Raw/Image/" + loadingGifPath);
+
+            System.Drawing.Image gifImage = null;
+
+#if UNITY_ANDROID
+
+            WWW www = new WWW(Application.streamingAssetsPath + "/Image/" + loadingGifPath);
+
+            yield return www;
+
+            using(MemoryStream ms = new MemoryStream(www.bytes))
+            {
+                gifImage = System.Drawing.Image.FromStream(ms);
+            }
+
+#elif UNITY_EDITOR
+            gifImage = System.Drawing.Image.FromFile(Application.streamingAssetsPath + "/Image/" + loadingGifPath);
+#endif
+
             var dimension = new FrameDimension(gifImage.FrameDimensionsList[0]);
             int frameCount = gifImage.GetFrameCount(dimension);
             for (int i = 0; i < frameCount; i++)
@@ -75,20 +93,20 @@ namespace MiniWeChat
 
             List<Texture2D> gifFrames = _gifFrameDict[loadingGifPath];
 
-            if (IsFinishedLoading())
+            if (Time.frameCount % interval == 0 && gifFrames.Count > 0)
             {
-                //GUI.DrawTexture(new Rect(transform.position.x, Screen.height - transform.position.y, gifFrames[0].width, gifFrames[0].height), gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count]);
-                //_showingImage.overrideSprite = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
-                //GetComponent<SpriteRenderer>().sprite = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
-                GetComponent<RawImage>().texture = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
+                if (IsFinishedLoading())
+                {
+                    _showingImage.texture = gifFrames[(int)(Time.frameCount / interval) % gifFrames.Count];
+                }
+                else
+                {
+                    _showingImage.texture = gifFrames[0];
+                }
+                Log4U.LogDebug((int)(Time.frameCount / interval) % gifFrames.Count);
             }
-            else
-            {
-                //GUI.DrawTexture(new Rect(transform.position.x, Screen.height - transform.position.y, gifFrames[0].width, gifFrames[0].height), gifFrames[0]);
-                //_showingImage.overrideSprite = gifFrames[0];
-                //GetComponent<SpriteRenderer>().sprite = gifFrames[0];
-                GetComponent<RawImage>().texture = gifFrames[0];
-            }
+
+
         }
 
         private bool IsFinishedLoading()
