@@ -9,14 +9,14 @@ using System.Drawing.Imaging;
 
 namespace MiniWeChat
 {
-    [RequireComponent(typeof(RectTransform))]
+    //[RequireComponent(typeof(UnityEngine.UI.Image))]
     public class GIFImage : MonoBehaviour
     {
         public string loadingGifPath;
         public float speed = 1;
 
-        private RectTransform _rectTrans;
-        private static Dictionary<string, List<Texture2D>> _gifFrameDict = new Dictionary<string, List<Texture2D>>();
+        private UnityEngine.UI.Image _showingImage;
+        private static Dictionary<string, List<Sprite>> _gifFrameDict = new Dictionary<string, List<Sprite>>();
         private static HashSet<string> _finishGIFs = new HashSet<string>();
 
         void Awake()
@@ -31,24 +31,26 @@ namespace MiniWeChat
                 yield break;
             }
 
-            List<Texture2D> gifFrames = new List<Texture2D>();
+            List<Sprite> gifFrames = new List<Sprite>();
             _gifFrameDict[loadingGifPath] = gifFrames;
 
-            _rectTrans = GetComponent<RectTransform>();
+            //_showingImage = GetComponent<UnityEngine.UI.Image>();
             var gifImage = System.Drawing.Image.FromFile(Application.dataPath + "/Raw/Image/" + loadingGifPath);
             var dimension = new FrameDimension(gifImage.FrameDimensionsList[0]);
             int frameCount = gifImage.GetFrameCount(dimension);
             for (int i = 0; i < frameCount; i++)
             {
                 gifImage.SelectActiveFrame(dimension, i);
-                var frameTexture = new Texture2D(gifImage.Height, gifImage.Height);
+                var frameTexture = new Texture2D(gifImage.Width, gifImage.Height);
 
                 var frame = new Bitmap(gifImage.Width, gifImage.Height);
                 System.Drawing.Graphics.FromImage(frame).DrawImage(gifImage, Point.Empty);
                 ImageConverter converter = new ImageConverter();
                 frameTexture.LoadImage((byte[])converter.ConvertTo(frame, typeof(byte[])));
 
-                gifFrames.Add(frameTexture);
+                Sprite sprite = Sprite.Create(frameTexture, new Rect(0, 0, frameTexture.width, frameTexture.height), new Vector3(0.5f, 0.5f), 1f);
+
+                gifFrames.Add(sprite);
                 //yield return new WaitForSeconds(UnityEngine.Random.Range(0.03f, 0.06f)) ;
                 yield return null;
             }
@@ -58,15 +60,19 @@ namespace MiniWeChat
 
         void OnGUI()
         {
-            List<Texture2D> gifFrames = _gifFrameDict[loadingGifPath];
+            List<Sprite> gifFrames = _gifFrameDict[loadingGifPath];
 
             if (IsFinishedLoading())
             {
-                GUI.DrawTexture(new Rect(transform.position.x, Screen.height - transform.position.y, gifFrames[0].width, gifFrames[0].height), gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count]);
+                //GUI.DrawTexture(new Rect(transform.position.x, Screen.height - transform.position.y, gifFrames[0].width, gifFrames[0].height), gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count]);
+                //_showingImage.overrideSprite = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
+                GetComponent<SpriteRenderer>().sprite = gifFrames[(int)(Time.frameCount * speed) % gifFrames.Count];
             }
             else
             {
-                GUI.DrawTexture(new Rect(transform.position.x, Screen.height - transform.position.y, gifFrames[0].width, gifFrames[0].height), gifFrames[0]);
+                //GUI.DrawTexture(new Rect(transform.position.x, Screen.height - transform.position.y, gifFrames[0].width, gifFrames[0].height), gifFrames[0]);
+                //_showingImage.overrideSprite = gifFrames[0];
+                GetComponent<SpriteRenderer>().sprite = gifFrames[0];
             }
         }
 
