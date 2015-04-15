@@ -108,7 +108,10 @@ namespace MiniWeChat
         public void OnClickShowEmotionButton(bool check)
         {
             _gridEmotion.gameObject.SetActive(check);
-            
+            StartCoroutine(CoroutineTool.ActionNextFrame(delegate()
+            {
+                UpdateChatBubbleGrid();
+            }));
         }
 
         public void OnClickSendEmotionButton(int index)
