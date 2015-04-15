@@ -109,8 +109,9 @@ public class UniGifTexture : MonoBehaviour
         {
             rawImage = GetComponent<RawImage>();
         }
-        if (loadOnStart) {
-            StartCoroutine (SetGifFromUrlCoroutine (loadOnStartUrl));
+        if (loadOnStart)
+        {
+            StartCoroutine(SetGifFromUrlCoroutine(loadOnStartUrl));
         }
     }
 
@@ -131,11 +132,12 @@ public class UniGifTexture : MonoBehaviour
     {
         if (gifTextAsset != null)
         {
-            yield return StartCoroutine(UniGif.GetTextureListCoroutine(this, gifTextAsset.bytes, (gtList, loop, w, h) =>
+            yield return StartCoroutine(UniGif.GetTextureListCoroutine(this, gifTextAsset.bytes, gifTextAsset.GetInstanceID(), (gtList, loop, w, h) =>
             {
                 gifTexList = gtList;
                 FinishedGetTextureList(loop, w, h, autoPlay);
             }, filterMode, wrapMode, outputDebugLog));
+
             yield break;
         }
 

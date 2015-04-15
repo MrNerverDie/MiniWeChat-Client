@@ -61,9 +61,9 @@ public static partial class UniGif
                 SetTexturePixelRow (tex, y, imgBlock, decodedData, ref dataIndex, colorTable, bgColor, transparentIndex, useBeforeTex);
 
                 // avoid lock up
-                if (y % 10 == 0) {
-                    yield return 0;
-                }
+                //if (y % 10 == 0) {
+                //    yield return 0;
+                //}
             }
             tex.Apply ();
 

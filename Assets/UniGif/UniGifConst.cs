@@ -12,6 +12,14 @@ using System.Collections.Generic;
 
 public static partial class UniGif
 {
+    public class GifAnimation
+    {
+        public int loopCount;
+        public int width;
+        public int height;
+        public List<GifTexture> textureList;
+    }
+
     public struct GifTexture
     {
         

@@ -139,7 +139,14 @@ namespace MiniWeChat
         public ChatDataItem GetLastChat(string userId)
         {
             List<ChatDataItem> itemList = GetChatLog(userId).itemList;
-            return itemList[itemList.Count - 1];
+            if (itemList.Count > 0)
+            {
+                return itemList[itemList.Count - 1];
+            }
+            else
+            {
+                throw new Exception("No Last Chat");
+            }
         }
 
         #region MessageHandler
