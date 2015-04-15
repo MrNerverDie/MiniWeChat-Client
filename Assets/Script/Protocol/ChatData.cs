@@ -15,36 +15,44 @@ namespace protocol
   {
     public ChatItem() {}
     
+    private protocol.ChatItem.TargetType _targetType = protocol.ChatItem.TargetType.INDIVIDUAL;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"targetType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(protocol.ChatItem.TargetType.INDIVIDUAL)]
+    public protocol.ChatItem.TargetType targetType
+    {
+      get { return _targetType; }
+      set { _targetType = value; }
+    }
     private string _sendUserId;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"sendUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sendUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string sendUserId
     {
       get { return _sendUserId; }
       set { _sendUserId = value; }
     }
     private string _receiveUserId;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"receiveUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"receiveUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string receiveUserId
     {
       get { return _receiveUserId; }
       set { _receiveUserId = value; }
     }
     private protocol.ChatItem.ChatType _chatType;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"chatType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"chatType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public protocol.ChatItem.ChatType chatType
     {
       get { return _chatType; }
       set { _chatType = value; }
     }
     private string _chatBody;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"chatBody", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"chatBody", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string chatBody
     {
       get { return _chatBody; }
       set { _chatBody = value; }
     }
     private long _date = default(long);
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"date", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"date", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(long))]
     public long date
     {
@@ -60,6 +68,17 @@ namespace protocol
             
       [global::ProtoBuf.ProtoEnum(Name=@"IMAGE", Value=1)]
       IMAGE = 1
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"TargetType")]
+    public enum TargetType
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"INDIVIDUAL", Value=0)]
+      INDIVIDUAL = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"GROUP", Value=1)]
+      GROUP = 1
     }
   
     private global::ProtoBuf.IExtension extensionObject;

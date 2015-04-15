@@ -7,10 +7,15 @@ message ChatItem{
     	TEXT = 0;
 		IMAGE = 1;
 	}
+	enum TargetType{
+    	INDIVIDUAL = 0;
+		GROUP = 1;
+	}
 
-	required string sendUserId= 1;
-	required string receiveUserId= 2;
-	required ChatType chatType= 3;
-	required string chatBody= 4;
-	optional int64 date = 5;
+	optional TargetType targetType = 1[default = INDIVIDUAL];
+	required string sendUserId= 2;
+	required string receiveUserId= 3;
+	required ChatType chatType= 4;
+	required string chatBody= 5;
+	optional int64 date = 6;
 }

@@ -86,7 +86,8 @@ namespace MiniWeChat
         public void OnClickBeginChatButton()
         {
             StateManager.GetInstance().ClearStatesExceptBottom();
-            StateManager.GetInstance().PushState<ChatPanel>(EUIType.ChatPanel, _userItem);
+            ChatLog chatLog = GlobalChat.GetInstance().GetChatLog(_userItem.userId);
+            StateManager.GetInstance().PushState<ChatPanel>(EUIType.ChatPanel, chatLog);
         }
 
         public void OnClickAddFriendButton()

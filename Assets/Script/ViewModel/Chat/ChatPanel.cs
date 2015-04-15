@@ -25,16 +25,20 @@ namespace MiniWeChat
         public override void OnEnter(object param = null)
         {
             base.OnEnter(param);
-            _guestUserItem = param as UserItem;
+            _chatLog = param as ChatLog;
+            _guestUserItem = GlobalContacts.GetInstance().GetUserItemById(_chatLog.userId);
+
             UIManager.GetInstance().AddChild(transform.Find("TopBar").gameObject, EUIType.BackButton);
-            _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, 0);
+
             _buttonSend.onClick.AddListener(OnClickSendButton);
             _buttonFriendDetail.onClick.AddListener(OnClickFriendDetailButton);
             _toggleShowEmotion.onValueChanged.AddListener(OnClickShowEmotionButton);
-            _scrollChatLog.verticalNormalizedPosition = 0;
-            _labelGuestUserName.text = _guestUserItem.userName;
 
-            _chatLog = GlobalChat.GetInstance().GetChatLog(_guestUserItem.userId);
+            if (_guestUserItem != null)
+            {
+                _labelGuestUserName.text = _guestUserItem.userName;                
+            }
+
             _chatBubbleList = new List<ChatBubbleFrame>();
             RefreshChatLog();
         }

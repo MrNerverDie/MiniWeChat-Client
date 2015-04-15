@@ -78,7 +78,19 @@ namespace protocol
       SEND_CHAT_RSP = 20,
             
       [global::ProtoBuf.ProtoEnum(Name=@"RECEIVE_CHAT_SYNC", Value=21)]
-      RECEIVE_CHAT_SYNC = 21
+      RECEIVE_CHAT_SYNC = 21,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CREATE_GROUP_CHAT_REQ", Value=22)]
+      CREATE_GROUP_CHAT_REQ = 22,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CREATE_GROUP_CHAT_RSP", Value=23)]
+      CREATE_GROUP_CHAT_RSP = 23,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_GROUP_CHAT_MEMBER_REQ", Value=24)]
+      CHANGE_GROUP_CHAT_MEMBER_REQ = 24,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_GROUP_CHAT_MEMBER__RSP", Value=25)]
+      CHANGE_GROUP_CHAT_MEMBER__RSP = 25
     }
   
 }
