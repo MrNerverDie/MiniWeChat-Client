@@ -29,6 +29,7 @@ namespace MiniWeChat
                 chatType = ((ChatDataItem.ChatType)(uint)chatItem.chatType),
                 chatBody = chatItem.chatBody,
                 date = chatItem.date,
+                targetType = ((ChatDataItem.TargetType)(uint)chatItem.targetType),
             };
         }
 
@@ -41,6 +42,7 @@ namespace MiniWeChat
                 chatType = ((ChatItem.ChatType)(uint)chatDataItem.chatType),
                 chatBody = chatDataItem.chatBody,
                 date = chatDataItem.date,
+                targetType = (ChatItem.TargetType)(uint)chatDataItem.targetType,
             };
         }
     }

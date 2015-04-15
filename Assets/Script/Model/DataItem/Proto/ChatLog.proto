@@ -7,4 +7,5 @@ message ChatLog
 	required string userId = 1;
 	required int64 date = 2;
 	repeated ChatDataItem itemList=3;
+	optional ChatDataItem.TargetType targetType = 4[default = INDIVIDUAL];
 }

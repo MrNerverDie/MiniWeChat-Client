@@ -37,6 +37,14 @@ namespace MiniWeChat
       get { return _itemList; }
     }
   
+    private MiniWeChat.ChatDataItem.TargetType _targetType = MiniWeChat.ChatDataItem.TargetType.INDIVIDUAL;
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"targetType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(MiniWeChat.ChatDataItem.TargetType.INDIVIDUAL)]
+    public MiniWeChat.ChatDataItem.TargetType targetType
+    {
+      get { return _targetType; }
+      set { _targetType = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

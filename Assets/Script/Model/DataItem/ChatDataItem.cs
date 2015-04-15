@@ -67,6 +67,25 @@ namespace MiniWeChat
       get { return _isSend; }
       set { _isSend = value; }
     }
+    private MiniWeChat.ChatDataItem.TargetType _targetType = MiniWeChat.ChatDataItem.TargetType.INDIVIDUAL;
+    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"targetType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(MiniWeChat.ChatDataItem.TargetType.INDIVIDUAL)]
+    public MiniWeChat.ChatDataItem.TargetType targetType
+    {
+      get { return _targetType; }
+      set { _targetType = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"TargetType")]
+    public enum TargetType
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"INDIVIDUAL", Value=0)]
+      INDIVIDUAL = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"GROUP", Value=1)]
+      GROUP = 1
+    }
+  
     [global::ProtoBuf.ProtoContract(Name=@"ChatType")]
     public enum ChatType
     {

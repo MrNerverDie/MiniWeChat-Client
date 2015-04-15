@@ -2,6 +2,11 @@ package MiniWeChat;
 
 message ChatDataItem
 {
+	enum TargetType{
+    	INDIVIDUAL = 0;
+		GROUP = 1;
+	}
+
 	enum ChatType{
     	TEXT = 0;
 		IMAGE = 1;
@@ -15,4 +20,5 @@ message ChatDataItem
 
 	optional bool isRead = 6[default=false];
 	optional bool isSend = 7[default=false];
+	optional TargetType targetType = 8[default = INDIVIDUAL];
 }

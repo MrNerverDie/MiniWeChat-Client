@@ -122,6 +122,7 @@ namespace MiniWeChat
             _chatLogDict[guestUserID].itemList.Remove(chatDataItem);
 
             _chatLogDict[guestUserID].date = chatDataItem.date;
+            _chatLogDict[guestUserID].targetType = chatDataItem.targetType;
             _chatLogDict[guestUserID].itemList.Add(chatDataItem);
         }
 
