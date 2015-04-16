@@ -9,6 +9,8 @@ namespace MiniWeChat
     public class MainMenuPanel : BaseState
     {
         public Button _searchButton;
+        public Button _createGroupButton;
+
         public MainMenuNaviBar _mainMenuNaviBar;
 
         public ScrollRect _swipePanel;
@@ -18,6 +20,7 @@ namespace MiniWeChat
             base.OnEnter(param);
 
             _searchButton.onClick.AddListener(OnClickSearchButton);
+            _createGroupButton.onClick.AddListener(OnClickCreateGroupButton);
             _mainMenuNaviBar.SwitchToTab((int)MainMenuNaviBar.MainMenuTab.CHAT_LIST);
         }
 
@@ -40,6 +43,11 @@ namespace MiniWeChat
         }
 
         public void OnClickSearchButton()
+        {
+            StateManager.GetInstance().PushState<SearchFriendPanel>(EUIType.SearchFriendPanel);
+        }
+
+        public void OnClickCreateGroupButton()
         {
             StateManager.GetInstance().PushState<SearchFriendPanel>(EUIType.SearchFriendPanel);
         }
