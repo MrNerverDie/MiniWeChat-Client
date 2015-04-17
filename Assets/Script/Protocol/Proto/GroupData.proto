@@ -1,0 +1,13 @@
+package protocol;
+
+option java_package = "protocol.Data";
+import "UserData.proto";
+
+message GroupItem{
+	required string groupId = 1;
+	required string groupName = 2;
+	required UserItem creater = 3;
+	repeated UserItem memberUser = 4;
+}
+
+

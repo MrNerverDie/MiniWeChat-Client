@@ -86,4 +86,42 @@ namespace protocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupChatMemberSync")]
+  public partial class ChangeGroupChatMemberSync : global::ProtoBuf.IExtensible
+  {
+    public ChangeGroupChatMemberSync() {}
+    
+    private protocol.ChangeGroupChatMemberSync.Type _type;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public protocol.ChangeGroupChatMemberSync.Type type
+    {
+      get { return _type; }
+      set { _type = value; }
+    }
+    private readonly global::System.Collections.Generic.List<string> _userId = new global::System.Collections.Generic.List<string>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"userId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<string> userId
+    {
+      get { return _userId; }
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"Type")]
+    public enum Type
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ADD", Value=0)]
+      ADD = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"DELETE", Value=1)]
+      DELETE = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"REFRESH", Value=2)]
+      REFRESH = 2
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
 }

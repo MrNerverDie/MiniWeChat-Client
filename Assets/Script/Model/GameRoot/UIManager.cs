@@ -95,6 +95,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.InputDebug, "Common/InputDebug");
             _UIPathDict.Add(EUIType.StatusLabel, "Common/StatusLabel");
             _UIPathDict.Add(EUIType.LoadingDialog, "Common/Dialog/LoadingDialog");
+            _UIPathDict.Add(EUIType.CreateGroupPanel, "Group/CreateGroupPanel");
         }
 
         private void InitAtlasPathDict()
@@ -126,6 +127,7 @@ namespace MiniWeChat
         InputDebug,
         StatusLabel,
         LoadingDialog,
+        CreateGroupPanel,
     }
 
     public enum EAtlasName

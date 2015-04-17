@@ -18,6 +18,14 @@ message ChangeGroupChatMemberRsp{
 		FAIL = 1;
 		NO_AUTHORITY = 2;
 	}
-
 	required ResultCode resultCode = 1;
+}
+message ChangeGroupChatMemberSync{
+	enum Type{
+    	ADD = 0;
+		DELETE = 1;
+		REFRESH = 2;
+	}
+	required Type type = 1;
+	repeated string userId = 2;
 }

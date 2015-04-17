@@ -49,7 +49,7 @@ namespace MiniWeChat
 
         public void OnClickCreateGroupButton()
         {
-            StateManager.GetInstance().PushState<SearchFriendPanel>(EUIType.SearchFriendPanel);
+            StateManager.GetInstance().PushState<CreateGroupPanel>(EUIType.CreateGroupPanel);
         }
     }
 }
