@@ -204,6 +204,7 @@ namespace MiniWeChat
                 Application.persistentDataPath + "/" + _userId + "/Contacts",
                 Application.persistentDataPath + "/" + _userId + "/Head",
                 Application.persistentDataPath + "/" + _userId + "/Image",
+                Application.persistentDataPath + "/" + _userId + "/Group",
             };
 
             foreach (var dirPath in dirPathList)
