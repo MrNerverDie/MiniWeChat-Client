@@ -36,6 +36,8 @@ namespace MiniWeChat
             _gridSelectMember.GetComponent<RectTransform>().sizeDelta= new Vector2(
                 GlobalVars.DEFAULT_SCREEN_WIDTH,
                 GlobalContacts.GetInstance().Count * GROUP_MEMBER_FRAME_HEIGHT);
+
+            _buttonConfirm.onClick.AddListener(OnClickConfirmButton);
         }
 
         public override void OnExit()
@@ -48,13 +50,30 @@ namespace MiniWeChat
         {
             base.OnShow(param);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.TOGGLE_GROUP_MEMBER, OnToggleGroupMember);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CREATE_GROUP_CHAT_RSP, OnCreateGroupRsp);
         }
 
         public override void OnHide()
         {
             base.OnHide();
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.TOGGLE_GROUP_MEMBER, OnToggleGroupMember);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CREATE_GROUP_CHAT_RSP, OnCreateGroupRsp);
         }
+
+        #region EventListener
+
+        public void OnClickConfirmButton()
+        {
+            CreateGroupChatReq req = new CreateGroupChatReq();
+            foreach (var item in _selectUserIdSet)
+            {
+                req.userId.Add(item);
+            }
+
+            NetworkManager.GetInstance().SendPacket<CreateGroupChatReq>(ENetworkMessage.CREATE_GROUP_CHAT_REQ, req);
+        }
+
+        #endregion
 
         #region MessageHandler
 
@@ -69,6 +88,15 @@ namespace MiniWeChat
                 _selectUserIdSet.Remove(param.userID);
 	        }
             RefreshGroupMember();
+        }
+
+        public void OnCreateGroupRsp(uint iMessageType, object kParam)
+        {
+            CreateGroupChatRsp rsp = kParam as CreateGroupChatRsp;
+            if (rsp.resultCode == CreateGroupChatRsp.ResultCode.SUCCESS)
+            {
+                StateManager.GetInstance().PopState();
+            }
         }
 
         #endregion

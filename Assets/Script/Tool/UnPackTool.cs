@@ -58,6 +58,18 @@ namespace MiniWeChat
                         case ENetworkMessage.RECEIVE_CHAT_SYNC:
                             packet = Serializer.Deserialize<ReceiveChatSync>(streamForProto);
                             break;
+                        case ENetworkMessage.CREATE_GROUP_CHAT_RSP:
+                            packet = Serializer.Deserialize<CreateGroupChatRsp>(streamForProto);
+                            break;
+                        case ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_RSP:
+                            packet = Serializer.Deserialize<ChangeGroupChatMemberRsq>(streamForProto);
+                            break;
+                        case ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_SYNC:
+                            packet = Serializer.Deserialize<ChangeGroupChatMemberSync>(streamForProto);
+                            break;
+                        case ENetworkMessage.GET_GROUP_INFO_RSP:
+                            packet = Serializer.Deserialize<GetGroupInfoRsp>(streamForProto);
+                            break;
                         default:
                             Log4U.LogInfo("No Such Packet, packet type is " + networkMessage);
                             break;
