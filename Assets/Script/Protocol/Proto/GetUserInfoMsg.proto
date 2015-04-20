@@ -4,7 +4,7 @@ option java_package = "protocol.Msg";
 import "UserData.proto";
 
 message GetUserInfoReq{
-	required string targetUserId = 1 ;
+	repeated string targetUserId = 1 ;
 }
 
 message GetUserInfoRsp{
@@ -14,5 +14,5 @@ message GetUserInfoRsp{
 		USER_NOT_EXIST = 2;//用户不存在
 	}
 	required ResultCode resultCode = 1;
-	optional UserItem userItem = 2;
+	repeated UserItem userItem = 2;
 }

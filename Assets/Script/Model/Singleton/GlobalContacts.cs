@@ -93,7 +93,6 @@ namespace MiniWeChat
             NetworkMessageParam param = kParam as NetworkMessageParam;
             GetPersonalInfoRsp rsp = param.rsp as GetPersonalInfoRsp;
             GetPersonalInfoReq req = param.req as GetPersonalInfoReq;
-            Log4U.LogInfo("rsp.friends : " + rsp.friends);
             if (rsp.resultCode == GetPersonalInfoRsp.ResultCode.SUCCESS
                 && req.friendInfo)
             {
@@ -102,7 +101,7 @@ namespace MiniWeChat
                 {
                     _friendDict[friend.userId] = friend;
                 }
-                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_CHAT_LIST, null);
+                MessageDispatcher.GetInstance().DispatchMessageAsync((uint)EUIMessage.UPDATE_CHAT_LIST, null);
             }
         }
 

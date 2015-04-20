@@ -14,8 +14,5 @@ message GetGroupInfoRsp{
 		GROUP_NOT_EXIST = 2;//群不存在
 	}
 	required ResultCode resultCode = 1;
-	required string groupId = 2;
-	required string groupName = 3;
-	required string createrId = 4;
-	repeated string memberId = 5;
+	required GroupItem groupItem = 2;
 }

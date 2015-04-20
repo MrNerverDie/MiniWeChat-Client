@@ -2,7 +2,7 @@ package protocol;
 
 option java_package = "protocol.Msg";
 
-message ChangeGroupChatMemberRsq{
+message ChangeGroupChatMemberReq{
 	enum ChangeType{
 		ADD = 0;
 		DELETE = 1;
@@ -11,6 +11,7 @@ message ChangeGroupChatMemberRsq{
 	required int32 groupId = 1;
 	required ChangeType changeType = 2;
 	repeated string userId = 3;
+	optional string groupName = 4;
 }
 message ChangeGroupChatMemberRsp{
 	enum ResultCode{

@@ -14,6 +14,12 @@ namespace MiniWeChat
             yield return null;
             action();
         }
+
+        public static IEnumerator ActionWithDelay(Action action, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            action();
+        }
     }
 }
 

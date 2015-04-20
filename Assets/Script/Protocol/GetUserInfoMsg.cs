@@ -16,13 +16,13 @@ namespace protocol
   {
     public GetUserInfoReq() {}
     
-    private string _targetUserId;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"targetUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string targetUserId
+    private readonly global::System.Collections.Generic.List<string> _targetUserId = new global::System.Collections.Generic.List<string>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"targetUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<string> targetUserId
     {
       get { return _targetUserId; }
-      set { _targetUserId = value; }
     }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -40,14 +40,13 @@ namespace protocol
       get { return _resultCode; }
       set { _resultCode = value; }
     }
-    private protocol.UserItem _userItem = null;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"userItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public protocol.UserItem userItem
+    private readonly global::System.Collections.Generic.List<protocol.UserItem> _userItem = new global::System.Collections.Generic.List<protocol.UserItem>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"userItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<protocol.UserItem> userItem
     {
       get { return _userItem; }
-      set { _userItem = value; }
     }
+  
     [global::ProtoBuf.ProtoContract(Name=@"ResultCode")]
     public enum ResultCode
     {

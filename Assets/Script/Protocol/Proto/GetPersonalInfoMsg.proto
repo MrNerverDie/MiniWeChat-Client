@@ -2,10 +2,12 @@ package protocol;
 
 option java_package = "protocol.Msg";
 import "UserData.proto";
+import "GroupData.proto";
 
 message GetPersonalInfoReq{
 	optional bool userInfo = 1 [default = false];
 	optional bool friendInfo = 2 [default = false];
+	optional bool groupInfo = 3 [default =false];
 }
 
 message GetPersonalInfoRsp{
@@ -17,4 +19,5 @@ message GetPersonalInfoRsp{
 	
 	optional UserItem userInfo = 2;
 	repeated  UserItem friends = 3;
+	repeated  GroupItem groups = 4;
 }

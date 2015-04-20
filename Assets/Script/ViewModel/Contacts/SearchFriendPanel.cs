@@ -48,10 +48,8 @@ namespace MiniWeChat
 
         public void OnClickSearchFriendButton()
         {
-            GetUserInfoReq req = new GetUserInfoReq
-            {
-                targetUserId = _inputUserID.text,
-            };
+            GetUserInfoReq req = new GetUserInfoReq();
+            req.targetUserId.Add(_inputUserID.text);
 
             NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GET_USERINFO_REQ, req);
         }
@@ -61,7 +59,7 @@ namespace MiniWeChat
             GetUserInfoRsp rsp = kParam as GetUserInfoRsp;
             if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
             {
-                StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, rsp.userItem);
+                StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, rsp.userItem[0]);
             }
             else if(rsp.resultCode == GetUserInfoRsp.ResultCode.USER_NOT_EXIST)
             {
