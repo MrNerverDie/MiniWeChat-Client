@@ -28,6 +28,7 @@ namespace MiniWeChat
         UPDATE_RECEIVE_CHAT,
         UPDATE_PERSONAL_DETAIL,
         UPDATE_CHAT_LIST,
+        TOGGLE_GROUP_MEMBER,
     }
 
     #endregion

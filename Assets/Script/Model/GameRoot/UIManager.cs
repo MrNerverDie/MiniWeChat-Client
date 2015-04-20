@@ -61,6 +61,40 @@ namespace MiniWeChat
             return go;
         }
 
+        public void RefreshChildren(GameObject parent, EUIType name, int count)
+        {
+            if (parent.transform.childCount > count)
+            {
+                for (int i = count; i < parent.transform.childCount; i++)
+                {
+                    GameObject.Destroy(parent.transform.GetChild(i).gameObject); 
+                }
+            }
+            else
+            {
+                for (int i = parent.transform.childCount; i < count; i++)
+                {
+                    AddChild(parent, name);
+                }
+            }
+        }
+
+        public void RefreshChildren(GameObject parent, EUIType name, int count, float childHeight, bool isVertical)
+        {
+            RefreshChildren(parent, name, count);
+
+            Vector2 originalSize = parent.GetComponent<RectTransform>().sizeDelta;
+
+            if (isVertical)
+            {
+                parent.GetComponent<RectTransform>().sizeDelta = new Vector2(originalSize.x, childHeight * count);
+            }
+            else
+            {
+                parent.GetComponent<RectTransform>().sizeDelta = new Vector2(childHeight * count, originalSize.y);
+            }
+        }
+
         public void SetSiblingToTop(GameObject child)
         {
             child.transform.SetSiblingIndex(child.transform.parent.childCount - 1);
@@ -71,8 +105,14 @@ namespace MiniWeChat
             GameObject go = Resources.Load<GameObject>("Raw/Image/" + _atlasPathDict[eAtlasName] + "/" + spriteName);
             if (go != null)
 	        {
-                Sprite sprite = go.GetComponent<SpriteRenderer>().sprite;
-                image.sprite = sprite; 
+                try
+                {
+                    Sprite sprite = go.GetComponent<SpriteRenderer>().sprite;
+                    image.sprite = sprite; 
+                }catch(System.NullReferenceException ex)
+                {
+                    Log4U.LogError(eAtlasName, spriteName);
+                }
 	        }
         }
 
@@ -100,6 +140,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.SelectGroupPanel, "Group/SelectGroupPanel");
             _UIPathDict.Add(EUIType.GroupMemberFrame, "Group/GroupMemberFrame");
             _UIPathDict.Add(EUIType.GroupMemberHeadFrame, "Group/GroupMemberHeadFrame");
+            _UIPathDict.Add(EUIType.GroupMemberHeadIcon, "Group/GroupMemberHeadIcon");
         }
 
         private void InitAtlasPathDict()
@@ -135,6 +176,7 @@ namespace MiniWeChat
         GroupDetailPanel,
         GroupMemberFrame,
         GroupMemberHeadFrame,
+        GroupMemberHeadIcon,
         SelectGroupPanel,
     }
 

@@ -5,13 +5,23 @@ using protocol;
 
 namespace MiniWeChat
 {
+    public class ToggleGroupMemberParam
+    {
+        public string userID;
+        public bool check;
+    }
+
+
     public class GroupMemberFrame : MonoBehaviour
     {
+
+        // Component //
         public Image _imageHead;
         public Text _labelUserName;
 
         public Toggle _toggleAddUser;
 
+        // DataItem //
         private UserItem _userItem;
 
         public void Show(UserItem userItem)
@@ -20,16 +30,30 @@ namespace MiniWeChat
 
             if (_userItem != null)
             {
-                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
-                _labelUserName.text = _userItem.userName;
+                if (_imageHead)
+                {
+                    UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);                                    
+                }
+
+                if (_labelUserName)
+                {
+                    _labelUserName.text = _userItem.userName;                    
+                }
             }
 
-            _toggleAddUser.onValueChanged.AddListener(OnClickAddMemeber);
+            if (_toggleAddUser)
+            {
+                _toggleAddUser.onValueChanged.AddListener(OnClickToggleMemeber);                
+            }
         }
 
-        public void OnClickAddMemeber(bool check)
+        public void OnClickToggleMemeber(bool check)
         {
-
+            MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.TOGGLE_GROUP_MEMBER,
+                new ToggleGroupMemberParam { 
+                    userID = _userItem.userId,
+                    check = check,
+                });
         }
     }
 }
