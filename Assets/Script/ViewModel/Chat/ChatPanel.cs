@@ -26,7 +26,7 @@ namespace MiniWeChat
         {
             base.OnEnter(param);
             _chatLog = param as ChatLog;
-            _guestUserItem = GlobalContacts.GetInstance().GetUserItemById(_chatLog.userId);
+            _guestUserItem = GlobalContacts.GetInstance().GetUserItemById(_chatLog.chatID);
 
             UIManager.GetInstance().AddChild(transform.Find("TopBar").gameObject, EUIType.BackButton);
 

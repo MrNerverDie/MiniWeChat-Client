@@ -26,7 +26,7 @@ namespace MiniWeChat
 
         public void Show(ChatLog chatLog)
         {
-            _userItem = GlobalContacts.GetInstance().GetUserItemById(chatLog.userId);
+            _userItem = GlobalContacts.GetInstance().GetUserItemById(chatLog.chatID);
             _chatLog = chatLog;
 
             // Set UserItem //
@@ -37,7 +37,7 @@ namespace MiniWeChat
             }
 
             // Set ChatItem //
-            _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.userId).chatBody;
+            _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.chatID).chatBody;
             _labelDate.text = new DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm");
         }
 

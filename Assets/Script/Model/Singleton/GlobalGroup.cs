@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 using protocol;
 
@@ -8,23 +9,29 @@ namespace MiniWeChat
 {
     public class GlobalGroup : Singleton<GlobalGroup>
     {
+        private const float WAIT_QUERY_INTERVAL = 0.1f;
+
         private Dictionary<string, GroupItem> _groupDict = new Dictionary<string,GroupItem>();
         private Dictionary<string, UserItem> _groupMemberDict = new Dictionary<string, UserItem>();
+
+        private HashSet<string> _waitQueryMemberSet = new HashSet<string>();
 
         #region LifeCycle
         
         public override void Init()
         {
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
 
             base.Init();
+
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
+            StartCoroutine(QueryMemberData());
         }
 
         public override void Release()
         {
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
-
             base.Release();
+
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
         }
 
         #endregion
@@ -43,7 +50,7 @@ namespace MiniWeChat
 
                 if (userItem == null)
                 {
-                    //NetworkManager.GetInstance().SendPacket<Get>
+                    _waitQueryMemberSet.Add(userID);
                 }
 
                 return userItem;
@@ -65,6 +72,24 @@ namespace MiniWeChat
             else
             {
                 throw new UnityException("No such group : " + groupID);
+            }
+        }
+
+        private IEnumerator QueryMemberData()
+        {
+            while(true)
+            {
+                if (_waitQueryMemberSet.Count != 0)
+                {
+                    GetUserInfoReq req = new GetUserInfoReq();
+                    foreach (var item in _waitQueryMemberSet)
+                    {
+                        req.targetUserId.Add(item);
+                    }
+                    NetworkManager.GetInstance().SendPacket<GetUserInfoReq>(ENetworkMessage.GET_USERINFO_REQ, req);
+                    _waitQueryMemberSet.Clear();
+                }
+                yield return new WaitForSeconds(WAIT_QUERY_INTERVAL);
             }
         }
 

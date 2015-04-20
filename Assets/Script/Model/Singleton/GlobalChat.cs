@@ -62,24 +62,35 @@ namespace MiniWeChat
 
 #endregion
 
-        public ChatLog GetChatLog(string userID)
+        /// <summary>
+        /// 通过chatID来获取ChatLog
+        /// </summary>
+        /// <param name="chatID">当chatLog为群聊的时候，chatID为群ID，否则为userID</param>
+        /// <returns></returns>
+        public ChatLog GetChatLog(string chatID)
         {
-            if (!_chatLogDict.ContainsKey(userID))
+            if (!_chatLogDict.ContainsKey(chatID))
             {
                 ChatLog chatLog = new ChatLog
                 {
-                    userId = userID,
+                    chatID = chatID,
                 };
 
-                _chatLogDict.Add(userID, chatLog);
+                _chatLogDict.Add(chatID, chatLog);
             }
 
-            return _chatLogDict[userID];
+            return _chatLogDict[chatID];
         }
 
-        public ChatDataItem GetChatDataItem(string userID, int index)
+        /// <summary>
+        /// 通过chatID和index来获取ChatDataItem
+        /// </summary>
+        /// <param name="chatID">当chatLog为群聊的时候，chatID为群ID，否则为userID</param>
+        /// <param name="index">chatDataItem在ChatLog中的index</param>
+        /// <returns></returns>
+        public ChatDataItem GetChatDataItem(string chatID, int index)
         {
-            return GetChatLog(userID).itemList[index];
+            return GetChatLog(chatID).itemList[index];
         }
 
         private static int SortChatLogByDate(ChatLog c1, ChatLog c2)
@@ -102,28 +113,40 @@ namespace MiniWeChat
 
         private void AddChatDataItem(ChatDataItem chatDataItem)
         {
-            string guestUserID = chatDataItem.sendUserId;
+            string chatID = null;
 
-            if (chatDataItem.sendUserId == GlobalUser.GetInstance().UserId)
+            if (chatDataItem.targetType == ChatDataItem.TargetType.INDIVIDUAL)
+	        {
+                if (chatDataItem.sendUserId == GlobalUser.GetInstance().UserId)
+                {
+                    chatID = chatDataItem.receiveUserId;
+                }
+                else
+                {
+                    chatID = chatDataItem.sendUserId;
+                }
+            }
+            else
             {
-                guestUserID = chatDataItem.receiveUserId;
+                chatID = chatDataItem.receiveUserId;
             }
 
-            if (!_chatLogDict.ContainsKey(guestUserID))
+
+            if (!_chatLogDict.ContainsKey(chatID))
             {
                 ChatLog chatLog = new ChatLog
                 {
-                    userId = guestUserID,
+                    chatID = chatID,
                 };
 
-                _chatLogDict.Add(guestUserID, chatLog);
+                _chatLogDict.Add(chatID, chatLog);
             }
 
-            _chatLogDict[guestUserID].itemList.Remove(chatDataItem);
+            _chatLogDict[chatID].itemList.Remove(chatDataItem);
 
-            _chatLogDict[guestUserID].date = chatDataItem.date;
-            _chatLogDict[guestUserID].targetType = chatDataItem.targetType;
-            _chatLogDict[guestUserID].itemList.Add(chatDataItem);
+            _chatLogDict[chatID].date = chatDataItem.date;
+            _chatLogDict[chatID].targetType = chatDataItem.targetType;
+            _chatLogDict[chatID].itemList.Add(chatDataItem);
         }
 
         public List<ChatLog>.Enumerator GetEnumerator()
@@ -224,7 +247,7 @@ namespace MiniWeChat
                 {
                     ChatLog chatLog = new ChatLog
                     {
-                        userId = userID,
+                        chatID = userID,
                     };
 
                     _chatLogDict.Add(userID, chatLog);
@@ -272,7 +295,7 @@ namespace MiniWeChat
                     ChatLog chatLog = IOTool.DeserializeFromFile<ChatLog>(file.FullName);
                     if (chatLog != null)
                     {
-                        _chatLogDict[chatLog.userId] = chatLog;                        
+                        _chatLogDict[chatLog.chatID] = chatLog;                        
                     }
                 }
             }

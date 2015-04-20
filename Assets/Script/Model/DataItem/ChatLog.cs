@@ -16,12 +16,12 @@ namespace MiniWeChat
   {
     public ChatLog() {}
     
-    private string _userId;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"userId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string userId
+    private string _chatID;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"chatID", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string chatID
     {
-      get { return _userId; }
-      set { _userId = value; }
+      get { return _chatID; }
+      set { _chatID = value; }
     }
     private long _date;
     [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"date", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
