@@ -8,40 +8,59 @@ namespace MiniWeChat
 {
     public class ChatFrame : MonoBehaviour
     {
+        [SerializeField]
         public Image _imageHead;
+        [SerializeField]
         public Text _labelUserName;
+        [SerializeField]
         public Text _labelLastChat;
+        [SerializeField]
         public Text _labelDate;
-
+        [SerializeField]
         public Button _buttonChatFrame;
 
-        private UserItem _userItem;
-        private ChatLog _chatLog;
+        protected ChatLog _chatLog;
 
         // Use this for initialization
-        void Start()
+        public virtual void Start()
         {
             _buttonChatFrame.onClick.AddListener(OnClickChatFrameButton);
         }
 
-        public void Show(ChatLog chatLog)
+        public virtual void Show(ChatLog chatLog)
         {
-            _userItem = GlobalContacts.GetInstance().GetUserItemById(chatLog.chatID);
             _chatLog = chatLog;
 
             // Set UserItem //
-            if (_userItem != null)
+
+            UserItem userItem = GlobalContacts.GetInstance().GetUserItemById(chatLog.chatID);
+            if (userItem != null)
             {
-                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
-                _labelUserName.text = _userItem.userName;
+                if (_imageHead)
+                {
+                    UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + userItem.headIndex);                    
+                }
+
+                if (_labelUserName)
+                {
+                    _labelUserName.text = userItem.userName;                    
+                }
             }
 
+
             // Set ChatItem //
-            _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.chatID).chatBody;
-            _labelDate.text = new DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm");
+            if (_labelLastChat)
+            {
+                _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.chatID).chatBody;                
+            }
+
+            if (_labelDate)
+            {
+                _labelDate.text = new DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm");                
+            }
         }
 
-        public void OnClickChatFrameButton()
+        public virtual void OnClickChatFrameButton()
         {
             StateManager.GetInstance().PushState<ChatPanel>(EUIType.ChatPanel, _chatLog);
         }
