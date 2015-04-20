@@ -61,11 +61,11 @@ namespace MiniWeChat
                         case ENetworkMessage.CREATE_GROUP_CHAT_RSP:
                             packet = Serializer.Deserialize<CreateGroupChatRsp>(streamForProto);
                             break;
-                        case ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_RSP:
-                            packet = Serializer.Deserialize<ChangeGroupChatMemberRsq>(streamForProto);
-                            break;
                         case ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_SYNC:
-                            packet = Serializer.Deserialize<ChangeGroupChatMemberSync>(streamForProto);
+                            packet = Serializer.Deserialize<ChangeFriendSync>(streamForProto);
+                            break;
+                        case ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_RSP:
+                            packet = Serializer.Deserialize<ChangeGroupChatMemberRsp>(streamForProto);
                             break;
                         case ENetworkMessage.GET_GROUP_INFO_RSP:
                             packet = Serializer.Deserialize<GetGroupInfoRsp>(streamForProto);

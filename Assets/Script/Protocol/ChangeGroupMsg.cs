@@ -7,13 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: ChangeGroupChatMemberMsg.proto
+// Generated from: ChangeGroupMsg.proto
 namespace protocol
 {
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupChatMemberRsq")]
-  public partial class ChangeGroupChatMemberRsq : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupChatMemberReq")]
+  public partial class ChangeGroupChatMemberReq : global::ProtoBuf.IExtensible
   {
-    public ChangeGroupChatMemberRsq() {}
+    public ChangeGroupChatMemberReq() {}
     
     private int _groupId;
     [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"groupId", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
@@ -22,9 +22,9 @@ namespace protocol
       get { return _groupId; }
       set { _groupId = value; }
     }
-    private protocol.ChangeGroupChatMemberRsq.ChangeType _changeType;
+    private protocol.ChangeGroupChatMemberReq.ChangeType _changeType;
     [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"changeType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public protocol.ChangeGroupChatMemberRsq.ChangeType changeType
+    public protocol.ChangeGroupChatMemberReq.ChangeType changeType
     {
       get { return _changeType; }
       set { _changeType = value; }
@@ -36,6 +36,14 @@ namespace protocol
       get { return _userId; }
     }
   
+    private string _groupName = "";
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"groupName", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string groupName
+    {
+      get { return _groupName; }
+      set { _groupName = value; }
+    }
     [global::ProtoBuf.ProtoContract(Name=@"ChangeType")]
     public enum ChangeType
     {

@@ -9,6 +9,7 @@
 
 // Generated from: GetPersonalInfoMsg.proto
 // Note: requires additional types generated from: UserData.proto
+// Note: requires additional types generated from: GroupData.proto
 namespace protocol
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GetPersonalInfoReq")]
@@ -31,6 +32,14 @@ namespace protocol
     {
       get { return _friendInfo; }
       set { _friendInfo = value; }
+    }
+    private bool _groupInfo = (bool)false;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"groupInfo", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue((bool)false)]
+    public bool groupInfo
+    {
+      get { return _groupInfo; }
+      set { _groupInfo = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -62,6 +71,13 @@ namespace protocol
     public global::System.Collections.Generic.List<protocol.UserItem> friends
     {
       get { return _friends; }
+    }
+  
+    private readonly global::System.Collections.Generic.List<protocol.GroupItem> _groups = new global::System.Collections.Generic.List<protocol.GroupItem>();
+    [global::ProtoBuf.ProtoMember(4, Name=@"groups", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<protocol.GroupItem> groups
+    {
+      get { return _groups; }
     }
   
     [global::ProtoBuf.ProtoContract(Name=@"ResultCode")]

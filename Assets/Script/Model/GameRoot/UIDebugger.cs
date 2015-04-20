@@ -59,6 +59,7 @@ namespace MiniWeChat
 
             GlobalChat.GetInstance().ClearLogDict();
             GlobalContacts.GetInstance().ClearFriendDict();
+            GlobalGroup.GetInstance().ClearGroupData();
 
             DirectoryInfo dirInfo = new DirectoryInfo(Application.persistentDataPath);
             foreach (var item in dirInfo.GetDirectories())

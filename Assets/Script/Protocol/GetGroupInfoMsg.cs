@@ -40,34 +40,13 @@ namespace protocol
       get { return _resultCode; }
       set { _resultCode = value; }
     }
-    private string _groupId;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"groupId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string groupId
+    private protocol.GroupItem _groupItem;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"groupItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public protocol.GroupItem groupItem
     {
-      get { return _groupId; }
-      set { _groupId = value; }
+      get { return _groupItem; }
+      set { _groupItem = value; }
     }
-    private string _groupName;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"groupName", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string groupName
-    {
-      get { return _groupName; }
-      set { _groupName = value; }
-    }
-    private string _createrId;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"createrId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string createrId
-    {
-      get { return _createrId; }
-      set { _createrId = value; }
-    }
-    private readonly global::System.Collections.Generic.List<string> _memberId = new global::System.Collections.Generic.List<string>();
-    [global::ProtoBuf.ProtoMember(5, Name=@"memberId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<string> memberId
-    {
-      get { return _memberId; }
-    }
-  
     [global::ProtoBuf.ProtoContract(Name=@"ResultCode")]
     public enum ResultCode
     {

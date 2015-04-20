@@ -16,6 +16,11 @@ namespace MiniWeChat
 
         private HashSet<string> _waitQueryMemberSet = new HashSet<string>();
 
+        public int Count
+        {
+            get { return _groupDict.Count; }
+        }
+
         #region LifeCycle
         
         public override void Init()
@@ -24,7 +29,14 @@ namespace MiniWeChat
             base.Init();
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
+            
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
+
             StartCoroutine(QueryMemberData());
+
+            LoadGroupData();
         }
 
         public override void Release()
@@ -32,6 +44,12 @@ namespace MiniWeChat
             base.Release();
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
+            
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
+
+            SaveAndClearGroupData();
         }
 
         #endregion
@@ -60,7 +78,7 @@ namespace MiniWeChat
         public bool ContainsMember(string groupID, string userID)
         {
             GroupItem group = GetGroup(groupID);
-            return false;
+            return group.memberUserId.Contains(groupID);
         }
 
         public GroupItem GetGroup(string groupID)
@@ -106,11 +124,21 @@ namespace MiniWeChat
                 && req.friendInfo)
             {
                 _groupDict.Clear();
-                //foreach (UserItem friend in rsp.friends)
-                //{
-                //    _groupDict[friend.userId] = friend;
-                //}
+                foreach (GroupItem group in rsp.groups)
+                {
+                    _groupDict[group.groupId] = group;
+                }
             }
+        }
+
+        public void OnTryLogin(uint iMessageType, object kParam)
+        {
+            LoadGroupData();
+        }
+
+        public void OnLogOutRsp(uint iMessageType, object kParam)
+        {
+            SaveAndClearGroupData();
         }
 
         #endregion
@@ -131,7 +159,7 @@ namespace MiniWeChat
             }
         }
 
-        private void SaveAndClearFriendDict()
+        private void SaveAndClearGroupData()
         {
             SaveGroupData();
             ClearGroupData();

@@ -8,7 +8,6 @@
 //------------------------------------------------------------------------------
 
 // Generated from: GroupData.proto
-// Note: requires additional types generated from: UserData.proto
 namespace protocol
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GroupItem")]
@@ -30,18 +29,18 @@ namespace protocol
       get { return _groupName; }
       set { _groupName = value; }
     }
-    private protocol.UserItem _creater;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"creater", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public protocol.UserItem creater
+    private string _createrUserId;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"createrUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string createrUserId
     {
-      get { return _creater; }
-      set { _creater = value; }
+      get { return _createrUserId; }
+      set { _createrUserId = value; }
     }
-    private readonly global::System.Collections.Generic.List<protocol.UserItem> _memberUser = new global::System.Collections.Generic.List<protocol.UserItem>();
-    [global::ProtoBuf.ProtoMember(4, Name=@"memberUser", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<protocol.UserItem> memberUser
+    private readonly global::System.Collections.Generic.List<string> _memberUserId = new global::System.Collections.Generic.List<string>();
+    [global::ProtoBuf.ProtoMember(4, Name=@"memberUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<string> memberUserId
     {
-      get { return _memberUser; }
+      get { return _memberUserId; }
     }
   
     private global::ProtoBuf.IExtension extensionObject;
