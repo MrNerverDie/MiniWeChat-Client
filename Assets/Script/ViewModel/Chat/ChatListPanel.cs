@@ -42,17 +42,12 @@ namespace MiniWeChat
             {
                 if (i >= _chatFrameList.Count)
                 {
-                    GameObject go = null;
-                    if (chatLog.targetType == ChatDataItem.TargetType.INDIVIDUAL)
-                    {
-                        go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.ChatFrame);
-
-                    }
-                    else
-                    {
-                        go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.GroupChatFrame);
-                    }
+                    GameObject go = AddChatFrame(chatLog);
                     _chatFrameList.Add(go.GetComponent<ChatFrame>());
+                }
+                else
+                {
+                    ResetChtFrame(i, chatLog);
                 }
                 _chatFrameList[i].Show(chatLog);
                 i++;
@@ -65,6 +60,31 @@ namespace MiniWeChat
                     }
                     _chatFrameList = _chatFrameList.GetRange(0, GlobalChat.GetInstance().Count);
                 }
+            }
+        }
+
+        private GameObject AddChatFrame(ChatLog chatLog)
+        {
+            if (chatLog.targetType == ChatDataItem.TargetType.INDIVIDUAL)
+            {
+                return UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.ChatFrame);
+
+            }
+            else
+            {
+                return UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.GroupChatFrame);
+            }
+        }
+
+        private void ResetChtFrame(int index, ChatLog chatLog)
+        {
+            if (chatLog.targetType != _chatFrameList[index].GetTargetType())
+            {
+                int siblingIndex = _chatFrameList[index].transform.GetSiblingIndex();
+                GameObject.Destroy(_chatFrameList[index].gameObject);
+                GameObject newGo = AddChatFrame(chatLog);
+                _chatFrameList[index] = newGo.GetComponent<ChatFrame>();
+                newGo.transform.SetSiblingIndex(siblingIndex);
             }
         }
     }

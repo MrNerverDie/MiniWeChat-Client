@@ -111,6 +111,23 @@ namespace MiniWeChat
             }
         }
 
+        private static int SortGroupItemByName(GroupItem u1, GroupItem u2)
+        {
+            return (int)(u1.groupName.CompareTo(u2.groupName));
+        }
+
+
+        public List<GroupItem>.Enumerator GetEnumerator()
+        {
+            List<GroupItem> sortedGroupList = new List<GroupItem>();
+            foreach (var group in _groupDict.Values)
+            {
+                sortedGroupList.Add(group);
+            }
+            sortedGroupList.Sort(SortGroupItemByName);
+            return sortedGroupList.GetEnumerator();
+        }
+
         #endregion
 
         #region MessageHandler

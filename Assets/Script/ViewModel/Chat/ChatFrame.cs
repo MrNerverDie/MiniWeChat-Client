@@ -65,6 +65,11 @@ namespace MiniWeChat
             StateManager.GetInstance().PushState<ChatPanel>(EUIType.ChatPanel, _chatLog);
         }
 
+        public ChatDataItem.TargetType GetTargetType()
+        {
+            return _chatLog.targetType;
+        }
+
     }
 }
 

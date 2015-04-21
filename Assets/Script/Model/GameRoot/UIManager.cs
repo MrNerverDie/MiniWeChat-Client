@@ -141,6 +141,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.GroupMemberFrame, "Group/GroupMemberFrame");
             _UIPathDict.Add(EUIType.GroupMemberHeadFrame, "Group/GroupMemberHeadFrame");
             _UIPathDict.Add(EUIType.GroupMemberHeadIcon, "Group/GroupMemberHeadIcon");
+            _UIPathDict.Add(EUIType.GroupFrame, "Group/GroupFrame");
             _UIPathDict.Add(EUIType.GroupChatFrame, "Chat/GroupChatFrame");
             _UIPathDict.Add(EUIType.GroupChatPanel, "Chat/GroupChatPanel");
         }
@@ -182,6 +183,7 @@ namespace MiniWeChat
         SelectGroupPanel,
         GroupChatFrame,
         GroupChatPanel,
+        GroupFrame,
     }
 
     public enum EAtlasName
