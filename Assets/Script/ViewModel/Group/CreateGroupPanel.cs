@@ -22,23 +22,29 @@ namespace MiniWeChat
         private GroupItem _groupItem;
         private HashSet<string> _selectUserIdSet = new HashSet<string>();
 
-        public override void OnEnter(object param = null)
+        public override void OnEnter(object param)
         {
             base.OnEnter(param);
             UIManager.GetInstance().AddChild(transform.Find("TopBar").gameObject, EUIType.BackButton);
 
             _groupItem = param as GroupItem;
 
+            InitMemberFrames();
+
+            _buttonConfirm.onClick.AddListener(OnClickConfirmButton);
+        }
+
+        private void InitMemberFrames()
+        {
+
             foreach (var friendItem in GlobalContacts.GetInstance())
             {
                 GameObject go = UIManager.GetInstance().AddChild(_gridSelectMember.gameObject, EUIType.GroupMemberFrame);
                 go.GetComponent<GroupMemberFrame>().Show(friendItem);
             }
-            _gridSelectMember.GetComponent<RectTransform>().sizeDelta= new Vector2(
+            _gridSelectMember.GetComponent<RectTransform>().sizeDelta = new Vector2(
                 GlobalVars.DEFAULT_SCREEN_WIDTH,
                 GlobalContacts.GetInstance().Count * GROUP_MEMBER_FRAME_HEIGHT);
-
-            _buttonConfirm.onClick.AddListener(OnClickConfirmButton);
         }
 
         public override void OnExit()

@@ -23,7 +23,6 @@ namespace MiniWeChat
                     _labelGuestUserName.text = _groupItem.groupName;
                 }
             }
-
         }
 
         public override void OnExit()
@@ -34,7 +33,7 @@ namespace MiniWeChat
 
         public override void OnClickFriendDetailButton()
         {
-            StateManager.GetInstance().PushState<CreateGroupPanel>(EUIType.CreateGroupPanel, _groupItem);
+            StateManager.GetInstance().PushState<CreateGroupPanel>(EUIType.GroupDetailPanel, _groupItem);
         }
 
         public override void OnClickSendEmotionButton(int index)
