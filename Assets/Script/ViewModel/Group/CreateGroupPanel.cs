@@ -112,7 +112,7 @@ namespace MiniWeChat
 
         public void OnClickSelectGroup()
         {
-            StateManager.GetInstance().ReplaceState<SelectGroupPanel>(EUIType.SelectGroupPanel);
+            StateManager.GetInstance().PushState<SelectGroupPanel>(EUIType.SelectGroupPanel);
         }
 
 

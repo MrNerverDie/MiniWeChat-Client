@@ -91,7 +91,10 @@ namespace MiniWeChat
             }
             else
             {
-                throw new UnityException("No such group : " + groupID);
+                return new GroupItem
+                {
+                    groupId = groupID
+                };
             }
         }
 
@@ -121,6 +124,7 @@ namespace MiniWeChat
 
         public List<GroupItem>.Enumerator GetEnumerator()
         {
+            Log4U.LogDebug(_groupDict);
             List<GroupItem> sortedGroupList = new List<GroupItem>();
             foreach (var group in _groupDict.Values)
             {
@@ -153,16 +157,30 @@ namespace MiniWeChat
         public void OnChangeGroupSync(uint iMessageType, object kParam)
         {
             ChangeGroupSync sync = kParam as ChangeGroupSync;
+            GroupItem group = GetGroup(sync.groupId);
             switch (sync.changeType)
             {
                 case ChangeGroupSync.ChangeType.ADD:
-                    GroupItem group = GetGroup(sync.groupId);
+                    foreach (var item in sync.userId)
+                    {
+                        group.memberUserId.Add(item);
+                    }
                     break;
                 case ChangeGroupSync.ChangeType.DELETE:
+                    foreach (var item in sync.userId)
+                    {
+                        group.memberUserId.Remove(item);
+                    }
                     break;
                 case ChangeGroupSync.ChangeType.UPDATE_INFO:
+                    group.groupName = sync.groupName;
                     break;
                 case ChangeGroupSync.ChangeType.UPDATE_MEMBER:
+                    group.memberUserId.Clear();
+                    foreach (var item in sync.userId)
+                    {
+                        group.memberUserId.Add(item);
+                    }
                     break;
                 default:
                     break;

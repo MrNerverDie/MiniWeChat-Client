@@ -44,6 +44,7 @@ namespace MiniWeChat
             AddSingleton<GlobalUser>(_rootObj);
             AddSingleton<GlobalContacts>(_rootObj);
             AddSingleton<GlobalChat>(_rootObj);
+            AddSingleton<GlobalGroup>(_rootObj);
             AddSingleton<UIManager>(_rootObj);
             AddSingleton<StateManager>(_rootObj);
             AddSingleton<DialogManager>(_rootObj);

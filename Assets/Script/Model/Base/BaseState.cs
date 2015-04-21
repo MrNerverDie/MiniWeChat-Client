@@ -33,9 +33,13 @@ namespace MiniWeChat
         {
             OnHide();
 
-            transform.localScale = Vector3.one;
-            transform.DOScale(Vector3.zero * ORIGINAL_SCALE, FADE_DURATION);
-            DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 0f, FADE_DURATION);
+            if (gameObject.activeSelf)
+            {
+                transform.localScale = Vector3.one;
+                transform.DOScale(Vector3.zero * ORIGINAL_SCALE, FADE_DURATION);
+                DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 0f, FADE_DURATION);
+            }
+
         }
 
         /// <summary>
