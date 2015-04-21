@@ -34,6 +34,9 @@ namespace MiniWeChat
 
         public void RefreshChatFrames()
         {
+            _chatGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, CHAT_FRAME_HEIGHT * GlobalChat.GetInstance().Count);
+            _scrollChatList.verticalNormalizedPosition = 1.0f;
+
             int i = 0;
             foreach (ChatLog chatLog in GlobalChat.GetInstance())
             {
@@ -63,9 +66,6 @@ namespace MiniWeChat
                     _chatFrameList = _chatFrameList.GetRange(0, GlobalChat.GetInstance().Count);
                 }
             }
-
-            _chatGrid.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, CHAT_FRAME_HEIGHT * GlobalChat.GetInstance().Count);
-            _scrollChatList.verticalNormalizedPosition = 1.0f;
         }
     }
 }

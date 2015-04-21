@@ -12,9 +12,10 @@ namespace MiniWeChat
 
         public override void OnEnter(object param = null)
         {
+            _chatLog = param as ChatLog;
+
             Init(param);
 
-            _chatLog = param as ChatLog;
             _groupItem = GlobalGroup.GetInstance().GetGroup(_chatLog.chatID);
             if (_groupItem != null)
             {

@@ -32,9 +32,10 @@ namespace MiniWeChat
 
         public override void OnEnter(object param)
         {
-            Init(param);
 
             _chatLog = param as ChatLog;
+
+            Init(param);
 
             _guestUserItem = GlobalContacts.GetInstance().GetUserItemById(_chatLog.chatID);
             _buttonFriendDetail.onClick.AddListener(OnClickFriendDetailButton);

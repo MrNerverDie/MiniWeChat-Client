@@ -95,6 +95,18 @@ namespace MiniWeChat
         }
 
         /// <summary>
+        /// 对界面进行压栈
+        /// </summary>
+        /// <typeparam name="T">界面的类型</typeparam>
+        /// <param name="uiType">界面对应的uiType</param>
+        /// <param name="param">界面对应的压栈参数</param>
+        public void ReplaceState<T>(EUIType uiType, object param = null) where T : BaseState
+        {
+            GameObject go = UIManager.GetInstance().GetSingleUI(uiType);
+            ReplaceState<T>(go, param);
+        }
+
+        /// <summary>
         /// 对栈顶的界面进行Replace
         /// </summary>
         /// <typeparam name="T">下一个界面的类型</typeparam>

@@ -15,9 +15,9 @@ namespace protocol
   {
     public ChangeGroupChatMemberReq() {}
     
-    private int _groupId;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"groupId", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int groupId
+    private string _groupId;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"groupId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string groupId
     {
       get { return _groupId; }
       set { _groupId = value; }

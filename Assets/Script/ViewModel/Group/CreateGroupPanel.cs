@@ -32,19 +32,34 @@ namespace MiniWeChat
             InitMemberFrames();
 
             _buttonConfirm.onClick.AddListener(OnClickConfirmButton);
+
+            _buttonSelectGroup.gameObject.SetActive(false);
+            if (_groupItem == null)
+            {
+                _buttonSelectGroup.gameObject.SetActive(true);
+                _buttonSelectGroup.onClick.AddListener(OnClickSelectGroup);
+            }
         }
 
         private void InitMemberFrames()
         {
+            List<string> groupMemberIDs = new List<string>();
+            if (_groupItem != null)
+            {
+                groupMemberIDs = _groupItem.memberUserId;
+            }
 
             foreach (var friendItem in GlobalContacts.GetInstance())
             {
-                GameObject go = UIManager.GetInstance().AddChild(_gridSelectMember.gameObject, EUIType.GroupMemberFrame);
-                go.GetComponent<GroupMemberFrame>().Show(friendItem);
+                if (!groupMemberIDs.Contains(friendItem.userId))
+                {
+                    GameObject go = UIManager.GetInstance().AddChild(_gridSelectMember.gameObject, EUIType.GroupMemberFrame);
+                    go.GetComponent<GroupMemberFrame>().Show(friendItem);
+                }
             }
             _gridSelectMember.GetComponent<RectTransform>().sizeDelta = new Vector2(
                 GlobalVars.DEFAULT_SCREEN_WIDTH,
-                GlobalContacts.GetInstance().Count * GROUP_MEMBER_FRAME_HEIGHT);
+                (GlobalContacts.GetInstance().Count - groupMemberIDs.Count) * GROUP_MEMBER_FRAME_HEIGHT);
         }
 
         public override void OnExit()
@@ -71,14 +86,35 @@ namespace MiniWeChat
 
         public void OnClickConfirmButton()
         {
-            CreateGroupChatReq req = new CreateGroupChatReq();
-            foreach (var item in _selectUserIdSet)
+            if (_groupItem == null)
             {
-                req.userId.Add(item);
-            }
+                CreateGroupChatReq req = new CreateGroupChatReq();
+                foreach (var item in _selectUserIdSet)
+                {
+                    req.userId.Add(item);
+                }
 
-            NetworkManager.GetInstance().SendPacket<CreateGroupChatReq>(ENetworkMessage.CREATE_GROUP_CHAT_REQ, req);
+                NetworkManager.GetInstance().SendPacket<CreateGroupChatReq>(ENetworkMessage.CREATE_GROUP_CHAT_REQ, req);
+            }
+            else
+            {
+                ChangeGroupChatMemberReq req = new ChangeGroupChatMemberReq();
+                req.changeType = ChangeGroupChatMemberReq.ChangeType.ADD;
+                req.groupId = _groupItem.groupId;
+                foreach (var item in _selectUserIdSet)
+                {
+                    req.userId.Add(item);
+                }
+
+                NetworkManager.GetInstance().SendPacket<ChangeGroupChatMemberReq>(ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_REQ, req);
+            }
         }
+
+        public void OnClickSelectGroup()
+        {
+            StateManager.GetInstance().ReplaceState<SelectGroupPanel>(EUIType.SelectGroupPanel);
+        }
+
 
         #endregion
 

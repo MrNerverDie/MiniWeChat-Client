@@ -83,17 +83,25 @@ namespace MiniWeChat
 
         public void OnClickSetGroupName()
         {
-
+            DialogManager.GetInstance().CreateDoubleButtonInputDialog();
         }
 
         public void OnClickAddGroupMember()
         {
-
+            StateManager.GetInstance().PushState<CreateGroupPanel>(EUIType.CreateGroupPanel, _groupItem);
         }
 
         public void OnClickExitGroup()
         {
+            ChangeGroupChatMemberReq req = new ChangeGroupChatMemberReq
+            {
+                changeType = ChangeGroupChatMemberReq.ChangeType.DELETE,
+                groupId = _groupItem.groupId,
+            };
 
+            req.userId.Add(GlobalUser.GetInstance().UserId);
+
+            NetworkManager.GetInstance().SendPacket<ChangeGroupChatMemberReq>(ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_REQ, req);
         }
 
         #endregion

@@ -85,7 +85,7 @@ namespace MiniWeChat
 
         public void OnSocketDisConnected(uint iMessageType, object kParam)
         {
-            MessageDispatcher.GetInstance().DispatchMessage((uint)ENetworkMessage.OFFLINE_SYNC, new OffLineSync { causeCode = OffLineSync.CauseCode.KEEP_ALIVE_FALSE });
+            //MessageDispatcher.GetInstance().DispatchMessage((uint)ENetworkMessage.OFFLINE_SYNC, new OffLineSync { causeCode = OffLineSync.CauseCode.KEEP_ALIVE_FALSE });
 
             StartCoroutine(BeginTryConnect());
         }

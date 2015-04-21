@@ -8,7 +8,7 @@ message ChangeGroupChatMemberReq{
 		DELETE = 1;
 		UPDATE = 2;
 	}
-	required int32 groupId = 1;
+	required string groupId = 1;
 	required ChangeType changeType = 2;
 	repeated string userId = 3;
 	optional string groupName = 4;
