@@ -109,7 +109,7 @@ namespace MiniWeChat
                 {
                     Sprite sprite = go.GetComponent<SpriteRenderer>().sprite;
                     image.sprite = sprite; 
-                }catch(System.NullReferenceException ex)
+                }catch(System.NullReferenceException)
                 {
                     Log4U.LogError(eAtlasName, spriteName);
                 }
@@ -142,6 +142,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.GroupMemberHeadFrame, "Group/GroupMemberHeadFrame");
             _UIPathDict.Add(EUIType.GroupMemberHeadIcon, "Group/GroupMemberHeadIcon");
             _UIPathDict.Add(EUIType.GroupChatFrame, "Chat/GroupChatFrame");
+            _UIPathDict.Add(EUIType.GroupChatPanel, "Chat/GroupChatPanel");
         }
 
         private void InitAtlasPathDict()
@@ -180,6 +181,7 @@ namespace MiniWeChat
         GroupMemberHeadIcon,
         SelectGroupPanel,
         GroupChatFrame,
+        GroupChatPanel,
     }
 
     public enum EAtlasName

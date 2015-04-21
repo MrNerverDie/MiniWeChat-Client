@@ -39,7 +39,16 @@ namespace MiniWeChat
             {
                 if (i >= _chatFrameList.Count)
                 {
-                    GameObject go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.ChatFrame);
+                    GameObject go = null;
+                    if (chatLog.targetType == ChatDataItem.TargetType.INDIVIDUAL)
+                    {
+                        go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.ChatFrame);
+
+                    }
+                    else
+                    {
+                        go = UIManager.GetInstance().AddChild(_chatGrid.gameObject, EUIType.GroupChatFrame);
+                    }
                     _chatFrameList.Add(go.GetComponent<ChatFrame>());
                 }
                 _chatFrameList[i].Show(chatLog);

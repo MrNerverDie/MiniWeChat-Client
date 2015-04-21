@@ -8,39 +8,45 @@ namespace MiniWeChat
 {
     public class ChatPanel : BaseState
     {
+        [SerializeField]
         public InputField _inputChat;
+        [SerializeField]
         public ScrollRect _scrollChatLog;
+        [SerializeField]
         public Button _buttonSend;
+        [SerializeField]
         public Button _buttonFriendDetail;
+        [SerializeField]
         public VerticalLayoutGroup _gridChatBubble;
+        [SerializeField]
         public Text _labelGuestUserName;
+        [SerializeField]
         public Toggle _toggleShowEmotion;
+        [SerializeField]
         public HorizontalLayoutGroup _gridEmotion;
 
         private UserItem _guestUserItem;
-        private ChatLog _chatLog;
+        protected ChatLog _chatLog;
 
-        private List<ChatBubbleFrame> _chatBubbleList;
+        protected List<ChatBubbleFrame> _chatBubbleList;
 
-        public override void OnEnter(object param = null)
+        public override void OnEnter(object param)
         {
-            base.OnEnter(param);
+            Init(param);
+
             _chatLog = param as ChatLog;
+
             _guestUserItem = GlobalContacts.GetInstance().GetUserItemById(_chatLog.chatID);
-
-            UIManager.GetInstance().AddChild(transform.Find("TopBar").gameObject, EUIType.BackButton);
-
-            _buttonSend.onClick.AddListener(OnClickSendButton);
             _buttonFriendDetail.onClick.AddListener(OnClickFriendDetailButton);
-            _toggleShowEmotion.onValueChanged.AddListener(OnClickShowEmotionButton);
-
             if (_guestUserItem != null)
             {
-                _labelGuestUserName.text = _guestUserItem.userName;                
+                if (_labelGuestUserName)
+                {
+                    _labelGuestUserName.text = _guestUserItem.userName;                    
+                }
             }
 
-            _chatBubbleList = new List<ChatBubbleFrame>();
-            RefreshChatLog();
+
         }
 
         public override void OnExit()
@@ -78,7 +84,7 @@ namespace MiniWeChat
             UpdateChatBubbleGrid();
         }
 
-#region ButtonHandler
+#region EventListener
 
         public void OnClickSendButton()
         {
@@ -104,7 +110,7 @@ namespace MiniWeChat
             _inputChat.text = "";
         }
 
-        public void OnClickFriendDetailButton()
+        public virtual void OnClickFriendDetailButton()
         {
             StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _guestUserItem);
         }
@@ -118,7 +124,7 @@ namespace MiniWeChat
             }));
         }
 
-        public void OnClickSendEmotionButton(int index)
+        public virtual void OnClickSendEmotionButton(int index)
         {
             ChatDataItem chatDataItem = new ChatDataItem
             {
@@ -127,6 +133,7 @@ namespace MiniWeChat
                 date = System.DateTime.Now.Ticks,
                 chatType = ChatDataItem.ChatType.IMAGE,
                 chatBody = index.ToString(),
+                targetType = ChatDataItem.TargetType.INDIVIDUAL
             };
             GlobalChat.GetInstance().SendChatReq(chatDataItem);
 
@@ -157,7 +164,7 @@ namespace MiniWeChat
 
         #endregion
 
-        private void AddBubbleFrame(ChatDataItem chatDataItem)
+        protected void AddBubbleFrame(ChatDataItem chatDataItem)
         {
             EUIType uiType = (chatDataItem.sendUserId == GlobalUser.GetInstance().UserId) ? EUIType.PersonalChatBubbleFrame : EUIType.FriendChatBubbleFrame;
             GameObject bubbleFrame = UIManager.GetInstance().AddChild(_gridChatBubble.gameObject, uiType);
@@ -165,7 +172,7 @@ namespace MiniWeChat
             _chatBubbleList.Add(bubbleFrame.GetComponent<ChatBubbleFrame>()); 
         }
 
-        private void UpdateChatBubbleGrid()
+        protected void UpdateChatBubbleGrid()
         {
             float sumHeight = 0;
             foreach (var item in _chatBubbleList)
@@ -175,6 +182,19 @@ namespace MiniWeChat
 
             _gridChatBubble.GetComponent<RectTransform>().sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, sumHeight);
             _scrollChatLog.verticalNormalizedPosition = 0;
+        }
+
+        protected void Init(object param)
+        {
+            base.OnEnter(param);
+
+            UIManager.GetInstance().AddChild(transform.Find("TopBar").gameObject, EUIType.BackButton);
+
+            _buttonSend.onClick.AddListener(OnClickSendButton);
+            _toggleShowEmotion.onValueChanged.AddListener(OnClickShowEmotionButton);
+
+            _chatBubbleList = new List<ChatBubbleFrame>();
+            RefreshChatLog();
         }
     }
 }

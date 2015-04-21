@@ -33,6 +33,11 @@ namespace MiniWeChat
                 _labelDate.text = new System.DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm");
             }
         }
+
+        public override void OnClickChatFrameButton()
+        {
+            StateManager.GetInstance().PushState<GroupChatPanel>(EUIType.GroupChatPanel, _chatLog);
+        }
     }
 }
 

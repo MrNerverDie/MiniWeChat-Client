@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using protocol;
 
+// ChangeGroup To Do //
 namespace MiniWeChat
 {
     public class CreateGroupPanel : BaseState
