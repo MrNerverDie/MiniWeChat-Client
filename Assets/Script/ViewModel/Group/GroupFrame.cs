@@ -23,12 +23,14 @@ namespace MiniWeChat
                 _labelUserName.text = _groupItem.groupName;
             }
 
-            _buttonEnterGroup.onClick.AddListener(OnClickEnterGroup);
+            _buttonEnterGroup.onClick.AddListener(OnClickEnterGroupChat);
         }
 
-        public void OnClickEnterGroup()
+        public void OnClickEnterGroupChat()
         {
-
+            ChatLog chatLog = GlobalChat.GetInstance().GetChatLog(_groupItem.groupId);
+            StateManager.GetInstance().ClearStatesExceptBottom();
+            StateManager.GetInstance().PushState<GroupChatPanel>(EUIType.GroupChatPanel, chatLog);
         }
 		
     }

@@ -2,18 +2,18 @@ package protocol;
 
 option java_package = "protocol.Msg";
 
-message ChangeGroupChatMemberReq{
+message ChangeGroupReq{
 	enum ChangeType{
 		ADD = 0;
 		DELETE = 1;
-		UPDATE = 2;
+		UPDATE_INFO = 2;
 	}
 	required string groupId = 1;
 	required ChangeType changeType = 2;
 	repeated string userId = 3;
 	optional string groupName = 4;
 }
-message ChangeGroupChatMemberRsp{
+message ChangeGroupRsp{
 	enum ResultCode{
     	SUCCESS = 0;
 		FAIL = 1;
@@ -21,12 +21,15 @@ message ChangeGroupChatMemberRsp{
 	}
 	required ResultCode resultCode = 1;
 }
-message ChangeGroupChatMemberSync{
-	enum Type{
+message ChangeGroupSync{
+	enum ChangeType{
     	ADD = 0;
 		DELETE = 1;
-		REFRESH = 2;
+		UPDATE_INFO = 2;
+		UPDATE_MEMBER = 3;
 	}
-	required Type type = 1;
-	repeated string userId = 2;
+	required string groupId = 1;
+	required ChangeType changeType = 2;
+	repeated string userId = 3;
+	optional string groupName = 4;
 }

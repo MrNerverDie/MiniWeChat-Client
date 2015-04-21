@@ -98,15 +98,15 @@ namespace MiniWeChat
             }
             else
             {
-                ChangeGroupChatMemberReq req = new ChangeGroupChatMemberReq();
-                req.changeType = ChangeGroupChatMemberReq.ChangeType.ADD;
+                ChangeGroupReq req = new ChangeGroupReq();
+                req.changeType = ChangeGroupReq.ChangeType.ADD;
                 req.groupId = _groupItem.groupId;
                 foreach (var item in _selectUserIdSet)
                 {
                     req.userId.Add(item);
                 }
 
-                NetworkManager.GetInstance().SendPacket<ChangeGroupChatMemberReq>(ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_REQ, req);
+                NetworkManager.GetInstance().SendPacket<ChangeGroupReq>(ENetworkMessage.CHANGE_GROUP_REQ, req);
             }
         }
 

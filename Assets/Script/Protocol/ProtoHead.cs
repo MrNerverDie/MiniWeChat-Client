@@ -86,14 +86,14 @@ namespace protocol
       [global::ProtoBuf.ProtoEnum(Name=@"CREATE_GROUP_CHAT_RSP", Value=23)]
       CREATE_GROUP_CHAT_RSP = 23,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_GROUP_CHAT_MEMBER_REQ", Value=24)]
-      CHANGE_GROUP_CHAT_MEMBER_REQ = 24,
+      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_GROUP_REQ", Value=24)]
+      CHANGE_GROUP_REQ = 24,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_GROUP_CHAT_MEMBER_RSP", Value=25)]
-      CHANGE_GROUP_CHAT_MEMBER_RSP = 25,
+      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_GROUP_RSP", Value=25)]
+      CHANGE_GROUP_RSP = 25,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_GROUP_CHAT_MEMBER_SYNC", Value=26)]
-      CHANGE_GROUP_CHAT_MEMBER_SYNC = 26,
+      [global::ProtoBuf.ProtoEnum(Name=@"CHANGE_GROUP_SYNC", Value=26)]
+      CHANGE_GROUP_SYNC = 26,
             
       [global::ProtoBuf.ProtoEnum(Name=@"GET_GROUP_INFO_REQ", Value=27)]
       GET_GROUP_INFO_REQ = 27,

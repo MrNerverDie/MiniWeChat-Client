@@ -10,10 +10,10 @@
 // Generated from: ChangeGroupMsg.proto
 namespace protocol
 {
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupChatMemberReq")]
-  public partial class ChangeGroupChatMemberReq : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupReq")]
+  public partial class ChangeGroupReq : global::ProtoBuf.IExtensible
   {
-    public ChangeGroupChatMemberReq() {}
+    public ChangeGroupReq() {}
     
     private string _groupId;
     [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"groupId", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -22,9 +22,9 @@ namespace protocol
       get { return _groupId; }
       set { _groupId = value; }
     }
-    private protocol.ChangeGroupChatMemberReq.ChangeType _changeType;
+    private protocol.ChangeGroupReq.ChangeType _changeType;
     [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"changeType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public protocol.ChangeGroupChatMemberReq.ChangeType changeType
+    public protocol.ChangeGroupReq.ChangeType changeType
     {
       get { return _changeType; }
       set { _changeType = value; }
@@ -54,8 +54,8 @@ namespace protocol
       [global::ProtoBuf.ProtoEnum(Name=@"DELETE", Value=1)]
       DELETE = 1,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"UPDATE", Value=2)]
-      UPDATE = 2
+      [global::ProtoBuf.ProtoEnum(Name=@"UPDATE_INFO", Value=2)]
+      UPDATE_INFO = 2
     }
   
     private global::ProtoBuf.IExtension extensionObject;
@@ -63,14 +63,14 @@ namespace protocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupChatMemberRsp")]
-  public partial class ChangeGroupChatMemberRsp : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupRsp")]
+  public partial class ChangeGroupRsp : global::ProtoBuf.IExtensible
   {
-    public ChangeGroupChatMemberRsp() {}
+    public ChangeGroupRsp() {}
     
-    private protocol.ChangeGroupChatMemberRsp.ResultCode _resultCode;
+    private protocol.ChangeGroupRsp.ResultCode _resultCode;
     [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"resultCode", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public protocol.ChangeGroupChatMemberRsp.ResultCode resultCode
+    public protocol.ChangeGroupRsp.ResultCode resultCode
     {
       get { return _resultCode; }
       set { _resultCode = value; }
@@ -94,27 +94,42 @@ namespace protocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupChatMemberSync")]
-  public partial class ChangeGroupChatMemberSync : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupSync")]
+  public partial class ChangeGroupSync : global::ProtoBuf.IExtensible
   {
-    public ChangeGroupChatMemberSync() {}
+    public ChangeGroupSync() {}
     
-    private protocol.ChangeGroupChatMemberSync.Type _type;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public protocol.ChangeGroupChatMemberSync.Type type
+    private string _groupId;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"groupId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string groupId
     {
-      get { return _type; }
-      set { _type = value; }
+      get { return _groupId; }
+      set { _groupId = value; }
+    }
+    private protocol.ChangeGroupSync.ChangeType _changeType;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"changeType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public protocol.ChangeGroupSync.ChangeType changeType
+    {
+      get { return _changeType; }
+      set { _changeType = value; }
     }
     private readonly global::System.Collections.Generic.List<string> _userId = new global::System.Collections.Generic.List<string>();
-    [global::ProtoBuf.ProtoMember(2, Name=@"userId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, Name=@"userId", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<string> userId
     {
       get { return _userId; }
     }
   
-    [global::ProtoBuf.ProtoContract(Name=@"Type")]
-    public enum Type
+    private string _groupName = "";
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"groupName", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string groupName
+    {
+      get { return _groupName; }
+      set { _groupName = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"ChangeType")]
+    public enum ChangeType
     {
             
       [global::ProtoBuf.ProtoEnum(Name=@"ADD", Value=0)]
@@ -123,8 +138,11 @@ namespace protocol
       [global::ProtoBuf.ProtoEnum(Name=@"DELETE", Value=1)]
       DELETE = 1,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"REFRESH", Value=2)]
-      REFRESH = 2
+      [global::ProtoBuf.ProtoEnum(Name=@"UPDATE_INFO", Value=2)]
+      UPDATE_INFO = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"UPDATE_MEMBER", Value=3)]
+      UPDATE_MEMBER = 3
     }
   
     private global::ProtoBuf.IExtension extensionObject;

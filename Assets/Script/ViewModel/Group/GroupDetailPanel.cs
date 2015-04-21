@@ -93,15 +93,15 @@ namespace MiniWeChat
 
         public void OnClickExitGroup()
         {
-            ChangeGroupChatMemberReq req = new ChangeGroupChatMemberReq
+            ChangeGroupReq req = new ChangeGroupReq
             {
-                changeType = ChangeGroupChatMemberReq.ChangeType.DELETE,
+                changeType = ChangeGroupReq.ChangeType.DELETE,
                 groupId = _groupItem.groupId,
             };
 
             req.userId.Add(GlobalUser.GetInstance().UserId);
 
-            NetworkManager.GetInstance().SendPacket<ChangeGroupChatMemberReq>(ENetworkMessage.CHANGE_GROUP_CHAT_MEMBER_REQ, req);
+            NetworkManager.GetInstance().SendPacket<ChangeGroupReq>(ENetworkMessage.CHANGE_GROUP_REQ, req);
         }
 
         #endregion

@@ -15,6 +15,8 @@ namespace MiniWeChat
         {
             base.OnEnter(param);
             UIManager.GetInstance().AddChild(transform.Find("TopBar").gameObject, EUIType.BackButton);
+
+            InitGroupFrames();
         }
 
         public override void OnExit()

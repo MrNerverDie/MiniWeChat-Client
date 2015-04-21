@@ -29,7 +29,8 @@ namespace MiniWeChat
             base.Init();
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
-            
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);
+
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
@@ -44,7 +45,8 @@ namespace MiniWeChat
             base.Release();
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
-            
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);            
+
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
@@ -145,6 +147,25 @@ namespace MiniWeChat
                 {
                     _groupDict[group.groupId] = group;
                 }
+            }
+        }
+
+        public void OnChangeGroupSync(uint iMessageType, object kParam)
+        {
+            ChangeGroupSync sync = kParam as ChangeGroupSync;
+            switch (sync.changeType)
+            {
+                case ChangeGroupSync.ChangeType.ADD:
+                    GroupItem group = GetGroup(sync.groupId);
+                    break;
+                case ChangeGroupSync.ChangeType.DELETE:
+                    break;
+                case ChangeGroupSync.ChangeType.UPDATE_INFO:
+                    break;
+                case ChangeGroupSync.ChangeType.UPDATE_MEMBER:
+                    break;
+                default:
+                    break;
             }
         }
 
