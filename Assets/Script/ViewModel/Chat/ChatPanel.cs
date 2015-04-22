@@ -86,7 +86,7 @@ namespace MiniWeChat
 
 #region EventListener
 
-        public void OnClickSendButton()
+        public virtual void OnClickSendButton()
         {
             if (_inputChat.text == "")
             {

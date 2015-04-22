@@ -40,6 +40,11 @@ namespace MiniWeChat
             int i = 0;
             foreach (ChatLog chatLog in GlobalChat.GetInstance())
             {
+                if (GlobalChat.GetInstance().GetLastChat(chatLog.chatID) == null)
+                {
+                    continue;
+                }
+
                 if (i >= _chatFrameList.Count)
                 {
                     GameObject go = AddChatFrame(chatLog);

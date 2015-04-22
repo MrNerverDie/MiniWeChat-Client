@@ -55,7 +55,14 @@ namespace MiniWeChat
                 ChatDataItem lastChat = GlobalChat.GetInstance().GetLastChat(chatLog.chatID);
                 if (lastChat != null)
                 {
-                    _labelLastChat.text = lastChat.chatBody;
+                    if (lastChat.chatType == ChatDataItem.ChatType.TEXT)
+                    {
+                        _labelLastChat.text = lastChat.chatBody;
+                    }
+                    else if (lastChat.chatType == ChatDataItem.ChatType.IMAGE)
+                    {
+                        _labelLastChat.text = "[表情]";
+                    }
                 }                
             }
 

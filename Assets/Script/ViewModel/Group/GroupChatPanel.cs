@@ -54,6 +54,30 @@ namespace MiniWeChat
 
             UpdateChatBubbleGrid();
         }
+        public override void OnClickSendButton()
+        {
+            if (_inputChat.text == "")
+            {
+                return;
+            }
+
+            ChatDataItem chatDataItem = new ChatDataItem
+            {
+                sendUserId = GlobalUser.GetInstance().UserId,
+                receiveUserId = _groupItem.groupId,
+                date = System.DateTime.Now.Ticks,
+                chatType = ChatDataItem.ChatType.TEXT,
+                chatBody = _inputChat.text,
+                targetType = ChatDataItem.TargetType.GROUP,
+            };
+            GlobalChat.GetInstance().SendChatReq(chatDataItem);
+
+            AddBubbleFrame(chatDataItem);
+
+            UpdateChatBubbleGrid();
+
+            _inputChat.text = "";
+        }
     }
 }
 
