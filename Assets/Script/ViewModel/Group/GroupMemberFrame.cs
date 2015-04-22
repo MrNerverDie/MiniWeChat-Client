@@ -55,6 +55,12 @@ namespace MiniWeChat
                     check = check,
                 });
         }
+
+        public void SetToggleInactive()
+        {
+            _toggleAddUser.isOn = true;
+            _toggleAddUser.interactable = false;
+        }
     }
 }
 

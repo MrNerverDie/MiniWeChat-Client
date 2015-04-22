@@ -84,7 +84,11 @@ namespace MiniWeChat
 
         public void OnClickSetGroupName()
         {
-            DialogManager.GetInstance().CreateDoubleButtonInputDialog();
+            DialogManager.GetInstance().CreateDoubleButtonInputDialog(
+                title : "修改群名",
+                inputHint : "群名",
+                inputPlaceHolder : _groupItem.groupName,
+                confirmCallback: OnConfirmSetGroupName);
         }
 
         public void OnClickAddGroupMember()
@@ -101,6 +105,18 @@ namespace MiniWeChat
             };
 
             req.userId.Add(GlobalUser.GetInstance().UserId);
+
+            NetworkManager.GetInstance().SendPacket<ChangeGroupReq>(ENetworkMessage.CHANGE_GROUP_REQ, req);
+        }
+
+        public void OnConfirmSetGroupName(string name)
+        {
+            ChangeGroupReq req = new ChangeGroupReq
+            {
+                changeType = ChangeGroupReq.ChangeType.DELETE,
+                groupId = _groupItem.groupId,
+                groupName = name,
+            };
 
             NetworkManager.GetInstance().SendPacket<ChangeGroupReq>(ENetworkMessage.CHANGE_GROUP_REQ, req);
         }

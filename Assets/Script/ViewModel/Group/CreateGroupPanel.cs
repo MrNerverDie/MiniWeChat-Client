@@ -51,15 +51,20 @@ namespace MiniWeChat
 
             foreach (var friendItem in GlobalContacts.GetInstance())
             {
-                if (!groupMemberIDs.Contains(friendItem.userId))
+                GameObject go = UIManager.GetInstance().AddChild(_gridSelectMember.gameObject, EUIType.GroupMemberFrame);
+                go.GetComponent<GroupMemberFrame>().Show(friendItem);
+
+                if (groupMemberIDs.Contains(friendItem.userId))
                 {
-                    GameObject go = UIManager.GetInstance().AddChild(_gridSelectMember.gameObject, EUIType.GroupMemberFrame);
-                    go.GetComponent<GroupMemberFrame>().Show(friendItem);
+                    go.GetComponent<GroupMemberFrame>().SetToggleInactive();
                 }
             }
             _gridSelectMember.GetComponent<RectTransform>().sizeDelta = new Vector2(
                 GlobalVars.DEFAULT_SCREEN_WIDTH,
-                (GlobalContacts.GetInstance().Count - groupMemberIDs.Count) * GROUP_MEMBER_FRAME_HEIGHT);
+                GlobalContacts.GetInstance().Count * GROUP_MEMBER_FRAME_HEIGHT);
+
+            _selectUserIdSet.Clear();
+            RefreshGroupMember();
         }
 
         public override void OnExit()
