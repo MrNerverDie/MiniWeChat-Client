@@ -122,6 +122,22 @@ public class UniGifTexture : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        if (gifTexList.Count != 0 && loadOnStart)
+        {
+            Play();
+        }
+    }
+
+    void OnDisable()
+    {
+        if (state != STATE.READY)
+        {
+            Stop();
+        }
+    }
+
     /// <summary>
     /// Set GIF texture from url
     /// </summary>
@@ -256,7 +272,7 @@ public class UniGifTexture : MonoBehaviour
     public void Play ()
     {
         if (state != STATE.READY) {
-            Debug.LogWarning ("State is not READY.");
+            Debug.LogWarning ("State is not READY. state is : " + state);
             return;
         }
         StopAllCoroutines ();

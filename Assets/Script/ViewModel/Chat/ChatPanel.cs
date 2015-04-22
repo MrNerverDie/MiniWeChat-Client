@@ -23,7 +23,7 @@ namespace MiniWeChat
         [SerializeField]
         public Toggle _toggleShowEmotion;
         [SerializeField]
-        public HorizontalLayoutGroup _gridEmotion;
+        public GridLayoutGroup _gridEmotion;
 
         private UserItem _guestUserItem;
         protected ChatLog _chatLog;
