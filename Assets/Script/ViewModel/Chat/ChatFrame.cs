@@ -34,7 +34,7 @@ namespace MiniWeChat
             // Set UserItem //
 
             UserItem userItem = GlobalContacts.GetInstance().GetUserItemById(chatLog.chatID);
-            if (userItem != null)
+            if (userItem != null && chatLog.targetType == ChatDataItem.TargetType.INDIVIDUAL)
             {
                 if (_imageHead)
                 {

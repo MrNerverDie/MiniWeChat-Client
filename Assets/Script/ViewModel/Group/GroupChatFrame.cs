@@ -11,7 +11,7 @@ namespace MiniWeChat
 
         public override void Show(ChatLog chatLog)
         {
-            _chatLog = chatLog;
+            base.Show(chatLog);
 
             // Set GroupItem  //
             GroupItem groupItem = GlobalGroup.GetInstance().GetGroup(chatLog.chatID);
@@ -21,16 +21,6 @@ namespace MiniWeChat
                 {
                     _labelUserName.text = groupItem.groupName;
                 }
-            }
-
-            if (_labelLastChat)
-            {
-                _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.chatID).chatBody;
-            }
-
-            if (_labelDate)
-            {
-                _labelDate.text = new System.DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm:ss");
             }
         }
 
