@@ -223,8 +223,8 @@ namespace MiniWeChat
 
             while (position < bytesRead)
             {
-                int bufferSize = MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 0);
-                ENetworkMessage networkMessage = (ENetworkMessage)MiniConverter.BytesToInt(_receiveBuffer, HEAD_SIZE * 1);
+                int bufferSize = MiniConverter.BytesToInt(_receiveBuffer, position + HEAD_SIZE * 0);
+                ENetworkMessage networkMessage = (ENetworkMessage)MiniConverter.BytesToInt(_receiveBuffer, position + HEAD_SIZE * 1);
 
                 byte[] msgIDBytes = new byte[HEAD_SIZE];
                 for (int i = 0; i < HEAD_SIZE; i++)
@@ -235,7 +235,7 @@ namespace MiniWeChat
 
                 if (networkMessage != ENetworkMessage.KEEP_ALIVE_SYNC)
                 {
-                    Log4U.LogInfo("networkMessage : " + networkMessage, "msgID : " + msgID);
+                    Log4U.LogInfo("networkMessage : " + networkMessage, "msgID : " + msgID, "bufferSize : " + bufferSize);
                 }
 
                 if (position + bufferSize > bytesRead)

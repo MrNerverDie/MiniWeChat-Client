@@ -51,7 +51,12 @@ namespace MiniWeChat
             // Set ChatItem //
             if (_labelLastChat)
             {
-                _labelLastChat.text = GlobalChat.GetInstance().GetLastChat(chatLog.chatID).chatBody;                
+                _labelLastChat.text = "";
+                ChatDataItem lastChat = GlobalChat.GetInstance().GetLastChat(chatLog.chatID);
+                if (lastChat != null)
+                {
+                    _labelLastChat.text = lastChat.chatBody;
+                }                
             }
 
             if (_labelDate)

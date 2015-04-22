@@ -102,6 +102,7 @@ namespace MiniWeChat
 
                 _receiveMessageQueue.Enqueue(args);
             }
+            Log4U.LogDebug((protocol.ENetworkMessage)iMessageType);
         }
 
         private IEnumerator BeginHandleReceiveMessageQueue()

@@ -141,6 +141,7 @@ namespace MiniWeChat
                 {
                     friendInfo  = true,
                     userInfo = true,
+                    groupInfo = true,
                 };
                 NetworkManager.GetInstance().SendPacket<GetPersonalInfoReq>(ENetworkMessage.GET_PERSONALINFO_REQ, req);
 

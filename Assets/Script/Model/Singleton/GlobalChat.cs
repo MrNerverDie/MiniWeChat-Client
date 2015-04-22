@@ -169,7 +169,7 @@ namespace MiniWeChat
             }
             else
             {
-                throw new Exception("No Last Chat");
+                return null;
             }
         }
 

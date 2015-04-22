@@ -19,7 +19,7 @@ namespace MiniWeChat
             {
                 if (_labelUserName)
                 {
-                    _labelUserName.text = groupItem.groupId;
+                    _labelUserName.text = groupItem.groupName;
                 }
             }
 

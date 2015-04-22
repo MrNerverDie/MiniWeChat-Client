@@ -45,7 +45,7 @@ namespace MiniWeChat
             base.Release();
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
-            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);            
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);            
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
@@ -85,7 +85,7 @@ namespace MiniWeChat
 
         public GroupItem GetGroup(string groupID)
         {
-            if (!_groupDict.ContainsKey(groupID))
+            if (_groupDict.ContainsKey(groupID))
             {
                 return _groupDict[groupID];
             }
@@ -124,7 +124,6 @@ namespace MiniWeChat
 
         public List<GroupItem>.Enumerator GetEnumerator()
         {
-            Log4U.LogDebug(_groupDict);
             List<GroupItem> sortedGroupList = new List<GroupItem>();
             foreach (var group in _groupDict.Values)
             {
@@ -149,9 +148,10 @@ namespace MiniWeChat
                 _groupDict.Clear();
                 foreach (GroupItem group in rsp.groups)
                 {
-                    _groupDict[group.groupId] = group;
+                    _groupDict.Add(group.groupId, group);
                 }
             }
+            Log4U.LogDebug(_groupDict.Count);
         }
 
         public void OnChangeGroupSync(uint iMessageType, object kParam)
@@ -165,6 +165,7 @@ namespace MiniWeChat
             {
                 _groupDict.Add(sync.groupItem.groupId, sync.groupItem);
             }
+            Log4U.LogDebug(_groupDict.ContainsKey(sync.groupItem.groupId), sync.groupItem.groupId);
         }
 
         public void OnTryLogin(uint iMessageType, object kParam)
