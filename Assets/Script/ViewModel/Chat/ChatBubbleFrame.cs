@@ -35,7 +35,7 @@ namespace MiniWeChat
 
             if (chatDataItem.targetType == ChatDataItem.TargetType.SYSTEM)
             {
-
+                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Chat, "010");
             }
             else
             {
