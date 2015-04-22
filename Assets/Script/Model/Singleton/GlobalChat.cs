@@ -95,7 +95,7 @@ namespace MiniWeChat
 
         private static int SortChatLogByDate(ChatLog c1, ChatLog c2)
         {
-            return (int)(c1.date - c2.date);
+            return -(int)(c1.date - c2.date);
         }
 
         public void SendChatReq(ChatDataItem chatDataItem)
@@ -181,6 +181,7 @@ namespace MiniWeChat
             foreach (var chatItem in rsp.chatData)
             {
                 AddChatDataItem(MiniConverter.ChatItemToDataItem(chatItem));
+                Log4U.LogDebug(chatItem.date);
             }
             MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_CHAT_LIST, null);
             MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_RECEIVE_CHAT, null);

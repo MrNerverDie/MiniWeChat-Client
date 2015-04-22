@@ -28,7 +28,7 @@ namespace MiniWeChat
                 receiveUserId = chatItem.receiveUserId,
                 chatType = ((ChatDataItem.ChatType)(uint)chatItem.chatType),
                 chatBody = chatItem.chatBody,
-                date = chatItem.date,
+                date = TimeJavaToCSharp(chatItem.date),
                 targetType = ((ChatDataItem.TargetType)(uint)chatItem.targetType),
             };
         }
@@ -44,6 +44,15 @@ namespace MiniWeChat
                 date = chatDataItem.date,
                 targetType = (ChatItem.TargetType)(uint)chatDataItem.targetType,
             };
+        }
+
+        public static long TimeJavaToCSharp(long java_time)
+        {
+            DateTime dt_1970 = new DateTime(1970, 1, 1, 0, 0, 0);
+            long ticks_1970 = dt_1970.Ticks;
+            long time_ticks = ticks_1970 + java_time * 10000;
+            DateTime dt = new DateTime(time_ticks).AddHours(8);
+            return dt.Ticks;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace MiniWeChat
 
             if (_labelDate)
             {
-                _labelDate.text = new System.DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm");
+                _labelDate.text = new System.DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm:ss");
             }
         }
 
