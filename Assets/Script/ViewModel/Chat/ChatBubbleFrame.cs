@@ -32,13 +32,21 @@ namespace MiniWeChat
         public void Show(ChatDataItem chatDataItem)
         {
             string text = chatDataItem.chatBody;
-            UserItem userItem = GlobalUser.GetInstance().Self;
-            if (chatDataItem.sendUserId != GlobalUser.GetInstance().UserId)
-            {
-                userItem = GlobalContacts.GetInstance().GetUserItemById(chatDataItem.sendUserId);
-            }
 
-            UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + userItem.headIndex);
+            if (chatDataItem.targetType == ChatDataItem.TargetType.SYSTEM)
+            {
+
+            }
+            else
+            {
+                UserItem userItem = GlobalUser.GetInstance().Self;
+                if (chatDataItem.sendUserId != GlobalUser.GetInstance().UserId)
+                {
+                    userItem = GlobalContacts.GetInstance().GetUserItemById(chatDataItem.sendUserId);
+                }
+
+                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + userItem.headIndex);
+            }
 
             _imageEmotionBubble.gameObject.SetActive(false);
             _imageChatBubble.gameObject.SetActive(false);

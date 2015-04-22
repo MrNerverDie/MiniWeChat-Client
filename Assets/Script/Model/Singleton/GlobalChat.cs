@@ -181,7 +181,6 @@ namespace MiniWeChat
             foreach (var chatItem in rsp.chatData)
             {
                 AddChatDataItem(MiniConverter.ChatItemToDataItem(chatItem));
-                Log4U.LogDebug(chatItem.date);
             }
             MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_CHAT_LIST, null);
             MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_RECEIVE_CHAT, null);

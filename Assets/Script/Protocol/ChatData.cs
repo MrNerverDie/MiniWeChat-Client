@@ -23,8 +23,9 @@ namespace protocol
       get { return _targetType; }
       set { _targetType = value; }
     }
-    private string _sendUserId;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"sendUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private string _sendUserId = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"sendUserId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
     public string sendUserId
     {
       get { return _sendUserId; }
@@ -78,7 +79,10 @@ namespace protocol
       INDIVIDUAL = 0,
             
       [global::ProtoBuf.ProtoEnum(Name=@"GROUP", Value=1)]
-      GROUP = 1
+      GROUP = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SYSTEM", Value=2)]
+      SYSTEM = 2
     }
   
     private global::ProtoBuf.IExtension extensionObject;

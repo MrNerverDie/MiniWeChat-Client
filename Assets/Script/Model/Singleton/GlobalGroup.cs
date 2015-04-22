@@ -158,7 +158,6 @@ namespace MiniWeChat
                     _groupDict.Add(group.groupId, group);
                 }
             }
-            Log4U.LogDebug(_groupDict.Count);
         }
 
         public void OnChangeGroupSync(uint iMessageType, object kParam)
@@ -172,7 +171,6 @@ namespace MiniWeChat
             {
                 _groupDict.Add(sync.groupItem.groupId, sync.groupItem);
             }
-            Log4U.LogDebug(_groupDict.ContainsKey(sync.groupItem.groupId), sync.groupItem.groupId);
         }
 
         public void OnTryLogin(uint iMessageType, object kParam)

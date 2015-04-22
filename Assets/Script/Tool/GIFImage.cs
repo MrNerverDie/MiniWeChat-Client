@@ -103,10 +103,7 @@ namespace MiniWeChat
                 {
                     _showingImage.texture = gifFrames[0];
                 }
-                Log4U.LogDebug((int)(Time.frameCount / interval) % gifFrames.Count);
             }
-
-
         }
 
         private bool IsFinishedLoading()

@@ -10,10 +10,11 @@ message ChatItem{
 	enum TargetType{
     	INDIVIDUAL = 0;
 		GROUP = 1;
+		SYSTEM = 2;
 	}
 
 	optional TargetType targetType = 1[default = INDIVIDUAL];
-	required string sendUserId= 2;
+	optional string sendUserId= 2;
 	required string receiveUserId= 3;
 	required ChatType chatType= 4;
 	required string chatBody= 5;

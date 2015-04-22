@@ -83,7 +83,10 @@ namespace MiniWeChat
       INDIVIDUAL = 0,
             
       [global::ProtoBuf.ProtoEnum(Name=@"GROUP", Value=1)]
-      GROUP = 1
+      GROUP = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SYSTEM", Value=2)]
+      SYSTEM = 2
     }
   
     [global::ProtoBuf.ProtoContract(Name=@"ChatType")]

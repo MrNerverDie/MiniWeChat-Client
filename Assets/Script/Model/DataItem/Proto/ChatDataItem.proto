@@ -5,6 +5,7 @@ message ChatDataItem
 	enum TargetType{
     	INDIVIDUAL = 0;
 		GROUP = 1;
+		SYSTEM = 2;
 	}
 
 	enum ChatType{
