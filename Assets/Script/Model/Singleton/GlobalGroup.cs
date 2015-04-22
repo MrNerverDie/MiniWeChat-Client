@@ -115,7 +115,7 @@ namespace MiniWeChat
                 yield return new WaitForSeconds(WAIT_QUERY_INTERVAL);
             }
         }
-
+         
         private static int SortGroupItemByName(GroupItem u1, GroupItem u2)
         {
             return (int)(u1.groupName.CompareTo(u2.groupName));
@@ -157,33 +157,13 @@ namespace MiniWeChat
         public void OnChangeGroupSync(uint iMessageType, object kParam)
         {
             ChangeGroupSync sync = kParam as ChangeGroupSync;
-            GroupItem group = GetGroup(sync.groupId);
-            switch (sync.changeType)
+            if (_groupDict.ContainsKey(sync.groupItem.groupId))
             {
-                case ChangeGroupSync.ChangeType.ADD:
-                    foreach (var item in sync.userId)
-                    {
-                        group.memberUserId.Add(item);
-                    }
-                    break;
-                case ChangeGroupSync.ChangeType.DELETE:
-                    foreach (var item in sync.userId)
-                    {
-                        group.memberUserId.Remove(item);
-                    }
-                    break;
-                case ChangeGroupSync.ChangeType.UPDATE_INFO:
-                    group.groupName = sync.groupName;
-                    break;
-                case ChangeGroupSync.ChangeType.UPDATE_MEMBER:
-                    group.memberUserId.Clear();
-                    foreach (var item in sync.userId)
-                    {
-                        group.memberUserId.Add(item);
-                    }
-                    break;
-                default:
-                    break;
+                _groupDict[sync.groupItem.groupId] = sync.groupItem;
+            }
+            else
+            {
+                _groupDict.Add(sync.groupItem.groupId, sync.groupItem);
             }
         }
 

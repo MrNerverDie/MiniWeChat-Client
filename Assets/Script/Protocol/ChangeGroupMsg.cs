@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 // Generated from: ChangeGroupMsg.proto
+// Note: requires additional types generated from: GroupData.proto
 namespace protocol
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeGroupReq")]
@@ -99,52 +100,13 @@ namespace protocol
   {
     public ChangeGroupSync() {}
     
-    private string _groupId;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"groupId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string groupId
+    private protocol.GroupItem _groupItem;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"groupItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public protocol.GroupItem groupItem
     {
-      get { return _groupId; }
-      set { _groupId = value; }
+      get { return _groupItem; }
+      set { _groupItem = value; }
     }
-    private protocol.ChangeGroupSync.ChangeType _changeType;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"changeType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public protocol.ChangeGroupSync.ChangeType changeType
-    {
-      get { return _changeType; }
-      set { _changeType = value; }
-    }
-    private readonly global::System.Collections.Generic.List<string> _userId = new global::System.Collections.Generic.List<string>();
-    [global::ProtoBuf.ProtoMember(3, Name=@"userId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<string> userId
-    {
-      get { return _userId; }
-    }
-  
-    private string _groupName = "";
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"groupName", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string groupName
-    {
-      get { return _groupName; }
-      set { _groupName = value; }
-    }
-    [global::ProtoBuf.ProtoContract(Name=@"ChangeType")]
-    public enum ChangeType
-    {
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"ADD", Value=0)]
-      ADD = 0,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"DELETE", Value=1)]
-      DELETE = 1,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"UPDATE_INFO", Value=2)]
-      UPDATE_INFO = 2,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"UPDATE_MEMBER", Value=3)]
-      UPDATE_MEMBER = 3
-    }
-  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

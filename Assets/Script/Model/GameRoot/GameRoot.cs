@@ -40,31 +40,32 @@ namespace MiniWeChat
         {
             ClearCanvas();
             yield return null;
-            AddSingleton<MessageDispatcher>(_rootObj);
-            AddSingleton<GlobalUser>(_rootObj);
-            AddSingleton<GlobalContacts>(_rootObj);
-            AddSingleton<GlobalChat>(_rootObj);
-            AddSingleton<GlobalGroup>(_rootObj);
-            AddSingleton<UIManager>(_rootObj);
-            AddSingleton<StateManager>(_rootObj);
-            AddSingleton<DialogManager>(_rootObj);
-            AddSingleton<UIDebugger>(_rootObj);
-            AddSingleton<NetworkManager>(_rootObj);
-            AddSingleton<FileNetworkManager>(_rootObj);
+            AddSingleton<MessageDispatcher>();
+            AddSingleton<GlobalUser>();
+            AddSingleton<GlobalContacts>();
+            AddSingleton<GlobalChat>();
+            AddSingleton<GlobalGroup>();
+            AddSingleton<UIManager>();
+            AddSingleton<StateManager>();
+            AddSingleton<DialogManager>();
+            AddSingleton<UIDebugger>();
+            AddSingleton<NetworkManager>();
+            AddSingleton<FileNetworkManager>();
         }
 
-        private static T AddSingleton<T>(GameObject go) where T : Singleton<T>
+        private static void AddSingleton<T>() where T : Singleton<T>
         {
-            T t = go.AddComponent<T>();
-            t.SetInstance(t);
-            t.Init();
-
-            _singletonReleaseList.Add(delegate()
+            if (_rootObj.GetComponent<T>() == null)
             {
-                t.Release();
-            });
+                T t = _rootObj.AddComponent<T>();
+                t.SetInstance(t);
+                t.Init();
 
-            return t;
+                _singletonReleaseList.Add(delegate()
+                {
+                    t.Release();
+                });
+            }
         }
 
         public static T GetSingleton<T>() where T : Singleton<T>
@@ -73,7 +74,7 @@ namespace MiniWeChat
 
             if (t == null)
             {
-                throw new Exception("Failed To Get Singleton : " + typeof(T));
+                AddSingleton<T>();
             }
 
             return t;
