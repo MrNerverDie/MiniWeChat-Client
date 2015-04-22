@@ -68,7 +68,8 @@ namespace MiniWeChat
                     userItem = new UserItem();
                 }
 
-                UIManager.GetInstance().AddChild(_gridMemberHead.gameObject, EUIType.GroupMemberHeadFrame);
+                GameObject go = UIManager.GetInstance().AddChild(_gridMemberHead.gameObject, EUIType.GroupMemberHeadFrame);
+                go.GetComponent<GroupMemberFrame>().Show(userItem);
             }
         }
 

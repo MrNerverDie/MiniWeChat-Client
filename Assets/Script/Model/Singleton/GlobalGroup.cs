@@ -30,6 +30,7 @@ namespace MiniWeChat
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_USERINFO_RSP, OnGetUserInfo);            
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
@@ -45,7 +46,8 @@ namespace MiniWeChat
             base.Release();
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
-            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);            
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_USERINFO_RSP, OnGetUserInfo);            
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
@@ -60,13 +62,18 @@ namespace MiniWeChat
 
         public UserItem GetGroupMember(string userID)
         {
-            if (!_groupMemberDict.ContainsKey(userID))
+            if (_groupMemberDict.ContainsKey(userID))
             {
                 return _groupMemberDict[userID];
             }
             else 
 	        {
                 UserItem userItem = GlobalContacts.GetInstance().GetUserItemById(userID);
+
+                if (userID == GlobalUser.GetInstance().UserId)
+                {
+                    userItem = GlobalUser.GetInstance().Self;
+                }
 
                 if (userItem == null)
                 {
@@ -176,6 +183,21 @@ namespace MiniWeChat
         public void OnLogOutRsp(uint iMessageType, object kParam)
         {
             SaveAndClearGroupData();
+        }
+
+        public void OnGetUserInfo(uint iMessageType, object kParam)
+        {
+            GetUserInfoRsp rsp = kParam as GetUserInfoRsp;
+            if (rsp.resultCode == GetUserInfoRsp.ResultCode.SUCCESS)
+            {
+                foreach (var item in rsp.userItem)
+                {
+                    if (!_groupMemberDict.ContainsKey(item.userId))
+                    {
+                        _groupMemberDict.Add(item.userId, item);
+                    }
+                }
+            }
         }
 
         #endregion

@@ -38,7 +38,6 @@ namespace MiniWeChat
             Init(param);
 
             _guestUserItem = GlobalContacts.GetInstance().GetUserItemById(_chatLog.chatID);
-            _buttonFriendDetail.onClick.AddListener(OnClickFriendDetailButton);
             if (_guestUserItem != null)
             {
                 if (_labelGuestUserName)
@@ -193,6 +192,7 @@ namespace MiniWeChat
 
             _buttonSend.onClick.AddListener(OnClickSendButton);
             _toggleShowEmotion.onValueChanged.AddListener(OnClickShowEmotionButton);
+            _buttonFriendDetail.onClick.AddListener(OnClickFriendDetailButton);
 
             _chatBubbleList = new List<ChatBubbleFrame>();
             RefreshChatLog();

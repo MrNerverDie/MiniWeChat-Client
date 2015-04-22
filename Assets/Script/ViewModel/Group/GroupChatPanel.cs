@@ -34,7 +34,7 @@ namespace MiniWeChat
 
         public override void OnClickFriendDetailButton()
         {
-            StateManager.GetInstance().PushState<CreateGroupPanel>(EUIType.GroupDetailPanel, _groupItem);
+            StateManager.GetInstance().PushState<GroupDetailPanel>(EUIType.GroupDetailPanel, _groupItem);
         }
 
         public override void OnClickSendEmotionButton(int index)
