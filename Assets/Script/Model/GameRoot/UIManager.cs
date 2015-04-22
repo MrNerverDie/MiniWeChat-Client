@@ -23,6 +23,7 @@ namespace MiniWeChat
 
             InitUIPathDict();
             InitAtlasPathDict();
+            InitGifRes();
         }
 
         public GameObject GetSingleUI(EUIType name)
@@ -114,6 +115,16 @@ namespace MiniWeChat
                     Log4U.LogError(eAtlasName, spriteName);
                 }
 	        }
+        }
+
+        private void InitGifRes()
+        {
+            TextAsset[] gifTextAssets = Resources.LoadAll<TextAsset>("Raw/Gif");
+            foreach (var gifTextAsset in gifTextAssets)
+            {
+                StartCoroutine(UniGif.GetTextureListCoroutine(this, gifTextAsset.bytes, gifTextAsset.GetInstanceID(), null,
+                    FilterMode.Trilinear, TextureWrapMode.Clamp, true));
+            }
         }
 
         private void InitUIPathDict()
