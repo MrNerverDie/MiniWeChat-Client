@@ -30,6 +30,7 @@ namespace MiniWeChat
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_RSP, OnChangeGroupRsp);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.GET_USERINFO_RSP, OnGetUserInfo);            
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
@@ -47,6 +48,7 @@ namespace MiniWeChat
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_PERSONALINFO_RSP, OnGetPersonalInfoRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_SYNC, OnChangeGroupSync);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_GROUP_RSP, OnChangeGroupRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.GET_USERINFO_RSP, OnGetUserInfo);            
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
@@ -156,6 +158,7 @@ namespace MiniWeChat
                 foreach (GroupItem group in rsp.groups)
                 {
                     _groupDict.Add(group.groupId, group);
+                    Log4U.LogDebug("gid : ", group.groupId);
                 }
             }
         }
@@ -170,6 +173,19 @@ namespace MiniWeChat
             else
             {
                 _groupDict.Add(sync.groupItem.groupId, sync.groupItem);
+            }
+        }
+
+        public void OnChangeGroupRsp(uint iMessageType, object kParam)
+        {
+            NetworkMessageParam param = kParam as NetworkMessageParam;
+            ChangeGroupReq req = param.req as ChangeGroupReq;
+            ChangeGroupRsp rsp = param.rsp as ChangeGroupRsp;
+            if (rsp.resultCode == ChangeGroupRsp.ResultCode.SUCCESS &&
+                req.changeType == ChangeGroupReq.ChangeType.DELETE)
+            {
+                _groupDict.Remove(req.groupId);
+                GlobalChat.GetInstance().RemoveChatLog(req.groupId);
             }
         }
 
@@ -232,6 +248,7 @@ namespace MiniWeChat
                     if (groupItem != null)
                     {
                         _groupDict[groupItem.groupId] = groupItem;
+                        Log4U.LogDebug("local", groupItem.groupId);
                     }
                 }
             }

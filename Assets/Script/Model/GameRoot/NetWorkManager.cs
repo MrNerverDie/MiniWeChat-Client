@@ -322,6 +322,7 @@ namespace MiniWeChat
             {
                 ENetworkMessage.SEND_CHAT_RSP,
                 ENetworkMessage.GET_PERSONALINFO_RSP,
+                ENetworkMessage.CHANGE_GROUP_RSP,
             };
         }
 

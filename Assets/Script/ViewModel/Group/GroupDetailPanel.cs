@@ -54,7 +54,7 @@ namespace MiniWeChat
 
         private void InitMemberHeadFrames()
         {
-            int memberRow = _groupItem.memberUserId.Count / MEMBER_ONE_ROW + 1;
+            int memberRow = Mathf.CeilToInt((float)_groupItem.memberUserId.Count / (float)MEMBER_ONE_ROW);
 
             _gridGroupDetail.sizeDelta = new Vector2(
                 GlobalVars.DEFAULT_SCREEN_WIDTH, GRID_GROUP_DETAIL_BASE + memberRow * GROUP_INFO_BAR_INC);
@@ -113,7 +113,7 @@ namespace MiniWeChat
         {
             ChangeGroupReq req = new ChangeGroupReq
             {
-                changeType = ChangeGroupReq.ChangeType.DELETE,
+                changeType = ChangeGroupReq.ChangeType.UPDATE_INFO,
                 groupId = _groupItem.groupId,
                 groupName = name,
             };

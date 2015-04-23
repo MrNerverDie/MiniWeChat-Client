@@ -82,6 +82,11 @@ namespace MiniWeChat
             return _chatLogDict[chatID];
         }
 
+        public void RemoveChatLog(string chatID)
+        {
+            _chatLogDict.Remove(chatID);
+        }
+
         /// <summary>
         /// 通过chatID和index来获取ChatDataItem
         /// </summary>
@@ -129,6 +134,7 @@ namespace MiniWeChat
             else
             {
                 chatID = chatDataItem.receiveUserId;
+                Log4U.LogDebug("Log Debug : " + chatID);
             }
 
 
