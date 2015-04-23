@@ -11,6 +11,7 @@ namespace MiniWeChat
     {
         private Dictionary<string, ChatLog> _chatLogDict;
         private Dictionary<string, ChatDataItem> _waitSendChatDict;
+        private List<ChatLog> _sortedChatLogList = new List<ChatLog>();
 
         public int Count
         {
@@ -134,7 +135,6 @@ namespace MiniWeChat
             else
             {
                 chatID = chatDataItem.receiveUserId;
-                Log4U.LogDebug("Log Debug : " + chatID);
             }
 
 
@@ -155,16 +155,19 @@ namespace MiniWeChat
             _chatLogDict[chatID].itemList.Add(chatDataItem);
         }
 
-        public List<ChatLog> GetSortedChatLogs()
+        public void SortChatLog()
         {
-            List<ChatLog> sortedChatLogList = new List<ChatLog>();
+            _sortedChatLogList.Clear();
             foreach (var chatLog in _chatLogDict.Values)
             {
-                sortedChatLogList.Add(chatLog);
+                _sortedChatLogList.Add(chatLog);
             }
-            sortedChatLogList.Sort(SortChatLogByDate);
-            Log4U.LogDebug("test");
-            return sortedChatLogList;
+            _sortedChatLogList.Sort(SortChatLogByDate);
+        }
+
+        public List<ChatLog>.Enumerator GetEnumerator()
+        {
+            return _sortedChatLogList.GetEnumerator();
         }
 
         public ChatDataItem GetLastChat(string userId)
@@ -302,7 +305,8 @@ namespace MiniWeChat
                     ChatLog chatLog = IOTool.DeserializeFromFile<ChatLog>(file.FullName);
                     if (chatLog != null)
                     {
-                        _chatLogDict[chatLog.chatID] = chatLog;                        
+                        _chatLogDict[chatLog.chatID] = chatLog;
+                        Log4U.LogDebug("chatID", chatLog.chatID);
                     }
                 }
             }

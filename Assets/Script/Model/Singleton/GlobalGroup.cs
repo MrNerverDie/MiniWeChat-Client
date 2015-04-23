@@ -174,6 +174,7 @@ namespace MiniWeChat
             {
                 _groupDict.Add(sync.groupItem.groupId, sync.groupItem);
             }
+            Log4U.LogDebug("Changing");
         }
 
         public void OnChangeGroupRsp(uint iMessageType, object kParam)

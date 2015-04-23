@@ -28,12 +28,10 @@ namespace MiniWeChat
         private UserItem _guestUserItem;
         protected ChatLog _chatLog;
 
-        protected List<ChatBubbleFrame> _chatBubbleList;
+        protected List<ChatBubbleFrame> _chatBubbleList = new List<ChatBubbleFrame>();
 
         public override void OnEnter(object param)
         {
-
-            _chatLog = param as ChatLog;
 
             Init(param);
 
@@ -60,6 +58,13 @@ namespace MiniWeChat
         {
             base.OnShow(param);
 
+            if (param != null)
+            {
+                _chatLog = param as ChatLog;
+            }
+
+            RefreshChatLog();
+
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_RECEIVE_CHAT, OnUpdateReceiveChat);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_SEND_CHAT, OnUpdateSendChat);
         }
@@ -75,9 +80,9 @@ namespace MiniWeChat
 
         private void RefreshChatLog()
         {
-            foreach (var chatDataItem in _chatLog.itemList)
+            for (int i = _chatBubbleList.Count; i < _chatLog.itemList.Count; i++)
             {
-                AddBubbleFrame(chatDataItem);
+                AddBubbleFrame(_chatLog.itemList[i]);
             }
 
             UpdateChatBubbleGrid();
@@ -148,12 +153,7 @@ namespace MiniWeChat
 
         public void OnUpdateReceiveChat(uint iMessageType, object kParam)
         {
-            for (int i = _chatBubbleList.Count; i < _chatLog.itemList.Count; i++)
-            {
-                AddBubbleFrame(_chatLog.itemList[i]);
-            }
-
-            UpdateChatBubbleGrid();
+            RefreshChatLog();
         }
 
         public void OnUpdateSendChat(uint iMessageType, object kParam)
@@ -193,8 +193,6 @@ namespace MiniWeChat
             _toggleShowEmotion.onValueChanged.AddListener(OnClickShowEmotionButton);
             _buttonFriendDetail.onClick.AddListener(OnClickFriendDetailButton);
 
-            _chatBubbleList = new List<ChatBubbleFrame>();
-            RefreshChatLog();
         }
     }
 }

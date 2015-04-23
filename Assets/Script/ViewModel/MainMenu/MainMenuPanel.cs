@@ -21,7 +21,6 @@ namespace MiniWeChat
 
             _searchButton.onClick.AddListener(OnClickSearchButton);
             _createGroupButton.onClick.AddListener(OnClickCreateGroupButton);
-            _mainMenuNaviBar.SwitchToTab((int)MainMenuNaviBar.MainMenuTab.CHAT_LIST);
         }
 
         public override void OnExit()

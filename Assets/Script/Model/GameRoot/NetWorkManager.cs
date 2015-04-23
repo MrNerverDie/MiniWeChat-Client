@@ -311,6 +311,7 @@ namespace MiniWeChat
                 ENetworkMessage.OFFLINE_SYNC,
                 ENetworkMessage.CHANGE_FRIEND_SYNC,
                 ENetworkMessage.RECEIVE_CHAT_SYNC,
+                ENetworkMessage.CHANGE_GROUP_SYNC,
             };
         }
 

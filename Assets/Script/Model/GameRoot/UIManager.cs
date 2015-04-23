@@ -123,7 +123,7 @@ namespace MiniWeChat
             foreach (var gifTextAsset in gifTextAssets)
             {
                 StartCoroutine(UniGif.GetTextureListCoroutine(this, gifTextAsset.bytes, gifTextAsset.GetInstanceID(), null,
-                    FilterMode.Trilinear, TextureWrapMode.Clamp, true));
+                    FilterMode.Trilinear, TextureWrapMode.Clamp, false));
             }
         }
 
