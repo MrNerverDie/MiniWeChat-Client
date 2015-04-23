@@ -155,7 +155,7 @@ namespace MiniWeChat
             _chatLogDict[chatID].itemList.Add(chatDataItem);
         }
 
-        public List<ChatLog>.Enumerator GetEnumerator()
+        public List<ChatLog> GetSortedChatLogs()
         {
             List<ChatLog> sortedChatLogList = new List<ChatLog>();
             foreach (var chatLog in _chatLogDict.Values)
@@ -163,7 +163,8 @@ namespace MiniWeChat
                 sortedChatLogList.Add(chatLog);
             }
             sortedChatLogList.Sort(SortChatLogByDate);
-            return sortedChatLogList.GetEnumerator();
+            Log4U.LogDebug("test");
+            return sortedChatLogList;
         }
 
         public ChatDataItem GetLastChat(string userId)

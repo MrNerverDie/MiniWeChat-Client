@@ -38,7 +38,8 @@ namespace MiniWeChat
             _scrollChatList.verticalNormalizedPosition = 1.0f;
 
             int i = 0;
-            foreach (ChatLog chatLog in GlobalChat.GetInstance())
+            List<ChatLog> list = GlobalChat.GetInstance().GetSortedChatLogs();
+            foreach (ChatLog chatLog in list)
             {
                 if (GlobalChat.GetInstance().GetLastChat(chatLog.chatID) == null)
                 {
