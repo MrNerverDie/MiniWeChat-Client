@@ -11,7 +11,7 @@ namespace MiniWeChat
     {
         // Const //
         private const float GROUP_MEMBER_FRAME_HEIGHT = 150f;
-        private const float GROUP_MEMBER_ICON_WIDTH = 150f;
+        private const float GROUP_MEMBER_ICON_WIDTH = 160f;
 
         public VerticalLayoutGroup _gridSelectMember;
         public HorizontalLayoutGroup _gridMember;
@@ -91,6 +91,12 @@ namespace MiniWeChat
 
         public void OnClickConfirmButton()
         {
+            if (_selectUserIdSet.Count == 0)
+            {
+                DialogManager.GetInstance().CreateSingleButtonDialog("您还没有选择群组成员！");
+                return;
+            }
+
             if (_groupItem == null)
             {
                 CreateGroupChatReq req = new CreateGroupChatReq();

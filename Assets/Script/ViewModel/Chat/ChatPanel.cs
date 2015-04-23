@@ -75,7 +75,6 @@ namespace MiniWeChat
 
         private void RefreshChatLog()
         {
-
             foreach (var chatDataItem in _chatLog.itemList)
             {
                 AddBubbleFrame(chatDataItem);
