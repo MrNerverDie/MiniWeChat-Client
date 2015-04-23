@@ -145,5 +145,23 @@ namespace MiniWeChat
                 curState.OnExit();
             }
         }
+
+        public void Update()
+        {
+#if UNITY_ANDROID
+            if (Input.GetKeyUp(KeyCode.Escape) && _stateStack.Count == 1)
+            {
+                DialogManager.GetInstance().CreateDoubleButtonDialog(
+                    "您确定要退出微信吗？", 
+                    "警告",
+                    OnClickConfirmExit);
+            }
+#endif
+        }
+
+        public void OnClickConfirmExit()
+        {
+            Application.Quit();
+        }
     }
 }

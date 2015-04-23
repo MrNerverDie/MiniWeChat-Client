@@ -27,6 +27,13 @@ namespace MiniWeChat
             return go;
         }
 
+        public GameObject CreateDoubleButtonDialog(string content, string title = null, UnityEngine.Events.UnityAction confirmCallback = null)
+        {
+            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.DoubleButtonDialog);
+            go.GetComponent<DoubleButtonDialog>().Show(title, content, confirmCallback);
+            return go;
+        }
+
         public GameObject CreateDoubleButtonInputDialog(string title = "", string inputHint = "", string inputPlaceHolder = "", string inputContent = "",
             InputField.ContentType contentType = InputField.ContentType.Standard, UnityEngine.Events.UnityAction<string> confirmCallback = null, UnityEngine.Events.UnityAction cancelCallback = null)
         {

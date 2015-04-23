@@ -155,6 +155,7 @@ namespace MiniWeChat
             _UIPathDict.Add(EUIType.GroupFrame, "Group/GroupFrame");
             _UIPathDict.Add(EUIType.GroupChatFrame, "Chat/GroupChatFrame");
             _UIPathDict.Add(EUIType.GroupChatPanel, "Chat/GroupChatPanel");
+            _UIPathDict.Add(EUIType.DoubleButtonDialog, "Common/Dialog/DoubleButtonDialog");
         }
 
         private void InitAtlasPathDict()
@@ -195,6 +196,7 @@ namespace MiniWeChat
         GroupChatFrame,
         GroupChatPanel,
         GroupFrame,
+        DoubleButtonDialog,
     }
 
     public enum EAtlasName

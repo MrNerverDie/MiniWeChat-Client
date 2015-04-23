@@ -6,8 +6,11 @@ namespace MiniWeChat
 {
     public class SingleButtonDialog : MonoBehaviour
     {
+        [SerializeField]
         public Text _labelTitle;
+        [SerializeField]
         public Text _labelContent;
+        [SerializeField]
         public Button _buttonConfirm;
 
         public void Show(string title, string content, UnityEngine.Events.UnityAction confirmCallback = null)
