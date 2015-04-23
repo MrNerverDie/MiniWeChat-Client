@@ -16,6 +16,18 @@ namespace MiniWeChat
 
             Init(param);
 
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            UIManager.GetInstance().DestroySingleUI(EUIType.GroupChatPanel);
+        }
+
+        public override void OnShow(object param = null)
+        {
+            base.OnShow(param);
+
             _groupItem = GlobalGroup.GetInstance().GetGroup(_chatLog.chatID);
             if (_groupItem != null)
             {
@@ -24,12 +36,6 @@ namespace MiniWeChat
                     _labelGuestUserName.text = _groupItem.groupName;
                 }
             }
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            UIManager.GetInstance().DestroySingleUI(EUIType.GroupChatPanel);
         }
 
         public override void OnClickFriendDetailButton()

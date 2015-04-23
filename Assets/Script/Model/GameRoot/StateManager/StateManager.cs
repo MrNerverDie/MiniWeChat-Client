@@ -137,12 +137,21 @@ namespace MiniWeChat
             }
         }
 
-        public void ClearStatesExceptBottom()
+        public void ClearStatesExceptBottom(bool isShowBottom = false)
         {
             while (_stateStack.Count != 1)
             {
                 BaseState curState = _stateStack.Pop();
                 curState.OnExit();
+            }
+
+            if (isShowBottom)
+            {
+                if (_stateStack.Count == 1)
+                {
+                    BaseState lastState = _stateStack.Peek();
+                    lastState.OnShow();
+                }
             }
         }
 

@@ -12,8 +12,8 @@ namespace MiniWeChat
 
         public const int DEFAULT_SCREEN_WIDTH = 1080;
 
-        public const string IPAddress = "104.224.165.21";
-        //public const string IPAddress = "192.168.45.17";
+        //public const string IPAddress = "104.224.165.21";
+        public const string IPAddress = "192.168.45.17";
         public const  int IPPort = 8081;
     }
 }

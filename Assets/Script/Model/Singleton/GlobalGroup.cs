@@ -186,6 +186,7 @@ namespace MiniWeChat
             {
                 _groupDict.Remove(req.groupId);
                 GlobalChat.GetInstance().RemoveChatLog(req.groupId);
+                StateManager.GetInstance().ClearStatesExceptBottom(true);
             }
         }
 
@@ -248,7 +249,6 @@ namespace MiniWeChat
                     if (groupItem != null)
                     {
                         _groupDict[groupItem.groupId] = groupItem;
-                        Log4U.LogDebug("local", groupItem.groupId);
                     }
                 }
             }

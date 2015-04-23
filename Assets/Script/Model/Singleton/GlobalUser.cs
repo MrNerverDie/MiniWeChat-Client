@@ -133,6 +133,7 @@ namespace MiniWeChat
         public void OnLoginRsp(uint iMessageType, object kParam)
         {
             LoginRsp rsp = kParam as LoginRsp;
+            Log4U.LogDebug(rsp.resultCode);
             if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
             {
                 _isLogin = true;
@@ -149,6 +150,10 @@ namespace MiniWeChat
                 PlayerPrefs.SetString(GlobalVars.PREF_USER_PASSWORD, _userPassword);
 
                 CreateDir();
+            }
+            else
+            {
+                DoLogOut();
             }
         }
 

@@ -218,7 +218,6 @@ namespace MiniWeChat
                 Log4U.LogError(ex.Message + "\n "+  ex.StackTrace + "\n" + ex.Source);
             }
 
-            Log4U.LogDebug("bytes read", bytesRead);
 
             // Begin Read //
             int position = 0;

@@ -21,7 +21,6 @@ namespace MiniWeChat
                 {
                     _labelUserName.text = groupItem.groupName;
                 }
-                Log4U.LogDebug(groupItem.groupName);
             }
         }
 
