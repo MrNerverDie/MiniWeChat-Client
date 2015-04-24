@@ -25,6 +25,8 @@ namespace MiniWeChat
         public Text _textChat;
         public Image _imageHead;
 
+        private UserItem _userItem;
+
         /// <summary>
         /// 在一个聊天窗口中显示一个字符串
         /// </summary>
@@ -39,13 +41,13 @@ namespace MiniWeChat
             }
             else
             {
-                UserItem userItem = GlobalUser.GetInstance().Self;
+                _userItem = GlobalUser.GetInstance().Self;
                 if (chatDataItem.sendUserId != GlobalUser.GetInstance().UserId)
                 {
-                    userItem = GlobalContacts.GetInstance().GetUserItemById(chatDataItem.sendUserId);
+                    _userItem = GlobalContacts.GetInstance().GetUserItemById(chatDataItem.sendUserId);
                 }
 
-                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + userItem.headIndex);
+                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
             }
 
             _imageEmotionBubble.gameObject.SetActive(false);
@@ -80,6 +82,16 @@ namespace MiniWeChat
                 _frameChatBubble.sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, IMAGE_EMOTION_HEIGHT);
                 _frameChatBubble.GetComponent<LayoutElement>().preferredHeight = _frameChatBubble.sizeDelta.y;
             }
+
+            if (_imageHead.GetComponent<Button>() && _userItem != null)
+            {
+                _imageHead.GetComponent<Button>().onClick.AddListener(OnClickHeadIcon);
+            }
+        }
+
+        public void OnClickHeadIcon()
+        {
+            StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _userItem);
         }
 
         public float GetHeight()

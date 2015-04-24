@@ -79,7 +79,7 @@ namespace MiniWeChat
 
         public void OnClickBeginChatButton()
         {
-            StateManager.GetInstance().ClearStatesExceptBottom();
+            StateManager.GetInstance().ClearStatesExceptBottom(true);
             ChatLog chatLog = GlobalChat.GetInstance().GetChatLog(_userItem.userId);
             StateManager.GetInstance().PushState<ChatPanel>(EUIType.ChatPanel, chatLog);
         }

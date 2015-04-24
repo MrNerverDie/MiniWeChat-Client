@@ -45,6 +45,16 @@ namespace MiniWeChat
             {
                 _toggleAddUser.onValueChanged.AddListener(OnClickToggleMemeber);                
             }
+
+            if (_imageHead.GetComponent<Button>() && _userItem != null)
+            {
+                _imageHead.GetComponent<Button>().onClick.AddListener(OnClickHeadIcon);
+            }
+        }
+
+        public void OnClickHeadIcon()
+        {
+            StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _userItem);
         }
 
         public void OnClickToggleMemeber(bool check)
