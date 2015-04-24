@@ -74,7 +74,14 @@ namespace MiniWeChat
         public static FileInfo[] GetFiles(string dirPath)
         {
             DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
-            return dirInfo.GetFiles();
+            if (dirInfo.Exists)
+            {
+                return dirInfo.GetFiles();
+            }
+            else
+            {
+                return new FileInfo[0];
+            }
         }
     }
 }
