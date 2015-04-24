@@ -58,15 +58,15 @@ namespace MiniWeChat
 
                 _chatFrameList[i].Show(chatLog);
                 i++;
+            }
 
-                if (_chatFrameList.Count > GlobalChat.GetInstance().Count)
+            if (_chatFrameList.Count > GlobalChat.GetInstance().Count)
+            {
+                for (i = GlobalChat.GetInstance().Count; i < _chatFrameList.Count; i++)
                 {
-                    for (i = GlobalChat.GetInstance().Count; i < _chatFrameList.Count; i++)
-                    {
-                        GameObject.Destroy(_chatFrameList[i].gameObject);
-                    }
-                    _chatFrameList = _chatFrameList.GetRange(0, GlobalChat.GetInstance().Count);
+                    GameObject.Destroy(_chatFrameList[i].gameObject);
                 }
+                _chatFrameList = _chatFrameList.GetRange(0, GlobalChat.GetInstance().Count);
             }
         }
 
