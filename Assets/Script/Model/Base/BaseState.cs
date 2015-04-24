@@ -11,6 +11,7 @@ namespace MiniWeChat
     {
 
         private CanvasGroup _canvasGroup;
+        private EUIType _uiType;
 
         private const float FADE_DURATION = 0.3f;
         private const float ORIGINAL_SCALE = 0.8f;
@@ -22,7 +23,7 @@ namespace MiniWeChat
         public virtual void OnEnter(object param = null)
         {
             _canvasGroup = GetComponent<CanvasGroup>();
-            OnShow();
+            OnShow(param);
 
         }
 
@@ -32,14 +33,7 @@ namespace MiniWeChat
         public virtual void OnExit()
         {
             OnHide();
-
-            if (gameObject.activeSelf)
-            {
-                transform.localScale = Vector3.one;
-                transform.DOScale(Vector3.zero * ORIGINAL_SCALE, FADE_DURATION);
-                DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 0f, FADE_DURATION);
-            }
-
+            DestroySelf();
         }
 
         /// <summary>
@@ -88,6 +82,16 @@ namespace MiniWeChat
         public void EnabelTouch()
         {
             _canvasGroup.blocksRaycasts = true;
+        }
+
+        public void SetUIType(EUIType uiType)
+        {
+            _uiType = uiType;
+        }
+
+        public void DestroySelf()
+        {
+            UIManager.GetInstance().DestroySingleUI(_uiType);
         }
 
     }

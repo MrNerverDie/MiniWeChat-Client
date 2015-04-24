@@ -33,12 +33,6 @@ namespace MiniWeChat
             InitButtons();
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
-            UIManager.GetInstance().DestroySingleUI(EUIType.FriendDetailPanel);
-        }
-
         public override void OnShow(object param = null)
         {
             base.OnShow(param);

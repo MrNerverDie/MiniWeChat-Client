@@ -41,6 +41,7 @@ namespace MiniWeChat
         public void PushState<T>(EUIType uiType, object param = null) where T : BaseState
         {
             GameObject go = UIManager.GetInstance().GetSingleUI(uiType);
+            go.GetComponent<BaseState>().SetUIType(uiType);
             PushState<T>(go, param);
         }
 
@@ -50,7 +51,7 @@ namespace MiniWeChat
         /// <typeparam name="T">下一个界面的类型</typeparam>
         /// <param name="go">下一个界面对应的GameObject</param>
         /// <param name="param">需要传给下一个界面对应的压栈参数</param>
-        public void PushState<T>(GameObject go, object param = null) where T : BaseState
+        private void PushState<T>(GameObject go, object param = null) where T : BaseState
         {
             T nextState = go.GetComponent<T>();
             nextState.OnEnter(param);
@@ -90,8 +91,6 @@ namespace MiniWeChat
                 BaseState lastState = _stateStack.Peek();
                 lastState.OnShow();
             }
-
-
         }
 
         /// <summary>

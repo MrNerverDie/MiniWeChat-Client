@@ -47,13 +47,6 @@ namespace MiniWeChat
 
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
-            UIManager.GetInstance().DestroySingleUI(EUIType.ChatPanel);
-
-        }
-
         public override void OnShow(object param = null)
         {
             base.OnShow(param);
@@ -75,17 +68,20 @@ namespace MiniWeChat
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_RECEIVE_CHAT, OnUpdateReceiveChat);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_SEND_CHAT, OnUpdateSendChat);
-
         }
 
         private void RefreshChatLog()
         {
+            Log4U.LogDebug(_chatLog == null);
+
             for (int i = _chatBubbleList.Count; i < _chatLog.itemList.Count; i++)
             {
                 AddBubbleFrame(_chatLog.itemList[i]);
             }
 
             UpdateChatBubbleGrid();
+
+            GlobalChat.GetInstance().MarkForRead(_chatLog.chatID);
         }
 
 #region EventListener

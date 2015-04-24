@@ -18,6 +18,10 @@ namespace MiniWeChat
         public Text _labelDate;
         [SerializeField]
         public Button _buttonChatFrame;
+        [SerializeField]
+        public Image _imageUnRead;
+        [SerializeField]
+        public Text _labelUnReadNum;
 
         protected ChatLog _chatLog;
 
@@ -69,6 +73,14 @@ namespace MiniWeChat
             if (_labelDate)
             {
                 _labelDate.text = new DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm:ss");                
+            }
+
+            if (_imageUnRead)
+            {
+                int num = GlobalChat.GetInstance().GetUnReadNum(_chatLog.chatID);
+                num = (num > 99) ? 99 : num;
+                _imageUnRead.gameObject.SetActive(num != 0);
+                _labelUnReadNum.text = num.ToString();
             }
         }
 

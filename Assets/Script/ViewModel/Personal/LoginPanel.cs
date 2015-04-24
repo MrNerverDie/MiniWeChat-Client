@@ -22,12 +22,6 @@ namespace MiniWeChat
             _buttonLogin.interactable = false;
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
-            UIManager.GetInstance().DestroySingleUI(EUIType.LoginPanel);
-        }
-
         public override void OnShow(object param = null)
         {
             base.OnShow(param);
@@ -65,8 +59,7 @@ namespace MiniWeChat
 
         public void OnCLickRegisterButton()
         {
-            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.RegisterPanel);
-            StateManager.GetInstance().PushState<RegisterPanel>(go);
+            StateManager.GetInstance().PushState<RegisterPanel>(EUIType.RegisterPanel);
         }
 
         public void OnLoginRsp(uint iMessageType, object kParam)
@@ -75,9 +68,8 @@ namespace MiniWeChat
             Log4U.LogInfo(rsp.resultCode);
             if (rsp.resultCode == LoginRsp.ResultCode.SUCCESS)
             {
-                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
                 StateManager.GetInstance().ClearStates();
-                StateManager.GetInstance().PushState<MainMenuPanel>(go);
+                StateManager.GetInstance().PushState<MainMenuPanel>(EUIType.MainMenuPanel);
             }
             else
             {

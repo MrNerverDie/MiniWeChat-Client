@@ -19,12 +19,6 @@ namespace MiniWeChat
             InitGroupFrames();
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
-            UIManager.GetInstance().DestroySingleUI(EUIType.SelectGroupPanel);
-        }
-
         public override void OnShow(object param = null)
         {
             base.OnShow(param);

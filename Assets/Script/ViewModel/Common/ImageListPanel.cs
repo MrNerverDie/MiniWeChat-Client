@@ -20,12 +20,6 @@ namespace MiniWeChat
             _callbackWrapper = param as CallBackWithString;
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
-            UIManager.GetInstance().DestroySingleUI(EUIType.ImageListPanel);
-        }
-
         public override void OnShow(object param = null)
         {
             base.OnShow(param);

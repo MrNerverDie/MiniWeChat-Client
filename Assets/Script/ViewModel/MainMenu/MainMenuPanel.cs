@@ -10,6 +10,7 @@ namespace MiniWeChat
     {
         public Button _searchButton;
         public Button _createGroupButton;
+        public Image _imageUnReadChat;
 
         public MainMenuNaviBar _mainMenuNaviBar;
 
@@ -23,22 +24,23 @@ namespace MiniWeChat
             _createGroupButton.onClick.AddListener(OnClickCreateGroupButton);
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
-            UIManager.GetInstance().DestroySingleUI(EUIType.MainMenuPanel);
-        }
-
         public override void OnShow(object param = null)
         {
             base.OnShow(param);
             _mainMenuNaviBar.GetCurPanel().Show();
+
+            _imageUnReadChat.gameObject.SetActive(GlobalChat.GetInstance().IsAnyUnReadChat());
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_CHAT_LIST, OnUpdateChatList);
+            
         }
 
         public override void OnHide()
         {
             base.OnHide();
             _mainMenuNaviBar.GetCurPanel().Hide();
+
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_CHAT_LIST, OnUpdateChatList);
+
         }
 
         public void OnClickSearchButton()
@@ -49,6 +51,11 @@ namespace MiniWeChat
         public void OnClickCreateGroupButton()
         {
             StateManager.GetInstance().PushState<CreateGroupPanel>(EUIType.CreateGroupPanel);
+        }
+
+        public void OnUpdateChatList(uint iMessageType, object kParam)
+        {
+            _imageUnReadChat.gameObject.SetActive(GlobalChat.GetInstance().IsAnyUnReadChat());
         }
     }
 }

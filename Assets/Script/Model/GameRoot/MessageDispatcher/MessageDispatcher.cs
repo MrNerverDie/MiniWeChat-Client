@@ -115,7 +115,6 @@ namespace MiniWeChat
                     {
                         MessageArgs args = _receiveMessageQueue.Dequeue();
                         DispatchMessage(args.iMessageType, args.kParam);
-                        Log4U.LogDebug(args.iMessageType);
                     }
                 }
             }

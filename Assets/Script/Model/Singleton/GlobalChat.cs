@@ -148,6 +148,11 @@ namespace MiniWeChat
                 _chatLogDict.Add(chatID, chatLog);
             }
 
+            if (chatDataItem.sendUserId == GlobalUser.GetInstance().UserId)
+            {
+                chatDataItem.isRead = true;
+            }
+
             _chatLogDict[chatID].itemList.Remove(chatDataItem);
 
             _chatLogDict[chatID].date = chatDataItem.date;
@@ -181,6 +186,50 @@ namespace MiniWeChat
             {
                 return null;
             }
+        }
+
+        public void MarkForRead(string chatID)
+        {
+            ChatLog chatLog = GetChatLog(chatID);
+            for (int i = chatLog.itemList.Count - 1; i >= 0 ; i--)
+            {
+                if (chatLog.itemList[i].isRead)
+                {
+                    break;
+                }
+
+                chatLog.itemList[i].isRead = true;
+            }
+        }
+
+        public int GetUnReadNum(string chatID)
+        {
+            int num = 0;
+            ChatLog chatLog = GetChatLog(chatID);
+            for (int i = chatLog.itemList.Count - 1; i >= 0; i--)
+            {
+                if (chatLog.itemList[i].isRead)
+                {
+                    break;
+                }
+
+                num++;
+            }
+            return num;
+        }
+
+        public bool IsAnyUnReadChat()
+        {
+            bool isUnRead = false;
+            foreach (var chatID in _chatLogDict.Keys)
+            {
+                if (GetUnReadNum(chatID) != 0)
+                {
+                    isUnRead = true;
+                    break;
+                }
+            }
+            return isUnRead;
         }
 
         #region MessageHandler

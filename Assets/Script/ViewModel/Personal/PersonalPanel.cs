@@ -72,8 +72,8 @@ namespace MiniWeChat
 
         public void OnClickSetHead()
         {
-            GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.ImageListPanel);
-            StateManager.GetInstance().PushState<ImageListPanel>(go, new CallBackWithString { callback = OnConfirmChange });
+            StateManager.GetInstance().PushState<ImageListPanel>(EUIType.ImageListPanel,
+                new CallBackWithString { callback = OnConfirmChange });
             _personalSetType = PersonalSetType.HEAD;
         }
 
