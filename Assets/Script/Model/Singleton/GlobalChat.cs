@@ -232,6 +232,11 @@ namespace MiniWeChat
             return isUnRead;
         }
 
+        public bool IsChatDataItemSending(ChatDataItem chatDataItem)
+        {
+            return _waitSendChatDict.ContainsValue(chatDataItem);
+        }
+
         #region MessageHandler
 
         public void OnReceiveChatSync(uint iMessageType, object kParam)

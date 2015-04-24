@@ -66,6 +66,7 @@ namespace MiniWeChat
             if (chatDataItem.chatType == ChatDataItem.ChatType.TEXT)
             {
                 _imageChatBubble.gameObject.SetActive(true);
+                SetIsSend(_imageChatBubble.transform);
 
                 int lines = 0;
                 float maxCharNumInOneLine = 0;
@@ -86,11 +87,13 @@ namespace MiniWeChat
             else if (chatDataItem.chatType == ChatDataItem.ChatType.IMAGE)
             {
                 _imageEmotionBubble.gameObject.SetActive(true);
+                SetIsSend(_imageEmotionBubble.transform);
 
                 _imageEmotionBubble.GetComponent<UniGifTexture>().gifTextAsset = Resources.Load<TextAsset>(string.Format("Raw/Gif/Emotion/00{0}", chatDataItem.chatBody));
 
                 _frameChatBubble.sizeDelta = new Vector2(GlobalVars.DEFAULT_SCREEN_WIDTH, IMAGE_EMOTION_HEIGHT);
                 _frameChatBubble.GetComponent<LayoutElement>().preferredHeight = _frameChatBubble.sizeDelta.y;
+
             }
 
             if (_imageHead.GetComponent<Button>() && _userItem != null)
@@ -183,6 +186,39 @@ namespace MiniWeChat
             }
         }
         
+
+        private void SetIsSend(Transform parent)
+        {
+            if (_chatDataItem.sendUserId != GlobalUser.GetInstance().UserId)
+            {
+                return;
+            }
+
+            GameObject buttonReSend = parent.Find("ReSendButton").gameObject;
+            GameObject labelSending = parent.Find("SendingLabel").gameObject;
+
+            buttonReSend.SetActive(false);
+            labelSending.SetActive(false);
+            if (!_chatDataItem.isSend)
+            {
+                if (GlobalChat.GetInstance().IsChatDataItemSending(_chatDataItem))
+                {
+                    labelSending.SetActive(true);
+                }
+                else
+                {
+                    buttonReSend.SetActive(true);
+                    buttonReSend.GetComponent<Button>().onClick.AddListener(OnClickReSendButton);
+                }
+            }
+        }
+
+        public void OnClickReSendButton()
+        {
+            GlobalChat.GetInstance().SendChatReq(_chatDataItem);
+
+            Show(_chatDataItem);
+        }
     }
 }
 

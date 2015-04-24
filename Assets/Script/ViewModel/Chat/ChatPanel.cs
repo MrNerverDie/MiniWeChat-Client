@@ -155,7 +155,8 @@ namespace MiniWeChat
 
         public void OnUpdateSendChat(uint iMessageType, object kParam)
         {
-
+            int index = (int)kParam;
+            _chatBubbleList[index].Show(_chatLog.itemList[index]);
         }
 
         public void OnDeleteChatItem(uint iMessageType, object kParam)
