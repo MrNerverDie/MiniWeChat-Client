@@ -99,7 +99,7 @@ namespace MiniWeChat
 
         private static int SortChatLogByDate(ChatLog c1, ChatLog c2)
         {
-            return -(int)(c1.date - c2.date);
+            return -(new DateTime(c1.date)).CompareTo(new DateTime(c2.date));
         }
 
         public void SendChatReq(ChatDataItem chatDataItem)
@@ -166,6 +166,10 @@ namespace MiniWeChat
                 _sortedChatLogList.Add(chatLog);
             }
             _sortedChatLogList.Sort(SortChatLogByDate);
+            foreach (var item in _sortedChatLogList)
+            {
+                Log4U.LogDebug(item.date);
+            }
         }
 
         public List<ChatLog>.Enumerator GetEnumerator()
