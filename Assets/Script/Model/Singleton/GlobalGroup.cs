@@ -38,8 +38,6 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
 
             StartCoroutine(QueryMemberData());
-
-            LoadGroupData();
         }
 
         public override void Release()
@@ -226,6 +224,11 @@ namespace MiniWeChat
 
         private void SaveGroupData()
         {
+            foreach (var file in IOTool.GetFiles(GetGroupDirPath()))
+            {
+                file.Delete();
+            }
+
             foreach (var groupID in _groupDict.Keys)
             {
                 string filePath = GetGroupDirPath() + "/" + groupID;

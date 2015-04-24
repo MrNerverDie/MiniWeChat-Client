@@ -34,8 +34,6 @@ namespace MiniWeChat
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
-
-            LoadLogDict();
         }
 
         public override void Release()
@@ -85,7 +83,7 @@ namespace MiniWeChat
 
         public void RemoveChatLog(string chatID)
         {
-            _chatLogDict.Remove(chatID);
+            Log4U.LogDebug(_chatLogDict.Remove(chatID));
         }
 
         /// <summary>
@@ -332,6 +330,11 @@ namespace MiniWeChat
 
         private void SaveLogDict()
         {
+            foreach (var file in IOTool.GetFiles(GetChatDirPath()))
+            {
+                file.Delete();
+            }
+
             foreach (var userID in _chatLogDict.Keys)
             {
                 string filePath = GetChatDirPath() + "/" + userID;

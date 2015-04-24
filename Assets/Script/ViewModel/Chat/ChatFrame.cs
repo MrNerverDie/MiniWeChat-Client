@@ -99,6 +99,7 @@ namespace MiniWeChat
         {
             GlobalChat.GetInstance().RemoveChatLog(_chatLog.chatID);
             Destroy(gameObject);
+            Log4U.LogDebug("chat count", GlobalChat.GetInstance().Count);
         }
 
         public ChatDataItem.TargetType GetTargetType()

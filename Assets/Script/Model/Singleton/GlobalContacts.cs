@@ -27,8 +27,6 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOut);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOut);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
-
-            LoadFriendDict();
         }
 
         public override void Release()
@@ -140,6 +138,11 @@ namespace MiniWeChat
 
         private void SaveFriendDict()
         {
+            foreach (var file in IOTool.GetFiles(GetContactsDirPath()))
+            {
+                file.Delete();
+            }
+
             foreach (var userID in _friendDict.Keys)
             {
                 string filePath = GetContactsDirPath() + "/" + userID;
