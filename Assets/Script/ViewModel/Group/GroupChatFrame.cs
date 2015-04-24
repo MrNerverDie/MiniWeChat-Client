@@ -22,6 +22,25 @@ namespace MiniWeChat
                     _labelUserName.text = groupItem.groupName;
                 }
             }
+
+            if (_imageHead != null)
+            {
+                int headCount = groupItem.memberUserId.Count > 9 ? 9 : groupItem.memberUserId.Count;
+                UIManager.GetInstance().RefreshChildren(_imageHead.gameObject, EUIType.GroupMemberHeadIcon, headCount);
+
+                for (int i = 0; i < headCount; i++)
+                {
+                    string userID = groupItem.memberUserId[i];
+                    UserItem userItem = GlobalGroup.GetInstance().GetGroupMember(userID);
+                    if (userItem == null)
+                    {
+                        userItem = new UserItem();
+                    }
+
+                    GameObject go = _imageHead.transform.GetChild(i).gameObject;
+                    go.GetComponent<GroupMemberFrame>().Show(userItem);
+                }
+            }
         }
 
         public override void OnClickChatFrameButton()

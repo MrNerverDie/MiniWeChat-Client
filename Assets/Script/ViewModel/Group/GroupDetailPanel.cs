@@ -29,16 +29,19 @@ namespace MiniWeChat
             base.OnEnter(param);
             UIManager.GetInstance().AddChild(transform.Find("TopBar").gameObject, EUIType.BackButton);
 
-            _groupItem = param as GroupItem;
-
-            InitMemberHeadFrames();
-
             InitButtons();
         }
 
         public override void OnShow(object param = null)
         {
             base.OnShow(param);
+
+            if (param != null)
+            {
+                _groupItem = param as GroupItem;                
+            }
+
+            RefreshMemberHeadFrames();
         }
 
         public override void OnHide()
@@ -46,7 +49,7 @@ namespace MiniWeChat
             base.OnHide();
         }
 
-        private void InitMemberHeadFrames()
+        private void RefreshMemberHeadFrames()
         {
             int memberRow = Mathf.CeilToInt((float)_groupItem.memberUserId.Count / (float)MEMBER_ONE_ROW);
 
@@ -54,15 +57,18 @@ namespace MiniWeChat
                 GlobalVars.DEFAULT_SCREEN_WIDTH, GRID_GROUP_DETAIL_BASE + memberRow * GROUP_INFO_BAR_INC);
             _groupInfoBar.preferredHeight = GROUP_INFO_BAR_BASE + memberRow * GROUP_INFO_BAR_INC;
 
-            foreach (var userID in _groupItem.memberUserId)
+            UIManager.GetInstance().RefreshChildren(_gridMemberHead.gameObject, EUIType.GroupMemberHeadFrame, _groupItem.memberUserId.Count);
+
+            for (int i = 0; i < _groupItem.memberUserId.Count; i++)
             {
+                string userID = _groupItem.memberUserId[i];
                 UserItem userItem = GlobalGroup.GetInstance().GetGroupMember(userID);
                 if (userItem == null)
                 {
                     userItem = new UserItem();
                 }
 
-                GameObject go = UIManager.GetInstance().AddChild(_gridMemberHead.gameObject, EUIType.GroupMemberHeadFrame);
+                GameObject go = _gridMemberHead.transform.GetChild(i).gameObject;
                 go.GetComponent<GroupMemberFrame>().Show(userItem);
             }
         }

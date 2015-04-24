@@ -412,6 +412,10 @@ namespace MiniWeChat
                 streamForProto.Dispose();
 
             }
+            catch (ObjectDisposedException)
+            {
+                Log4U.LogInfo("Send Closed");
+            }
             catch (Exception ex)
             {
                 Log4U.LogError(ex.Message);
