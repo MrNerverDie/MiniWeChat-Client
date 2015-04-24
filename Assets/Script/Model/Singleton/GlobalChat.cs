@@ -254,6 +254,7 @@ namespace MiniWeChat
         {
             NetworkMessageParam param = kParam as NetworkMessageParam;
             SendChatRsp rsp = param.rsp as SendChatRsp;
+            Log4U.LogDebug(rsp.resultCode);
             if (rsp.resultCode == SendChatRsp.ResultCode.SUCCESS)
             {
                 int index = -1;
@@ -263,6 +264,18 @@ namespace MiniWeChat
                     index = _chatLogDict[req.chatData.receiveUserId].itemList.LastIndexOf(_waitSendChatDict[param.msgID]);
                     _waitSendChatDict[param.msgID].isSend = true;
                     _waitSendChatDict.Remove(param.msgID);                
+                }
+                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT, index);
+            }
+            else
+            {
+                int index = -1;
+                if (_waitSendChatDict.ContainsKey(param.msgID))
+                {
+                    SendChatReq req = param.req as SendChatReq;
+                    index = _chatLogDict[req.chatData.receiveUserId].itemList.LastIndexOf(_waitSendChatDict[param.msgID]);
+                    _waitSendChatDict[param.msgID].isSend = false;
+                    _waitSendChatDict.Remove(param.msgID);
                 }
                 MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT, index);
             }

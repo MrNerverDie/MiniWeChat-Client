@@ -162,8 +162,8 @@ namespace MiniWeChat
         public void OnDeleteChatItem(uint iMessageType, object kParam)
         {
             DeleteChatParam param = kParam as DeleteChatParam;
-            Log4U.LogDebug( _chatLog.itemList.Remove(param.chatDataItem));
-            Log4U.LogDebug(_chatBubbleList.Remove(param.chatBubbleFrame));
+            _chatLog.itemList.Remove(param.chatDataItem);
+            _chatBubbleList.Remove(param.chatBubbleFrame);
         }
 
         #endregion
