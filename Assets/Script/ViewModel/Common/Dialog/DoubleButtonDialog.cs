@@ -9,16 +9,25 @@ namespace MiniWeChat
         [SerializeField]
         public Button _buttonCancel;
 
+        private UnityEngine.Events.UnityAction _cancelCallback;
+
         public void Show(string title, string content, UnityEngine.Events.UnityAction confirmCallback = null, UnityEngine.Events.UnityAction cancelCallback = null)
         {
             base.Show(title, content, confirmCallback);
 
-            if (cancelCallback == null)
+            _cancelCallback = cancelCallback;
+
+            _buttonCancel.onClick.AddListener(DoCancelCallBack);
+        }
+
+        public void DoCancelCallBack()
+        {
+            if (_cancelCallback != null)
             {
-                cancelCallback = Hide;
+                _cancelCallback();
             }
 
-            _buttonCancel.onClick.AddListener(cancelCallback);
+            Hide();
         }
     }
 }

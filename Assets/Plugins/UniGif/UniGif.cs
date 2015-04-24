@@ -110,9 +110,9 @@ public static partial class UniGif
             }
         }
 
-        while (true)
+        while (cb != null)
         {
-            if (cb != null && gifDict.ContainsKey(instanceId))
+            if (gifDict.ContainsKey(instanceId))
             {
                 loopCount = gifDict[instanceId].loopCount;
                 width = gifDict[instanceId].width;

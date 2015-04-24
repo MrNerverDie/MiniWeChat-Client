@@ -355,7 +355,6 @@ namespace MiniWeChat
                     if (chatLog != null)
                     {
                         _chatLogDict[chatLog.chatID] = chatLog;
-                        Log4U.LogDebug("chatID", chatLog.chatID);
                     }
                 }
             }

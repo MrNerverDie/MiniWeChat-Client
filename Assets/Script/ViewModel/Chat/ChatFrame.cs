@@ -17,7 +17,7 @@ namespace MiniWeChat
         [SerializeField]
         public Text _labelDate;
         [SerializeField]
-        public Button _buttonChatFrame;
+        public MiniButton _buttonChatFrame;
         [SerializeField]
         public Image _imageUnRead;
         [SerializeField]
@@ -29,6 +29,7 @@ namespace MiniWeChat
         public virtual void Start()
         {
             _buttonChatFrame.onClick.AddListener(OnClickChatFrameButton);
+            _buttonChatFrame.onLongPress.AddListener(OnLongPressChatFrameButton);
         }
 
         public virtual void Show(ChatLog chatLog)
@@ -87,6 +88,17 @@ namespace MiniWeChat
         public virtual void OnClickChatFrameButton()
         {
             StateManager.GetInstance().PushState<ChatPanel>(EUIType.ChatPanel, _chatLog);
+        }
+
+        public void OnLongPressChatFrameButton()
+        {
+            DialogManager.GetInstance().CreateDoubleButtonDialog("您确定要删除该聊天记录吗？", "警告", OnConfirmDeleteChatLog);
+        }
+
+        public void OnConfirmDeleteChatLog()
+        {
+            GlobalChat.GetInstance().RemoveChatLog(_chatLog.chatID);
+            Destroy(gameObject);
         }
 
         public ChatDataItem.TargetType GetTargetType()

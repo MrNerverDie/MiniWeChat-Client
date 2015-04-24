@@ -13,6 +13,8 @@ namespace MiniWeChat
         [SerializeField]
         public Button _buttonConfirm;
 
+        private UnityEngine.Events.UnityAction _confirmCallback;
+
         public void Show(string title, string content, UnityEngine.Events.UnityAction confirmCallback = null)
         {
             gameObject.SetActive(true);
@@ -28,15 +30,22 @@ namespace MiniWeChat
                 _labelContent.text = content;                
             }
 
-            if (confirmCallback == null)
-            {
-                confirmCallback = Hide;
-            }
+            _confirmCallback = confirmCallback;
 
-            _buttonConfirm.onClick.AddListener(confirmCallback);
+            _buttonConfirm.onClick.AddListener(DoConfirmCallBack);
         }
 
-        public void Hide()
+        public void DoConfirmCallBack()
+        {
+            if (_confirmCallback != null)
+            {
+                _confirmCallback();
+            }
+
+            Hide();
+        }
+
+        protected void Hide()
         {
             gameObject.SetActive(false);
             _buttonConfirm.onClick.RemoveAllListeners();

@@ -158,7 +158,6 @@ namespace MiniWeChat
                 foreach (GroupItem group in rsp.groups)
                 {
                     _groupDict.Add(group.groupId, group);
-                    Log4U.LogDebug("gid : ", group.groupId);
                 }
             }
         }
