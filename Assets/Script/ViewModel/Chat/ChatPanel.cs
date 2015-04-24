@@ -60,6 +60,7 @@ namespace MiniWeChat
 
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_RECEIVE_CHAT, OnUpdateReceiveChat);
             MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.UPDATE_SEND_CHAT, OnUpdateSendChat);
+            MessageDispatcher.GetInstance().RegisterMessageHandler((uint)EUIMessage.DELETE_CHAT_ITEM, OnDeleteChatItem);
         }
 
         public override void OnHide()
@@ -68,11 +69,11 @@ namespace MiniWeChat
 
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_RECEIVE_CHAT, OnUpdateReceiveChat);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.UPDATE_SEND_CHAT, OnUpdateSendChat);
+            MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.DELETE_CHAT_ITEM, OnDeleteChatItem);
         }
 
         private void RefreshChatLog()
         {
-            Log4U.LogDebug(_chatLog == null);
 
             for (int i = _chatBubbleList.Count; i < _chatLog.itemList.Count; i++)
             {
@@ -155,6 +156,13 @@ namespace MiniWeChat
         public void OnUpdateSendChat(uint iMessageType, object kParam)
         {
 
+        }
+
+        public void OnDeleteChatItem(uint iMessageType, object kParam)
+        {
+            DeleteChatParam param = kParam as DeleteChatParam;
+            Log4U.LogDebug( _chatLog.itemList.Remove(param.chatDataItem));
+            Log4U.LogDebug(_chatBubbleList.Remove(param.chatBubbleFrame));
         }
 
         #endregion

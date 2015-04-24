@@ -5,6 +5,13 @@ using protocol;
 
 namespace MiniWeChat
 {
+
+    public class DeleteChatParam
+    {
+        public ChatBubbleFrame chatBubbleFrame;
+        public ChatDataItem chatDataItem;
+    }
+
     public class ChatBubbleFrame : MonoBehaviour
     {
         private const float IMAGE_BUBBLE_WIDTH_BASE = 150f;
@@ -26,6 +33,7 @@ namespace MiniWeChat
         public Image _imageHead;
 
         private UserItem _userItem;
+        private ChatDataItem _chatDataItem;
 
         /// <summary>
         /// 在一个聊天窗口中显示一个字符串
@@ -33,6 +41,8 @@ namespace MiniWeChat
         /// <param name="text">字符串</param>
         public void Show(ChatDataItem chatDataItem)
         {
+            _chatDataItem = chatDataItem;
+
             string text = chatDataItem.chatBody;
 
             if (chatDataItem.targetType == ChatDataItem.TargetType.SYSTEM)
@@ -87,11 +97,36 @@ namespace MiniWeChat
             {
                 _imageHead.GetComponent<Button>().onClick.AddListener(OnClickHeadIcon);
             }
+
+            if (_imageChatBubble.GetComponent<MiniButton>())
+            {
+                _imageChatBubble.GetComponent<MiniButton>().onLongPress.AddListener(OnLongPressChatBubble);
+            }
+
+            if (_imageEmotionBubble.GetComponent<MiniButton>())
+	        {
+                _imageEmotionBubble.GetComponent<MiniButton>().onLongPress.AddListener(OnLongPressChatBubble);
+        	}
         }
 
         public void OnClickHeadIcon()
         {
             StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _userItem);
+        }
+
+        public void OnLongPressChatBubble()
+        {
+            DialogManager.GetInstance().CreateDoubleButtonDialog("您确定要删除这条聊天记录吗？", "警告", OnConfirmDeleteChatBubble);
+        }
+
+        public void OnConfirmDeleteChatBubble()
+        {
+            MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.DELETE_CHAT_ITEM, 
+                new DeleteChatParam { 
+                    chatBubbleFrame = this,
+                    chatDataItem = _chatDataItem,
+                });
+            Destroy(gameObject);
         }
 
         public float GetHeight()
