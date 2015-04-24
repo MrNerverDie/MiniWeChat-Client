@@ -72,7 +72,7 @@ namespace MiniWeChat
 
             if (_labelDate)
             {
-                _labelDate.text = new DateTime(chatLog.date).ToString("yyyy/MM/dd HH:mm:ss");                
+                _labelDate.text = DateFormatTool.GetChatFrameTimeStr(_chatLog.date);          
             }
 
             if (_imageUnRead)
