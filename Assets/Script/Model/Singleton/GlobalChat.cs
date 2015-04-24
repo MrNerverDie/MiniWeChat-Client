@@ -34,6 +34,8 @@ namespace MiniWeChat
 
             _chatLogDict = new Dictionary<string, ChatLog>();
             _waitSendChatDict = new Dictionary<string, ChatDataItem>();
+
+            LoadLogDict();
         }
 
         public override void Release()
@@ -166,10 +168,6 @@ namespace MiniWeChat
                 _sortedChatLogList.Add(chatLog);
             }
             _sortedChatLogList.Sort(SortChatLogByDate);
-            foreach (var item in _sortedChatLogList)
-            {
-                Log4U.LogDebug(item.date);
-            }
         }
 
         public List<ChatLog>.Enumerator GetEnumerator()

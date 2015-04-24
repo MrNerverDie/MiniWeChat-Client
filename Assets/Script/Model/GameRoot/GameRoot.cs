@@ -9,14 +9,12 @@ namespace MiniWeChat
     {
         private static GameObject _rootObj;
 
-        private static List<Action> _singletonReleaseList;
+        private static List<Action> _singletonReleaseList = new List<Action>();
 
         public void Awake()
         {
             _rootObj = gameObject;
             GameObject.DontDestroyOnLoad(_rootObj);
-
-            _singletonReleaseList = new List<Action>();
 
             StartCoroutine(InitSingletons());
         }

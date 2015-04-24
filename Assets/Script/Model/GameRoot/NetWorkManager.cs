@@ -28,7 +28,7 @@ namespace MiniWeChat
 
         private float CONNECT_TIME_OUT = 3.0f;
         private float REQ_TIME_OUT = 5.0f;
-        private float KEEP_ALIVE_TIME_OUT = 6.0f;
+        private float KEEP_ALIVE_TIME_OUT = 10.0f;
 
         private bool _isKeepAlive = false;
 

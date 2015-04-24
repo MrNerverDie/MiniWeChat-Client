@@ -14,13 +14,17 @@ namespace MiniWeChat
         public float _durationThreshold = 0.75f;
 
         public UnityEvent onLongPress = new UnityEvent();
-        public UnityEvent onClick = new UnityEvent();
+        public Button.ButtonClickedEvent onClick;
  
         private bool isPointerDown = false;
         private bool longPressTriggered = false;
         private float timePressStarted;
  
- 
+        public void Awake()
+        {
+            onClick = GetComponent<Button>().onClick;
+        }
+
         private void Update( ) {
             if ( isPointerDown && !longPressTriggered ) {
                 if ( Time.time - timePressStarted > _durationThreshold ) {
@@ -38,10 +42,6 @@ namespace MiniWeChat
  
         public void OnPointerUp( PointerEventData eventData ) {
             isPointerDown = false;
-            if (Time.time - timePressStarted < _durationThreshold)
-            {
-                onClick.Invoke();
-            }
         }
  
  
