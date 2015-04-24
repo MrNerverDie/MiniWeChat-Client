@@ -24,6 +24,14 @@ namespace MiniWeChat
         // DataItem //
         private UserItem _userItem;
 
+        public void Start()
+        {
+            if (_imageHead.GetComponent<Button>())
+            {
+                _imageHead.GetComponent<Button>().onClick.AddListener(OnClickHeadIcon);
+            }
+        }
+
         public void Show(UserItem userItem)
         {
             _userItem = userItem;
@@ -45,16 +53,14 @@ namespace MiniWeChat
             {
                 _toggleAddUser.onValueChanged.AddListener(OnClickToggleMemeber);                
             }
-
-            if (_imageHead.GetComponent<Button>() && _userItem != null)
-            {
-                _imageHead.GetComponent<Button>().onClick.AddListener(OnClickHeadIcon);
-            }
         }
 
         public void OnClickHeadIcon()
         {
-            StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _userItem);
+            if (_userItem != null)
+            {
+                StateManager.GetInstance().PushState<FriendDetailPanel>(EUIType.FriendDetailPanel, _userItem);                
+            }
         }
 
         public void OnClickToggleMemeber(bool check)

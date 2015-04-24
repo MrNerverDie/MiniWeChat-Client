@@ -10,11 +10,16 @@ namespace MiniWeChat
     public class BaseState : MonoBehaviour
     {
 
-        private CanvasGroup _canvasGroup;
-        private EUIType _uiType;
-
         private const float FADE_DURATION = 0.3f;
         private const float ORIGINAL_SCALE = 0.8f;
+
+        private CanvasGroup _canvasGroup;
+        private EUIType _uiType;
+        public MiniWeChat.EUIType UIType
+        {
+            get { return _uiType; }
+            set { _uiType = value; }
+        }
 
         /// <summary>
         /// 界面栈初始化的时候被调用的方法
@@ -82,11 +87,6 @@ namespace MiniWeChat
         public void EnabelTouch()
         {
             _canvasGroup.blocksRaycasts = true;
-        }
-
-        public void SetUIType(EUIType uiType)
-        {
-            _uiType = uiType;
         }
 
         public void DestroySelf()

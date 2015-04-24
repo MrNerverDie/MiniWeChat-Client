@@ -41,7 +41,7 @@ namespace MiniWeChat
         public void PushState<T>(EUIType uiType, object param = null) where T : BaseState
         {
             GameObject go = UIManager.GetInstance().GetSingleUI(uiType);
-            go.GetComponent<BaseState>().SetUIType(uiType);
+            go.GetComponent<BaseState>().UIType = uiType;
             PushState<T>(go, param);
         }
 
@@ -56,10 +56,13 @@ namespace MiniWeChat
             T nextState = go.GetComponent<T>();
             nextState.OnEnter(param);
 
+            Log4U.LogDebug("next", nextState.UIType);
+
             if (_stateStack.Count != 0)
             {
                 BaseState curState = _stateStack.Peek();
                 curState.DisableTouch();
+                Log4U.LogDebug("cur", curState.UIType);
                 Tweener tweener = nextState.BeginEnterTween();
                 tweener.OnComplete(delegate()
                 {
@@ -83,6 +86,7 @@ namespace MiniWeChat
                 tweener.OnComplete(delegate()
                 {
                     curState.OnExit();
+                    Log4U.LogDebug("cur", curState.UIType);
                 });
             }
 
@@ -90,6 +94,7 @@ namespace MiniWeChat
             {
                 BaseState lastState = _stateStack.Peek();
                 lastState.OnShow();
+                Log4U.LogDebug("last", lastState.UIType);
             }
         }
 
