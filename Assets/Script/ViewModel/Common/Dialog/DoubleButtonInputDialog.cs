@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MiniWeChat
 {
-    public class DoubleButtonInputDialog : MonoBehaviour
+    public class DoubleButtonInputDialog : BaseDialog
     {
         public Text _labelTitle;
         public Text _labelInputHint;
@@ -52,16 +52,19 @@ namespace MiniWeChat
             }
             _buttonCancel.onClick.AddListener(Hide);
 
+            BeginEnterTween();
+
         }
 
-        public void Hide()
+        protected override void Hide()
         {
-            gameObject.SetActive(false);
+            base.Hide();
+
             _buttonConfirm.onClick.RemoveAllListeners();
             _buttonCancel.onClick.RemoveAllListeners();
         }
 
-        public void OnClickConfirmButton()
+        protected void OnClickConfirmButton()
         {
             if (_confirmCallback != null)
             {

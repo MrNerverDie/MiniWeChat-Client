@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+
 using System.Collections.Generic;
+
+using DG.Tweening;
 
 namespace MiniWeChat
 {
-    public class SingleButtonDialog : MonoBehaviour
+    public class SingleButtonDialog : BaseDialog
     {
         [SerializeField]
         public Text _labelTitle;
@@ -33,6 +36,8 @@ namespace MiniWeChat
             _confirmCallback = confirmCallback;
 
             _buttonConfirm.onClick.AddListener(DoConfirmCallBack);
+
+            BeginEnterTween();
         }
 
         public void DoConfirmCallBack()
@@ -45,9 +50,9 @@ namespace MiniWeChat
             Hide();
         }
 
-        protected void Hide()
+        protected override void Hide()
         {
-            gameObject.SetActive(false);
+            base.Hide();
             _buttonConfirm.onClick.RemoveAllListeners();
         }
     }
