@@ -127,8 +127,9 @@ namespace MiniWeChat
             TextAsset[] gifTextAssets = Resources.LoadAll<TextAsset>("Raw/Gif");
             foreach (var gifTextAsset in gifTextAssets)
             {
-                yield return StartCoroutine(UniGif.GetTextureListCoroutine(this, gifTextAsset.bytes, gifTextAsset.GetInstanceID(), null,
-                    FilterMode.Trilinear, TextureWrapMode.Clamp, false));
+                yield return 0;
+                    StartCoroutine(UniGif.GetTextureListCoroutine(this, gifTextAsset.bytes, gifTextAsset.GetInstanceID(), null,
+                        FilterMode.Trilinear, TextureWrapMode.Clamp, false));
             }
         }
 
