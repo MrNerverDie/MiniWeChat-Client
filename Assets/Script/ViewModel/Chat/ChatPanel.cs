@@ -72,8 +72,18 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EUIMessage.DELETE_CHAT_ITEM, OnDeleteChatItem);
         }
 
-        private void RefreshChatLog()
+        private void RefreshChatLog(bool refreshAll = false)
         {
+
+            if (refreshAll)
+            {
+                foreach (ChatBubbleFrame chatBubble in _chatBubbleList)
+                {
+                    GameObject.Destroy(chatBubble.gameObject);
+                }
+
+                _chatBubbleList.Clear();
+            }
 
             for (int i = _chatBubbleList.Count; i < _chatLog.itemList.Count; i++)
             {
@@ -155,8 +165,7 @@ namespace MiniWeChat
 
         public void OnUpdateSendChat(uint iMessageType, object kParam)
         {
-            int index = (int)kParam;
-            _chatBubbleList[index].Show(_chatLog.itemList[index]);
+            RefreshChatLog(true);
         }
 
         public void OnDeleteChatItem(uint iMessageType, object kParam)

@@ -257,42 +257,36 @@ namespace MiniWeChat
             Log4U.LogDebug(rsp.resultCode);
             if (rsp.resultCode == SendChatRsp.ResultCode.SUCCESS)
             {
-                int index = -1;
                 if (_waitSendChatDict.ContainsKey(param.msgID))
                 {
                     SendChatReq req = param.req as SendChatReq;
-                    index = _chatLogDict[req.chatData.receiveUserId].itemList.LastIndexOf(_waitSendChatDict[param.msgID]);
                     _waitSendChatDict[param.msgID].isSend = true;
                     _waitSendChatDict.Remove(param.msgID);                
                 }
-                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT, index);
+                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT);
             }
             else
             {
-                int index = -1;
                 if (_waitSendChatDict.ContainsKey(param.msgID))
                 {
                     SendChatReq req = param.req as SendChatReq;
-                    index = _chatLogDict[req.chatData.receiveUserId].itemList.LastIndexOf(_waitSendChatDict[param.msgID]);
                     _waitSendChatDict[param.msgID].isSend = false;
                     _waitSendChatDict.Remove(param.msgID);
                 }
-                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT, index);
+                MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT);
             }
         }
 
         public void OnSendChatTimeOut(uint iMessageType, object kParam)
         {
             NetworkMessageParam param = kParam as NetworkMessageParam;
-            int index = -1;
             if (_waitSendChatDict.ContainsKey(param.msgID))
             {
                 SendChatReq req = param.req as SendChatReq;
-                index = _chatLogDict[req.chatData.receiveUserId].itemList.LastIndexOf(_waitSendChatDict[param.msgID]);
                 _waitSendChatDict[param.msgID].isSend = false;
                 _waitSendChatDict.Remove(param.msgID);
             }
-            MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT, index);
+            MessageDispatcher.GetInstance().DispatchMessage((uint)EUIMessage.UPDATE_SEND_CHAT);
         }
 
         public void OnLoginRsp(uint iMessageType, object kParam)
