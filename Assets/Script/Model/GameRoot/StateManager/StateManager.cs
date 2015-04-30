@@ -22,13 +22,11 @@ namespace MiniWeChat
         {
             if (GlobalUser.GetInstance().IsEnterMainMenu == false)
             {
-                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.LoginPanel);
-                StateManager.GetInstance().ReplaceState<LoginPanel>(go);
+                StateManager.GetInstance().PushState<LoginPanel>(EUIType.LoginPanel);
             }
             else
             {
-                GameObject go = UIManager.GetInstance().GetSingleUI(EUIType.MainMenuPanel);
-                StateManager.GetInstance().ReplaceState<MainMenuPanel>(go);
+                StateManager.GetInstance().PushState<MainMenuPanel>(EUIType.MainMenuPanel);
             }
         }
 

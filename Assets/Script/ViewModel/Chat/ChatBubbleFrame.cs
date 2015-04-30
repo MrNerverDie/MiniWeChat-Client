@@ -45,20 +45,8 @@ namespace MiniWeChat
 
             string text = chatDataItem.chatBody;
 
-            if (chatDataItem.targetType == ChatDataItem.TargetType.SYSTEM)
-            {
-                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Chat, "010");
-            }
-            else
-            {
-                _userItem = GlobalUser.GetInstance().Self;
-                if (chatDataItem.sendUserId != GlobalUser.GetInstance().UserId)
-                {
-                    _userItem = GlobalContacts.GetInstance().GetUserItemById(chatDataItem.sendUserId);
-                }
 
-                UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
-            }
+            SetUserItemData();
 
             _imageEmotionBubble.gameObject.SetActive(false);
             _imageChatBubble.gameObject.SetActive(false);
@@ -218,6 +206,34 @@ namespace MiniWeChat
             GlobalChat.GetInstance().SendChatReq(_chatDataItem);
 
             Show(_chatDataItem);
+        }
+
+        public void SetUserItemData()
+        {
+            switch (_chatDataItem.targetType)
+            {
+                case ChatDataItem.TargetType.SYSTEM:
+                    UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Chat, "010");
+                    break;
+                case ChatDataItem.TargetType.INDIVIDUAL:
+                    _userItem = GlobalUser.GetInstance().Self;
+                    if (_chatDataItem.sendUserId != GlobalUser.GetInstance().UserId)
+                    {
+                        _userItem = GlobalContacts.GetInstance().GetUserItemById(_chatDataItem.sendUserId);
+                    }
+
+                    UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
+                    break;
+                case ChatDataItem.TargetType.GROUP:
+                    _userItem = GlobalGroup.GetInstance().GetGroupMember(_chatDataItem.sendUserId);
+                    if (_userItem != null)
+                    {
+                        UIManager.GetInstance().SetImage(_imageHead, EAtlasName.Head, "00" + _userItem.headIndex);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
