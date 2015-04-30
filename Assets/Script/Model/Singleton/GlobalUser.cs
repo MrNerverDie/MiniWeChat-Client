@@ -78,7 +78,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.SOCKET_CONNECTED, TryLoginWithPref);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnOffLineSync);
 
-            SaveAndClearUserInfo();
+            SaveUserInfo();
         }
         #endregion
 
@@ -180,7 +180,7 @@ namespace MiniWeChat
 
             if (rsp.resultCode == LogoutRsp.ResultCode.SUCCESS)
             {
-                SaveAndClearUserInfo();
+                SaveUserInfo();
                 DoLogOut();
             }
         }
@@ -192,7 +192,7 @@ namespace MiniWeChat
             if (rsp.causeCode == OffLineSync.CauseCode.CHANGE_PASSWORD ||
                 rsp.causeCode == OffLineSync.CauseCode.ANOTHER_LOGIN)
             {
-                SaveAndClearUserInfo();
+                SaveUserInfo();
                 DoLogOut();
             }
         }
@@ -231,11 +231,9 @@ namespace MiniWeChat
             _userName = userItem.userName;
         }
 
-        public void SaveAndClearUserInfo()
+        public void SaveUserInfo()
         {
             PlayerPrefs.SetString(GlobalVars.PREF_USER_ITEM, IOTool.SerializeToString<UserItem>(Self));
-            _headIndex = 0;
-            _userName = "";
         }
 
 

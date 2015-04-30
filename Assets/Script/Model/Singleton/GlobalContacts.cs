@@ -42,7 +42,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
 
 
-            SaveAndClearFriendDict();
+            SaveFriendDict();
         }
 
         public void OnApplicationPause(bool pause)
@@ -122,7 +122,7 @@ namespace MiniWeChat
 
         public void OnLogOut(uint iMessageType, object kParam)
         {   
-            SaveAndClearFriendDict();
+            SaveFriendDict();
         }
 
         public void OnTryLogin(uint iMessageType, object kParam)
@@ -152,14 +152,9 @@ namespace MiniWeChat
             }
         }
 
-        private void SaveAndClearFriendDict()
-        {
-            SaveFriendDict();
-            ClearFriendDict();
-        }
-
         private void LoadFriendDict()
         {
+            ClearFriendDict();
             if (_friendDict.Count == 0 && IOTool.IsDirExist(GetContactsDirPath()))
             {
                 foreach (var file in IOTool.GetFiles(GetContactsDirPath()))

@@ -50,7 +50,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)EModelMessage.TRY_LOGIN, OnTryLogin);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.CHANGE_FRIEND_SYNC, OnChangeFriendSync);
 
-            SaveAndClearLogDict();
+            SaveLogDict();
         }
 
         public void OnApplicationPause(bool pause)
@@ -306,7 +306,7 @@ namespace MiniWeChat
 
         public void OnLogOutRsp(uint iMessageType, object kParam)
         {
-            SaveAndClearLogDict();
+            SaveLogDict();
         }
 
         public void OnTryLogin(uint iMessageType, object kParam)
@@ -362,14 +362,9 @@ namespace MiniWeChat
             }
         }
 
-        private void SaveAndClearLogDict()
-        {
-            SaveLogDict();
-            ClearLogDict();
-        }
-
         private void LoadLogDict()
         {
+            ClearLogDict();
             if (IOTool.IsDirExist(GetChatDirPath()))
             {
                 foreach (var file in IOTool.GetFiles(GetChatDirPath()))

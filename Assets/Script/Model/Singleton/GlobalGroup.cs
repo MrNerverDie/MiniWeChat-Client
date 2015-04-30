@@ -53,7 +53,7 @@ namespace MiniWeChat
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.LOGOUT_RSP, OnLogOutRsp);
             MessageDispatcher.GetInstance().UnRegisterMessageHandler((uint)ENetworkMessage.OFFLINE_SYNC, OnLogOutRsp);
 
-            SaveAndClearGroupData();
+            SaveGroupDict();
         }
 
         #endregion
@@ -190,12 +190,12 @@ namespace MiniWeChat
 
         public void OnTryLogin(uint iMessageType, object kParam)
         {
-            LoadGroupData();
+            LoadGroupDict();
         }
 
         public void OnLogOutRsp(uint iMessageType, object kParam)
         {
-            SaveAndClearGroupData();
+            SaveGroupDict();
         }
 
         public void OnGetUserInfo(uint iMessageType, object kParam)
@@ -222,7 +222,7 @@ namespace MiniWeChat
             return GlobalUser.GetInstance().GetUserDir() + "/Group";
         }
 
-        private void SaveGroupData()
+        private void SaveGroupDict()
         {
             foreach (var file in IOTool.GetFiles(GetGroupDirPath()))
             {
@@ -236,14 +236,9 @@ namespace MiniWeChat
             }
         }
 
-        private void SaveAndClearGroupData()
+        private void LoadGroupDict()
         {
-            SaveGroupData();
-            ClearGroupData();
-        }
-
-        private void LoadGroupData()
-        {
+            ClearGroupDict();
             if (_groupDict.Count == 0 && IOTool.IsDirExist(GetGroupDirPath()))
             {
                 foreach (var file in IOTool.GetFiles(GetGroupDirPath()))
@@ -257,7 +252,7 @@ namespace MiniWeChat
             }
         }
 
-        public void ClearGroupData()
+        public void ClearGroupDict()
         {
             _groupDict.Clear();
         }
