@@ -21,13 +21,11 @@ public static partial class UniGif
     /// <param name="filterMode">Textures filter mode</param>
     /// <param name="wrapMode">Textures wrap mode</param>
     /// <returns>IEnumerator</returns>
-    static IEnumerator DecodeTextureCoroutine (GifData gifData, Action<List<GifTexture>> cb, FilterMode filterMode, TextureWrapMode wrapMode)
+    static IEnumerator DecodeTextureCoroutine(GifData gifData, List<GifTexture> gifTexList, FilterMode filterMode, TextureWrapMode wrapMode)
     {
         if (gifData.imageBlockList == null || gifData.imageBlockList.Count < 1) {
             yield break;
         }
-
-        List<GifTexture> gifTexList = new List<GifTexture> ();
 
         Color32? bgColor = GetGlobalBgColor (gifData);
 
@@ -78,10 +76,6 @@ public static partial class UniGif
 
             // avoid lock up
             yield return 0;
-        }
-
-        if (cb != null) {
-            cb (gifTexList);
         }
     }
 

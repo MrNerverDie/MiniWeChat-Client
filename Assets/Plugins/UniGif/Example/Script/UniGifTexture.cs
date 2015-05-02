@@ -148,7 +148,12 @@ public class UniGifTexture : MonoBehaviour
     {
         if (gifTextAsset != null)
         {
-            yield return StartCoroutine(UniGif.GetTextureListCoroutine(this, gifTextAsset.bytes, gifTextAsset.GetInstanceID(), (gtList, loop, w, h) =>
+            if (gifTexList.Count != 0 && rawImage != null)
+            {
+                rawImage.texture = gifTexList[0].texture2d;
+            }
+
+            yield return StartCoroutine(UniGif.GetTextureListCoroutine(this, gifTextAsset.bytes, gifTextAsset.GetInstanceID(), gifTexList, (gtList, loop, w, h) =>
             {
                 gifTexList = gtList;
                 FinishedGetTextureList(loop, w, h, autoPlay);
@@ -238,7 +243,9 @@ public class UniGifTexture : MonoBehaviour
         state = STATE.PLAYING;
         int nowLoopCount = 0;
         do {
-            foreach (var gifTex in gifTexList) {
+            //foreach (var gifTex in gifTexList) {
+            for (int i = 0; i < gifTexList.Count; i++){
+                UniGif.GifTexture gifTex = gifTexList[i];
                 // Change texture
                 if (targetRenderer != null)
                 {

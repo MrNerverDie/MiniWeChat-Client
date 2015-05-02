@@ -63,13 +63,20 @@ public static partial class UniGif
     /// <param name="wrapMode">Textures wrap mode</param>
     /// <param name="debugLog">Debug Log Flag</param>
     /// <returns>IEnumerator</returns>
-    public static IEnumerator GetTextureListCoroutine (MonoBehaviour mb, byte[] bytes, int instanceId, Action<List<GifTexture>, int, int, int> cb,
-        FilterMode filterMode = FilterMode.Bilinear, TextureWrapMode wrapMode = TextureWrapMode.Clamp, bool debugLog = false)
+    public static IEnumerator GetTextureListCoroutine (MonoBehaviour mb, byte[] bytes, int instanceId, List<GifTexture> gifTexList,
+        Action<List<GifTexture>, int, int, int> cb, FilterMode filterMode = FilterMode.Bilinear, TextureWrapMode wrapMode = TextureWrapMode.Clamp, bool debugLog = false)
     {
         int loopCount = -1;
         int width = 0;
         int height = 0;
-        List<GifTexture> gifTexList = new List<GifTexture>();
+        if (gifTexList == null)
+        {
+            gifTexList = new List<GifTexture>();
+        }
+        else
+        {
+            gifTexList = gifDict[instanceId].textureList;
+        }
 
         if (!gifDict.ContainsKey(instanceId))
         {
@@ -89,40 +96,37 @@ public static partial class UniGif
             width = gifData.logicalScreenWidth;
             height = gifData.logicalScreenHeight;
 
+            Debug.Log("loopCount " + loopCount);
+
+            gifDict.Add(instanceId, new GifAnimation
+            {
+                loopCount = loopCount,
+                width = width,
+                height = height,
+                textureList = gifTexList,
+            });
+
             // avoid lock up
             yield return 0;
 
             // Decode to textures from GIF data
-            yield return mb.StartCoroutine(UniGif.DecodeTextureCoroutine(gifData, gtList =>
-            {
-                gifTexList = gtList;
-            }, filterMode, wrapMode));
-
-            if (!gifDict.ContainsKey(instanceId))
-            {
-                gifDict.Add(instanceId, new GifAnimation
-                {
-                    loopCount = loopCount,
-                    width = width,
-                    height = height,
-                    textureList = gifTexList,
-                });
-            }
+            yield return mb.StartCoroutine(UniGif.DecodeTextureCoroutine(gifData, gifTexList, filterMode, wrapMode));
         }
 
-        while (cb != null)
+        if (cb != null)
         {
-            if (gifDict.ContainsKey(instanceId))
-            {
+            //Debug.Log(gifDict[instanceId].textureList.Count + " " + gifDict[instanceId].loopCount);
+            //if (gifDict[instanceId].textureList.Count == gifDict[instanceId].loopCount)
+            //{
                 loopCount = gifDict[instanceId].loopCount;
                 width = gifDict[instanceId].width;
                 height = gifDict[instanceId].height;
                 gifTexList = gifDict[instanceId].textureList;
 
                 cb(gifTexList, loopCount, width, height);
-                yield break;
-            }
-            yield return new WaitForSeconds(0.1f);
+            //    yield break;
+            //}
+            //yield return new WaitForSeconds(0.1f);
         }
 
     }
@@ -161,10 +165,7 @@ public static partial class UniGif
 
         // Decode to textures from GIF data
         List<GifTexture> gifTexList = null;
-        yield return mb.StartCoroutine(UniGif.DecodeTextureCoroutine(gifData, gtList =>
-        {
-            gifTexList = gtList;
-        }, filterMode, wrapMode));
+        yield return mb.StartCoroutine(UniGif.DecodeTextureCoroutine(gifData, gifTexList, filterMode, wrapMode));
 
         if (gifTexList == null)
         {
