@@ -2,8 +2,6 @@
 
 #MiniWeChat
 
----------------
-
 迷你微信服务器端：[MiniWeChat-Server](https://github.com/MrNerverDie7/MiniWeChat-Server)
 
 迷你微信是一个基于Unity3D的微信客户端，客户端使用了MVVM架构，并使用protobuf作为网络协议生成语言。
@@ -22,9 +20,7 @@ Unity版本 > 4.6.3
 
 2. 安装之后通过Unity的Open Project选项打开该项目
 
->  对于Windows用户，如果您想使用VisualStudio 2012打开该项目的话，您可以下载[Visual Studio 2012 Tools for Unity extension](https://visualstudiogallery.msdn.microsoft.com/7ab11d2a-f413-4ed6-b3de-ff1d05157714/)。
-
-如果您想直接下载安卓版本的apk安装文件，可以直接点击该[下载地址](http://7xiw0o.com1.z0.glb.clouddn.com/MiniWeChat.apk)
+>  对于Windows用户，如果您想使用VisualStudio 2012打开该项目的话，您可以下载[Visual Studio 2012 Tools for Unity extension](https://visualstudiogallery.msdn.microsoft.com/7ab11d2a-f413-4ed6-b3de-ff1d05157714/)，如果您想直接下载安卓版本的apk安装文件，可以直接点击该[下载地址](http://7xiw0o.com1.z0.glb.clouddn.com/MiniWeChat.apk)
 
 ###展示
 
