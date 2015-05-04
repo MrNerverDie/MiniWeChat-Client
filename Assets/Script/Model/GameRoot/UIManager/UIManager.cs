@@ -133,6 +133,8 @@ namespace MiniWeChat
             }
         }
 
+        #region InitUIPaths
+
         private void InitUIPathDict()
         {
             _UIPathDict.Add(EUIType.MainMenuPanel, "Common/MainMenuPanel");
@@ -172,48 +174,7 @@ namespace MiniWeChat
             _atlasPathDict.Add(EAtlasName.MainMenu, "MainMenu");
             _atlasPathDict.Add(EAtlasName.Single, "Single");
         }
+
+        #endregion
     }
-
-    public enum EUIType
-    {
-        MainMenuPanel = 0,
-        ChatFrame,
-        ContactFrame,
-        FriendChatBubbleFrame,
-        PersonalChatBubbleFrame,
-        ChatPanel,
-        BackButton,
-        RegisterPanel,
-        LoginPanel,
-        SingleButtonDialog,
-        DoubleButtonInputDialog,
-        ImageListPanel,
-        SearchFriendPanel,
-        FriendDetailPanel,
-        InputDebug,
-        StatusLabel,
-        LoadingDialog,
-        CreateGroupPanel,
-        GroupDetailPanel,
-        GroupMemberFrame,
-        GroupMemberHeadFrame,
-        GroupMemberHeadIcon,
-        SelectGroupPanel,
-        GroupChatFrame,
-        GroupChatPanel,
-        GroupFrame,
-        DoubleButtonDialog,
-    }
-
-    public enum EAtlasName
-    {
-        Chat = 0,
-        Common,
-        Head,
-        MainMenu,
-        Single,
-    }
-
-
-
 }

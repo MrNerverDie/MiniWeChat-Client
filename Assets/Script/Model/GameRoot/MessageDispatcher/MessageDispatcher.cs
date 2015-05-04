@@ -19,8 +19,6 @@ namespace MiniWeChat
 
     public class MessageDispatcher : Singleton<MessageDispatcher>
     {
-        private const float CHECK_QUEUE_DURATION = 0.1f;
-
         Dictionary<uint, List<MessageHandler>> m_kMessageTable;
         Queue<MessageArgs> _receiveMessageQueue;
 
@@ -108,7 +106,7 @@ namespace MiniWeChat
         {
             while (true)
             {
-                yield return new WaitForSeconds(CHECK_QUEUE_DURATION);
+                yield return 0;
                 lock (_receiveMessageQueue)
                 {
                     while (_receiveMessageQueue.Count != 0)

@@ -31,7 +31,7 @@ namespace MiniWeChat
         }
 
         /// <summary>
-        /// 在这里进行所有丹利的初始化
+        /// 在这里进行所有单例的初始化
         /// </summary>
         /// <returns></returns>
         private IEnumerator InitSingletons()

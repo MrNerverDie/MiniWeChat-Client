@@ -54,8 +54,6 @@ namespace MiniWeChat
             T nextState = go.GetComponent<T>();
             nextState.OnEnter(param);
 
-            Log4U.LogDebug("next", nextState.UIType);
-
             if (_stateStack.Count != 0)
             {
                 BaseState curState = _stateStack.Peek();
@@ -84,7 +82,6 @@ namespace MiniWeChat
                 tweener.OnComplete(delegate()
                 {
                     curState.OnExit();
-                    Log4U.LogDebug("cur", curState.UIType);
                 });
             }
 
@@ -92,7 +89,6 @@ namespace MiniWeChat
             {
                 BaseState lastState = _stateStack.Peek();
                 lastState.OnShow();
-                Log4U.LogDebug("last", lastState.UIType);
             }
         }
 
