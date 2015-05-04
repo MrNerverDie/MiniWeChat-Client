@@ -2,7 +2,7 @@
 
 #MiniWeChat
 
-迷你微信服务器端：[MiniWeChat-Server](https://github.com/MrNerverDie7/MiniWeChat-Server)
+迷你微信服务器端：[MiniWeChat-Server](https://github.com/MrNerverDie/MiniWeChat-Server)
 
 迷你微信是一个基于Unity3D的微信客户端，客户端使用了MVVM架构，并使用protobuf作为网络协议生成语言。
 
