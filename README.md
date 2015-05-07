@@ -1,5 +1,7 @@
 [![hh](http://images.cnblogs.com/cnblogs_com/neverdie/685942/o_MiniWeChat-logo.png)](https://github.com/MrNerverDie/MiniWeChat-Client)
 
+![License](https://img.shields.io/github/license/mashape/apistatus.svg)
+
 #MiniWeChat
 
 迷你微信服务器端：[MiniWeChat-Server](https://github.com/MrNerverDie/MiniWeChat-Server)
