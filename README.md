@@ -1,7 +1,9 @@
 [![hh](http://images.cnblogs.com/cnblogs_com/neverdie/685942/o_MiniWeChat-logo.png)](https://github.com/MrNerverDie/MiniWeChat-Client)
 
 ![License](https://img.shields.io/github/license/mashape/apistatus.svg)
+![Unity](https://img.shields.io/badge/Unity-4.6.3-orange.svg)
 ![Platform](https://img.shields.io/badge/platform-all-red.svg)
+![version](https://img.shields.io/badge/version-1.0-yellow.svg)
 
 #MiniWeChat
 
