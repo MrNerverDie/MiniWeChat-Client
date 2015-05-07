@@ -24,7 +24,7 @@ Unity版本 > 4.6.3
 
 ###架构
 
-![Architecture](http://images.cnblogs.com/cnblogs_com/neverdie/685942/o_MiniWeChat%20Client%e7%9a%84MVVM%e6%9e%b6%e6%9e%84.png)
+![Architecture](http://images.cnblogs.com/cnblogs_com/neverdie/685942/o_MiniWeChat%20Client%e7%9a%84MVVM.png)
 
 ###展示
 
